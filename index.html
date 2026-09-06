@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Due Book Generator – 3 cards per A4</title>
+<style>
+  :root{--ui-bg:#f3f4f6;--ui-panel:#fff;--ui-border:#d1d5db;--accent:#0f766e}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--ui-bg);color:#111}
+  #app{display:flex;min-height:100vh}
+  #panel{width:400px;flex:0 0 400px;background:var(--ui-panel);border-right:1px solid var(--ui-border);display:flex;flex-direction:column;height:100vh;position:sticky;top:0}
+  #panel header{padding:12px 14px 8px;border-bottom:1px solid var(--ui-border)}
+  #panel h1{font-size:17px;margin:0}
+  #panel .sub{font-size:11px;color:#555;margin:2px 0 0}
+  #tabs{display:flex;flex-wrap:wrap;gap:4px;padding:8px 10px;border-bottom:1px solid var(--ui-border);background:#fafafa}
+  #tabs button{padding:5px 8px;font-size:11.5px;border-radius:14px;border:1px solid var(--ui-border);background:#fff;font-weight:600;cursor:pointer}
+  #tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #form{padding:10px 14px 20px;overflow-y:auto;flex:1}
+  fieldset{border:1px solid var(--ui-border);border-radius:8px;margin:0 0 12px;padding:8px 12px 12px}
+  legend{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--accent);padding:0 4px}
+  label{display:block;font-size:11.5px;font-weight:600;margin:8px 0 3px;color:#333}
+  input[type=text],input[type=number],textarea,select{width:100%;padding:6px 8px;border:1px solid var(--ui-border);border-radius:6px;font-size:13px;font-family:inherit;background:#fff}
+  input[type=color]{width:100%;height:32px;padding:2px;border:1px solid var(--ui-border);border-radius:6px;background:#fff}
+  input[type=range]{width:100%}
+  textarea{resize:vertical;min-height:50px}
+  .row{display:flex;gap:8px;align-items:flex-end}.row>*{flex:1;min-width:0}
+  .check{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;margin:8px 0 0}
+  .check input{width:auto;margin:0}.check label{margin:0;font-weight:500}
+  .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;align-items:flex-end}
+  button{cursor:pointer;border:1px solid var(--ui-border);background:#fff;border-radius:6px;padding:7px 11px;font-size:12.5px;font-weight:600}
+  button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  button.small{padding:4px 7px;font-size:11.5px;font-weight:500}
+  button.icon{padding:3px 6px;font-size:12px;line-height:1;font-weight:700}
+  button.danger{color:#b91c1c}
+  .hint{font-size:11px;color:#666;margin-top:4px;line-height:1.4}
+  .list{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+  .item{display:flex;gap:4px;align-items:center}
+  .item input[type=text]{flex:1;padding:4px 6px;font-size:12px}
+  .item input.w{width:52px;flex:0 0 52px;padding:4px 4px;font-size:12px}
+  .item select{width:auto;flex:0 0 auto;padding:4px 4px;font-size:11.5px}
+  .item .n{font-size:11px;color:#888;width:16px;text-align:right}
+  .tpl{border:1px solid var(--ui-border);border-radius:8px;padding:10px 12px;margin-top:8px;background:#fff}
+  .tpl.on{border-color:var(--accent);box-shadow:0 0 0 2px #0f766e22}
+  .tpl b{font-size:13px}.tpl p{font-size:11.5px;color:#555;margin:4px 0 8px;line-height:1.4}
+  #footer{padding:10px 14px;border-top:1px solid var(--ui-border);background:#fafafa}
+  #main{flex:1;padding:16px;overflow:auto}
+  #toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+  #toolbar .spacer{flex:1}#toolbar .info{font-size:13px;color:#444}
+  #previewWrap{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+  .sheetHolder .cap{font-size:12px;font-weight:700;color:#444;margin:0 0 6px;text-transform:uppercase;letter-spacing:.05em}
+  .scaleBox{transform-origin:top left}
+
+  /* ---------- Sheet & card ---------- */
+  .sheet{background:#fff;position:relative;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.18);color:var(--ink)}
+  .card{position:absolute;display:flex;background:var(--card-bg);font-family:var(--font);color:var(--ink)}
+  .sheet.cut .card{outline:0.3mm dashed #999}
+  .sheet.cut .fold{position:absolute;left:50%;top:0;bottom:0;border-left:0.3mm dotted #999}
+  .card.border{border:var(--card-border) solid var(--line)}
+  .panel{width:50%;height:100%;position:relative;display:flex;flex-direction:column;overflow:hidden;overflow-wrap:anywhere}
+  .panel.rl{border-left:var(--divider) solid var(--line)}
+
+  .pledge{justify-content:center}
+  .pledge h2{margin:0 0 .3em;font-weight:800;letter-spacing:.03em;line-height:1.15}
+  .pledge h2.u{text-decoration:underline;text-underline-offset:.12em}
+  .pledge p{margin:0;line-height:1.35;white-space:pre-line}
+
+  .cover .box{height:100%;padding:3mm 4mm;display:flex;flex-direction:column;text-align:center}
+  .cover .box.b{border:var(--box-w) solid var(--line)}
+  .cover .logo{display:block;margin:0 auto 1.5mm}
+  .cover .org{font-weight:900;letter-spacing:.02em;line-height:1.1;margin:0}
+  .cover .addr{line-height:1.25;margin:1mm 0 0;white-space:pre-line}
+  .cover .title{font-weight:800;margin:2.5mm 0 1.5mm;letter-spacing:.02em}
+  .cover .fields{flex:1;display:flex;flex-direction:column;justify-content:space-evenly;text-align:left}
+  .cover .field{display:flex;align-items:flex-end;gap:1.5mm}
+  .cover .field .lab{white-space:nowrap}
+  .cover .field .line{flex:1;border-bottom:0.3mm solid var(--line);height:1.2em;position:relative}
+  .cover .field .line .val{position:absolute;left:2mm;bottom:0.3mm;font-weight:700}
+  .cover .field .after{white-space:nowrap;font-weight:800;font-size:.9em}
+  .cover .field.stack{flex-direction:column;align-items:stretch;gap:0}
+  .cover .field.stack .top{display:flex;align-items:flex-end;gap:1.5mm}
+  .cover .field.stack .under{text-align:center;font-weight:800;font-size:.9em;line-height:1.1;margin-top:.4mm;letter-spacing:.03em}
+  .cover .motto{margin:1.5mm 0 0;white-space:pre-line}
+
+  .records h3{margin:0 0 1.5mm;font-weight:900;text-align:center;line-height:1.2}
+  .records table{width:100%;border-collapse:collapse;flex:1;table-layout:fixed}
+  .records th,.records td{border:var(--tbl-w) solid var(--line);padding:0 1.5mm;line-height:1;overflow:hidden;white-space:nowrap;height:1.5em}
+  .records th{font-weight:900;text-align:center;font-size:calc(var(--th-fs) * var(--cf,1))}
+  .records th.fill{background:var(--th-bg)}
+  .records td{font-size:calc(var(--td-fs) * var(--cf,1))}
+  .records td.m{text-align:left}
+  .records .yr{white-space:nowrap;font-weight:700}
+  .records .yline{display:inline-block;border-bottom:0.3mm solid var(--line);height:1em;vertical-align:baseline;max-width:100%}
+  .records .yrow{margin:-0.5mm 0 1.5mm;line-height:1.2}
+  .records .cardno{position:absolute;right:3mm;bottom:1mm;font-size:7pt;color:#333}
+
+  /* monthly record grid (offering booklet) */
+  .grid .gbox{height:100%;display:flex;flex-direction:column;padding:var(--gpad)}
+  .grid .gbox.b{border:var(--box-w) solid var(--line)}
+  .grid .gtitle{text-align:center;font-weight:900;margin:0 0 1mm;line-height:1.2}
+  .grid .gtables{display:flex;flex:1;gap:var(--ggap);align-items:stretch;min-height:0}
+  .grid .gtables.stacked{flex-direction:column}
+  .grid .gtables.stacked table{flex:1;height:auto}
+  .grid td.lab{text-align:left;padding-left:1mm;font-weight:700;white-space:nowrap;font-size:calc(var(--th-fs) * var(--cf,1))}
+  .grid td.mrow{text-align:left;padding-left:1mm;font-weight:700;font-size:calc(var(--th-fs) * var(--cf,1))}
+  .grid td.mrow .ml{display:inline-block;width:60%;border-bottom:0.3mm solid var(--line);height:.9em;vertical-align:baseline;margin-left:1mm}
+  .grid table{flex:1;width:100%;border-collapse:collapse;table-layout:fixed}
+  .grid th,.grid td{border:var(--tbl-w) solid var(--line);padding:0 0.6mm;line-height:1.05;overflow:hidden;white-space:nowrap;height:1.4em}
+  .grid th{font-weight:700;text-align:left;font-size:calc(var(--th-fs) * var(--cf,1));vertical-align:bottom;padding-bottom:.3mm}
+  .grid th.c{text-align:center}
+  .grid th.rot{height:auto;padding:0.8mm 0}
+  .grid th.rot span{writing-mode:vertical-rl;transform:rotate(180deg);display:inline-block;white-space:nowrap;line-height:1}
+  .grid th.fill{background:var(--th-bg)}
+  .grid td{font-size:calc(var(--td-fs) * var(--cf,1))}
+  .grid td.first{text-align:left;padding-left:1mm}
+  .grid .gnote{font-size:.8em;margin-top:.8mm;text-align:center}
+
+  /* report card */
+  .rc .box{height:100%;display:flex;flex-direction:column;padding:3mm 4mm}
+  .rc .box.b{border:var(--box-w) solid var(--line)}
+  .rc .bl{display:inline-block;border-bottom:0.3mm solid var(--line);height:1em;vertical-align:baseline}
+  .rc .org{font-weight:800;text-align:center;margin:0;line-height:1.15}
+  .rc .addr{text-align:center;margin:.5mm 0 0;line-height:1.25;white-space:pre-line}
+  .rc .title{font-weight:800;text-align:center;margin:2mm 0 1.5mm;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif}
+  .rc .frow{display:flex;gap:3mm;margin:2mm 0;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif;font-weight:700}
+  .rc .frow .f{flex:1;display:flex;align-items:flex-end;gap:1mm}
+  .rc .frow .lab{white-space:nowrap}
+  .rc .frow .line{flex:1;border-bottom:0.3mm solid var(--line);height:1.1em}
+  .rc .sh{text-align:center;font-weight:800;margin:2.5mm 0 0;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif}
+  .rc .sn{margin:.5mm 0 1.5mm;font-weight:700;line-height:1.25;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif}
+  .rc table{width:100%;border-collapse:collapse;table-layout:fixed;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif}
+  .rc table.fill{flex:1;min-height:0}
+  .rc th,.rc td{border:0.3mm solid var(--line);padding:0 1mm;height:1.6em;line-height:1;overflow:hidden;white-space:nowrap;text-align:left;font-weight:700}
+  .rc .note{margin:1.5mm 0 0;line-height:1.3;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif;text-align:justify}
+  .rc .motto{margin-top:auto;padding-top:1.5mm;text-align:center;font-weight:800;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif}
+  .rc .ptitle{text-align:center;font-weight:800;margin:4mm 0 3mm;letter-spacing:.02em}
+  .rc .pintro{text-align:center;margin:0 0 2.5mm}
+  .rc .pbody{margin:0 0 2.5mm;line-height:1.5}
+  .rc .popt{margin:0;padding:0;list-style:none}
+  .rc .popt li{margin:0 0 1.2mm;line-height:1.45;padding-left:6mm;text-indent:-6mm}
+  .rc .psig{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:3mm}
+  .rc .psig .sg{width:60%;text-align:center}
+  .rc .psig .sg .ln{border-bottom:0.3mm solid var(--line);height:8mm}
+  .rc .pdate{margin:4mm 0 0}
+  .rc .pnote{margin:3mm 0 0;text-align:center}
+  .gr .gwrap{display:flex;align-items:stretch;flex:1;min-height:0}
+  .gr table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:calc(var(--g-fs) * var(--cf,1));height:100%}
+  .gr th,.gr td{border:var(--tbl-w) solid var(--line);padding:0 1mm;line-height:1.1;overflow:hidden;white-space:nowrap;height:1.55em}
+  .gr th{font-weight:700;text-align:center;font-size:calc(var(--gh-fs) * var(--cf,1))}
+  .gr th.sem{font-weight:800;border:none;text-align:center;height:1.4em}
+  .gr th.sub{text-align:left;font-weight:700}
+  .gr th.col{white-space:normal;height:2.6em;line-height:1.1;vertical-align:middle}
+  .gr td.s{text-align:left}
+  .gr .gfoot{display:flex;justify-content:space-between;align-items:flex-end;gap:6mm;margin-top:2mm;flex:0 0 auto}
+  .gr .gfoot.bottom{flex:0 0 var(--foot-h)}
+  .gr .scale{white-space:pre-line;line-height:1.3;font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif}
+  .gr .gn{font-family:Calibri,Carlito,'Segoe UI',Arial,sans-serif;font-weight:700}
+  .free{white-space:pre-line}
+  .free h3{margin:0 0 .3em;font-weight:800}
+  .free p{margin:0;line-height:1.35}
+
+  @media print{
+    body{background:#fff}
+    #panel,#toolbar,.cap{display:none !important}
+    #app{display:block}#main{padding:0;overflow:visible}#previewWrap{display:block}
+    .scaleBox{transform:none !important;width:auto !important;height:auto !important}
+    .sheetHolder{page-break-after:always;break-after:page}
+    .sheetHolder:last-child{page-break-after:auto;break-after:auto}
+    .sheet{box-shadow:none}
+    .sheet,.card,.records th,.grid th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body.nobg .card{background:transparent !important}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="panel">
+    <header><h1>Due Book Generator</h1><p class="sub">Bi‑fold cards &amp; booklets · 3 per A4 front + 3 per A4 back</p></header>
+    <nav id="tabs"></nav>
+    <div id="form"></div>
+    <div id="footer">
+      <div class="btns">
+        <button class="primary" type="button" id="printBtn">🖨️ Print / Save PDF</button>
+        <button type="button" id="saveBtn">Export</button>
+        <button type="button" id="loadBtn">Import</button>
+        <button type="button" id="resetBtn">Reset</button>
+        <input type="file" id="loadFile" accept="application/json" hidden>
+      </div>
+    </div>
+  </aside>
+  <main id="main">
+    <div id="toolbar">
+      <span class="info" id="countInfo"></span><span class="spacer"></span>
+      <label style="margin:0;font-size:12px">Zoom</label>
+      <input type="range" id="zoom" min="0.25" max="1.2" step="0.05" value="0.5" style="width:120px">
+      <button class="small" type="button" id="prevSheet">◀</button>
+      <span class="info" id="sheetInfo"></span>
+      <button class="small" type="button" id="nextSheet">▶</button>
+    </div>
+    <div id="previewWrap"></div>
+  </main>
+</div>
+
+<script>
+(function(){
+"use strict";
+const KEY = "duebook.settings.v3", TKEY = "duebook.templates.v1";
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const DEFAULTS = {
+  template:"due",
+  layout:{ pageW:210, pageH:297, perSheet:3, cardW:200, cardH:92, marginTop:5, padX:6, padY:5,
+    color:"#cfe8dc", printBg:true, guides:true, cardBorder:0, divider:0,
+    font:"Cambria, Georgia, 'Times New Roman', serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
+  panels:{
+    fl:{type:"pledge", year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    fr:{type:"cover",  year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    bl:{type:"table",  year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    br:{type:"table",  year:2027, yearMode:"blank", custom:{head:"",body:""}},
+    il:{type:"grid",   year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    ir:{type:"grid",   year:2026, yearMode:"blank", custom:{head:"",body:""}}
+  },
+  pledge:{ head:"MY PLEDGE", headSize:16, underline:true,
+    text:"As a member of Greater Praise Pastoral Network of Liberia, I am willing to be governed by the discipline binding this network to support the various activities to the network.",
+    textSize:13, align:"justify", valign:"center" },
+  cover:{ org:"GREATER PRAISE PASTORAL NET WORK", orgSize:14,
+    addr:"Jamah Town, Brewerville City\nMontserrado County\nRepublic of Liberia", addrSize:9,
+    title:"MEMBERSHIP DUE & CONTRIBUTION CARD", titleSize:10.5,
+    fields:[ {label:"Church:", after:"", pos:"under", fill:"church"}, {label:"Card #:", after:"", pos:"under", fill:"cardno"}, {label:"Signed:", after:"FINANCIAL SECRETARY", pos:"under", fill:"none"} ],
+    fieldSize:9.5, motto:"Motto: \"Spreading the Gospel of Jesus Christ with integrity\"", mottoSize:7.5,
+    box:true, boxW:0.9, logo:"", logoH:14, orgCase:"upper", addrItalic:false, mottoAlign:"center", mottoBold:false, blankPad:0 },
+  table:{ head:"MONTHLY DUE PAYMENT AND CONTRIBUTION RECORDS CARD {year}", headSize:9.5,
+    cols:[ {name:"MONTH", w:34}, {name:"DUE", w:28}, {name:"CONTRIBUTION", w:38} ],
+    rows: MONTHS.slice(), showHeader:true, headerSize:8.5, cellSize:9, lineW:0.3, thBg:"", thFill:false,
+    rowAlign:"left", cardNo:false, note:"", noteSize:7.5,
+    yearLabel:"Year:", yearLine:22, yearPos:"inline", yearSize:9.5 },
+  grid:{ title:"", titleSize:9, tables:2, rows:13, layout:"stacked", blankCols:7, labelW:26, monthRow:true,
+    cols:[ {name:"Month of:", w:24}, {name:"Sunday", w:9.5}, {name:"Tithe", w:9.5}, {name:"Conference", w:9.5}, {name:"Death", w:9.5}, {name:"Programs", w:9.5}, {name:"Building Fund", w:9.5}, {name:"Attendance", w:9.5}, {name:"Total", w:9.5} ],
+    headerSize:7.5, cellSize:7, lineW:0.25, box:true, boxW:0.7, pad:2, gap:2.5, rotate:true, thFill:false, thBg:"#e5e7eb", note:"" },
+  report:{
+    school:"SAME GOD NEW GENERATION ACADEMY", schoolSize:12,
+    addr:"Cow Farm, New Israel Community\nBrewerville-City\nRepublic of Liberia", addrSize:10,
+    title:"JUNIOR HIGH REPORT CARD", titleSize:11,
+    fields:"Student Name:\nYear: | Class:", fieldSize:10.5,
+    signHead:"PARENTS/GUARDIANS", signNote:"Must sign each period as evidence that they have seen the period report.",
+    signCols:[ {name:"PERIOD", w:18}, {name:"CLASS SPONSOR", w:41}, {name:"PARENT/GUARDIAN", w:41} ],
+    signRows:["I.","II.","III.","IV.","V.","VI"], signSize:10,
+    note:"NOTE: When a student’s mark is 70% or below in any student, the parents/guardian should give special attention to see that the student does well in all the work required by the otherwise, the student will probably fail.", noteSize:9.5,
+    motto:"MOTTO: “NO CHILD LEFT BEHIND”", mottoSize:11,
+    pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This is to certify that",
+    pBody:"Student: ______________ HAS/HAS NOT satisfactorily completed the Academic work of Grade ______ and is therefore",
+    pOptions:["A.  Promoted to grade __________","B.  Condition in ____________________ and to be given conditional examination in this subject at the opening of the next school year term.","C.  Required to repeat the Grade.","D.  Asked not to enroll next year."],
+    pSigns:["Class Sponsor","Principal"], pDate:"Date: ______________ 20______", pNote:"Note: Any erasure on this card makes it invalid", pSize:11.5,
+    sem1:"FIRST SEMESTER", sem1Cols:["1st PD.","2nd PD.","3rd PD.","Sem. Exam","Sem. Ave"],
+    sem2:"SECOND SEMESTER", sem2Cols:["4th PD","5th PD","6th PD","EXAM","Sem. Ave.","Yrly Ave."],
+    subjHead:"SUBJECTS", subjects:["Mathematics","English","Civics","History","Health Science","Literature","Vocabulary","Computer","Phonics","P.E.","Wash In School","R.M.E.","Conduct","Rank","Average"],
+    subjW:24, gGap:6, gSize:10, gHeadSize:9.5, gLineW:0.3, gFill:78, signFill:true,
+    scale:"97 -100 = EXCELLENT\n90 -96  = Very Good\n80 -89  = Good\n70-79    = Fail Not Encouraging\nBelow 70 = D Failure", scaleSize:10,
+    gNote:"Any Grade below 70 will not be honored for promotion", box:true, boxW:0.6 },
+  numbering:{ sheets:1, innerSheets:0, autoNo:false, startNo:1, prefix:"", pad:0, churches:"" },
+  print:{ order:"interleaved" }
+};
+const clone = o => JSON.parse(JSON.stringify(o));
+const deepMerge = (base, over) => {
+  if(Array.isArray(base) || Array.isArray(over)) return over !== undefined ? over : base;
+  if(typeof base !== "object" || base === null) return over !== undefined ? over : base;
+  const out = {};
+  for(const k of new Set([...Object.keys(base), ...Object.keys(over||{})])) out[k] = deepMerge(base[k], over ? over[k] : undefined);
+  return out;
+};
+/* ---------- built-in templates ---------- */
+const TEMPLATES = {
+  due:{ name:"Membership Due & Contribution Card", desc:"Bi‑fold card: MY PLEDGE + cover on the outside, two monthly DUE / CONTRIBUTION tables (Year: ____) on the inside. 3 cards per A4, front and back.", settings:{} },
+  offering:{ name:"Monthly Activities Book (offering & attendance)", desc:"Front A4: 3 covers – Greater Praise Church Int, Inc., MONTHLY ACTIVITIES BOOK, NAME / POSITION / DATE / SIGNED lines and the Mission Statement (left page blank). Back A4: 3 record pages, each with two “Month of:” tables one under the other – Sunday, Tithe, Conference, Death, Programs, Building Fund, Attendance, Total. Add inner sheets in the Pages tab for a thicker stapled book.",
+    settings:{ template:"offering",
+      layout:{ color:"#ffffff" },
+      panels:{ fl:{type:"blank"}, fr:{type:"cover"}, bl:{type:"grid"}, br:{type:"grid"}, il:{type:"grid"}, ir:{type:"grid"} },
+      cover:{ org:"Greater Praise Church Int, Inc.", orgCase:"none", orgSize:13,
+        addr:"Jamah Town, Brewerville City\nMontserrado County\nR.L. West Africa", addrItalic:true, addrSize:9,
+        title:"MONTHLY ACTIVITIES BOOK", titleSize:11,
+        fields:[ {label:"", after:"NAME", pos:"under", fill:"none"}, {label:"", after:"POSITION", pos:"under", fill:"none"}, {label:"", after:"DATE", pos:"under", fill:"none"}, {label:"SIGNED:", after:"", pos:"under", fill:"none"} ],
+        fieldSize:9.5, motto:"Mission Statement Matthew 28, 19-20\nGo into the world and make disciple", mottoSize:8.5, mottoAlign:"left", mottoBold:true, boxW:0.8 },
+      numbering:{ innerSheets:0 } } },
+  report:{ name:"Junior High Report Card (progress report)", desc:"Half‑A4 card (2 per A4 sheet, front and back), folded in the middle. Outside: PROMOTION STATEMENT (left) and the front cover with school name, Student Name / Year / Class, PARENTS/GUARDIANS signature table for periods I–VI, NOTE and MOTTO (right). Inside: full‑width grades table – FIRST SEMESTER (1st–3rd PD, Sem. Exam, Sem. Ave) and SECOND SEMESTER (4th–6th PD, Exam, Sem. Ave., Yrly Ave.) for all subjects, with the grading scale below.",
+    settings:{ template:"report",
+      layout:{ pageW:210, pageH:297, perSheet:2, cardW:200, cardH:141, marginTop:5, padX:4, padY:4, color:"#ffffff", guides:true },
+      report:{ schoolSize:10, addrSize:8.5, titleSize:9.5, fieldSize:8.5, signSize:8, noteSize:7.5, mottoSize:9, pTitleSize:10, pSize:9, gSize:8, gHeadSize:8, scaleSize:8, subjW:34 },
+      panels:{ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"} } } }
+};
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const get = (o,p) => p.split(".").reduce((a,k)=>a==null?undefined:a[k], o);
+const set = (o,p,v) => { const ks=p.split("."); const last=ks.pop(); const t=ks.reduce((a,k)=>a[k]=a[k]??{}, o); t[last]=v; };
+
+let S = load(); let tab = "templates"; let currentSheet = 0;
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return deepMerge(clone(DEFAULTS), JSON.parse(raw)); }catch(e){} return clone(DEFAULTS); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function userTemplates(){ try{ return JSON.parse(localStorage.getItem(TKEY)||"[]"); }catch(e){ return []; } }
+function saveUserTemplates(list){ localStorage.setItem(TKEY, JSON.stringify(list)); }
+function loadTemplate(settings){ S = deepMerge(clone(DEFAULTS), settings); save(); currentSheet=0; renderForm(); render(); }
+
+/* ===================== FORM BUILDERS ===================== */
+const F = {
+  text:(p,l,ph="")=>`<label>${l}</label><input type="text" data-p="${p}" value="${esc(get(S,p))}" placeholder="${esc(ph)}">`,
+  area:(p,l,r=3)=>`<label>${l}</label><textarea data-p="${p}" rows="${r}">${esc(get(S,p))}</textarea>`,
+  num:(p,l,min,max,step=1)=>`<div><label>${l}</label><input type="number" data-p="${p}" data-t="num" value="${esc(get(S,p))}" min="${min}" max="${max}" step="${step}"></div>`,
+  color:(p,l)=>`<div><label>${l}</label><input type="color" data-p="${p}" value="${esc(get(S,p)||"#000000")}"></div>`,
+  check:(p,l)=>`<div class="check"><input type="checkbox" data-p="${p}" data-t="bool" id="c_${p.replace(/\./g,'_')}" ${get(S,p)?"checked":""}><label for="c_${p.replace(/\./g,'_')}">${l}</label></div>`,
+  select:(p,l,opts)=>`<div><label>${l}</label><select data-p="${p}">${opts.map(([v,t])=>`<option value="${esc(v)}" ${get(S,p)==v?"selected":""}>${esc(t)}</option>`).join("")}</select></div>`,
+  range:(p,l,min,max,step)=>`<div><label>${l} (${get(S,p)})</label><input type="range" data-p="${p}" data-t="num" value="${esc(get(S,p))}" min="${min}" max="${max}" step="${step}"></div>`
+};
+const arrBtns=(arr,i,n)=>`<button class="icon" data-act="up" data-arr="${arr}" data-i="${i}" ${i===0?"disabled":""} title="Move up">↑</button><button class="icon" data-act="down" data-arr="${arr}" data-i="${i}" ${i===n-1?"disabled":""} title="Move down">↓</button><button class="icon danger" data-act="del" data-arr="${arr}" data-i="${i}" title="Remove">✕</button>`;
+
+const PANEL_TYPES=[["pledge","Pledge text"],["cover","Cover (name, address, fill‑in lines)"],["table","Records table (Month / Due / Contribution)"],["grid","Monthly record grid (Month of: …)"],["rcover","Report card – front cover"],["promo","Report card – promotion statement"],["grades","Report card – grades table (First semester on left page, Second on right)"],["custom","Custom text"],["blank","Blank"]];
+const TABS=[["templates","Templates"],["layout","Layout & style"],["panels","Pages"],["cover","Cover"],["pledge","Pledge"],["table","Table"],["grid","Month grid"],["report","Report card"],["numbering","Numbering"],["print","Print"]];
+
+function formHTML(){
+  switch(tab){
+  case "templates": {
+    const ut=userTemplates();
+    return `
+    <fieldset><legend>Built‑in templates</legend>
+      ${Object.entries(TEMPLATES).map(([id,t])=>`<div class="tpl ${S.template===id?"on":""}"><b>${esc(t.name)}</b><p>${esc(t.desc)}</p><button class="small ${S.template===id?"":"primary"}" data-act="tpl" data-id="${id}">${S.template===id?"Reload template":"Use this template"}</button></div>`).join("")}
+      <div class="hint">Loading a template replaces the current design (export it first if you want to keep it). After loading, every part can still be changed in the other tabs.</div>
+    </fieldset>
+    <fieldset><legend>My saved templates</legend>
+      ${ut.length?`<div class="list">${ut.map((t,i)=>`<div class="item"><input type="text" value="${esc(t.name)}" readonly><button class="small" data-act="utpl-load" data-i="${i}">Load</button><button class="icon danger" data-act="utpl-del" data-i="${i}">✕</button></div>`).join("")}</div>`:`<div class="hint">None yet.</div>`}
+      <div class="row" style="margin-top:8px"><div style="flex:2"><label>Save the current design as</label><input type="text" id="tplName" placeholder="e.g. Youth Fellowship card"></div><button class="small" data-act="utpl-save" style="height:32px">Save</button></div>
+    </fieldset>`; }
+  case "layout": return `
+    <fieldset><legend>Paper &amp; cards</legend>
+      <div class="row">${F.num("layout.pageW","Page width (mm)",50,500)}${F.num("layout.pageH","Page height (mm)",50,500)}</div>
+      <div class="row">${F.num("layout.perSheet","Cards per sheet",1,6)}${F.num("layout.marginTop","Top/bottom margin (mm)",0,50,0.5)}</div>
+      <div class="row">${F.num("layout.cardW","Card width (mm, open)",60,300,0.5)}${F.num("layout.cardH","Card height (mm)",30,200,0.5)}</div>
+      <div class="row">${F.num("layout.padX","Panel side padding (mm)",0,20,0.5)}${F.num("layout.padY","Panel top/bottom padding (mm)",0,20,0.5)}</div>
+      <div class="hint">A4 = 210 × 297 mm. 3 cards of 200 × 92 mm fit with ~4.5 mm between them. Each card folds in the middle into two pages.</div>
+    </fieldset>
+    <fieldset><legend>Colours &amp; lines</legend>
+      <div class="row">${F.color("layout.color","Card background")}${F.color("layout.ink","Text colour")}${F.color("layout.line","Line colour")}</div>
+      <div class="row">${F.num("layout.cardBorder","Card outline (mm, 0 = none)",0,3,0.1)}${F.num("layout.divider","Centre fold line (mm, 0 = none)",0,3,0.1)}</div>
+      ${F.check("layout.printBg","Print background colour (untick for coloured paper)")}
+      ${F.check("layout.guides","Show cut &amp; fold guides")}
+    </fieldset>
+    <fieldset><legend>Typography</legend>
+      ${F.select("layout.font","Font",[
+        ["Cambria, Georgia, 'Times New Roman', serif","Cambria / Georgia (serif)"],
+        ["'Times New Roman', Times, serif","Times New Roman"],
+        ["Georgia, serif","Georgia"],
+        ["Garamond, 'EB Garamond', serif","Garamond"],
+        ["Arial, Helvetica, sans-serif","Arial"],
+        ["Calibri, Carlito, 'Segoe UI', sans-serif","Calibri"],
+        ["Verdana, Geneva, sans-serif","Verdana"],
+        ["'Trebuchet MS', sans-serif","Trebuchet MS"],
+        ["'Courier New', monospace","Courier New"]])}
+      ${F.range("layout.fs","Overall text scale",0.6,1.6,0.05)}
+      ${F.check("layout.autofit","Auto‑fit text (shrink letters automatically so nothing overflows or gets cut off)")}
+      <div class="hint">Each section also has its own point sizes in its tab. With auto‑fit on, those sizes act as a maximum – long text, extra rows/columns or a smaller card will scale down to fit by themselves.</div>
+    </fieldset>`;
+  case "panels": return `
+    <fieldset><legend>Cover sheet</legend>
+      <div class="hint">Each card has 4 pages: two on the <b>front sheet</b> (outside when folded) and two on the <b>back sheet</b> (inside). Choose the content of each.</div>
+      ${panelEditor("fl","Front sheet – LEFT page")}
+      ${panelEditor("fr","Front sheet – RIGHT page")}
+      ${panelEditor("bl","Back sheet – LEFT page")}
+      ${panelEditor("br","Back sheet – RIGHT page")}
+    </fieldset>
+    <fieldset><legend>Inner sheets (booklet)</legend>
+      ${F.num("numbering.innerSheets","Inner sheets per booklet (0 = plain bi‑fold card)",0,12)}
+      <div class="hint">Inner sheets are folded and stapled inside the cover sheet. Both sides of an inner sheet use the two pages below, so every inner page looks the same (e.g. month grids). Each inner sheet adds 4 pages to the booklet.</div>
+      ${panelEditor("il","Inner sheet – LEFT page")}
+      ${panelEditor("ir","Inner sheet – RIGHT page")}
+    </fieldset>`;
+  case "cover": return `
+    <fieldset><legend>Heading</legend>
+      <div class="row"><div style="flex:3">${F.text("cover.org","Organisation name")}</div>${F.num("cover.orgSize","pt",5,40,0.5)}</div>
+      ${F.select("cover.orgCase","Name style",[["upper","ALL CAPITALS"],["none","As typed"]])}
+      <div class="row"><div style="flex:3">${F.area("cover.addr","Address (one line each)",3)}</div>${F.num("cover.addrSize","pt",5,30,0.5)}</div>
+      ${F.check("cover.addrItalic","Bold italic address")}
+      <div class="row"><div style="flex:3">${F.text("cover.title","Card title")}</div>${F.num("cover.titleSize","pt",5,30,0.5)}</div>
+    </fieldset>
+    <fieldset><legend>Fill‑in lines</legend>
+      <div class="list">${S.cover.fields.map((f,i)=>`<div class="item"><span class="n">${i+1}</span>
+        <input type="text" data-p="cover.fields.${i}.label" value="${esc(f.label)}" placeholder="Label (optional)" title="Label before the line – leave empty for a bare line with the caption under it">
+        <input type="text" data-p="cover.fields.${i}.after" value="${esc(f.after)}" placeholder="Caption" title="Caption text (e.g. FINANCIAL SECRETARY)">
+        <select data-p="cover.fields.${i}.pos" title="Where the caption goes"><option value="under" ${(f.pos||"under")==="under"?"selected":""}>under line</option><option value="after" ${f.pos==="after"?"selected":""}>after line</option></select>
+        <select data-p="cover.fields.${i}.fill" title="Auto‑fill"><option value="none" ${f.fill==="none"?"selected":""}>blank</option><option value="cardno" ${f.fill==="cardno"?"selected":""}>card #</option><option value="church" ${f.fill==="church"?"selected":""}>church list</option></select>
+        ${arrBtns("cover.fields",i,S.cover.fields.length)}</div>`).join("")}</div>
+      <div class="btns"><button class="small" data-act="add" data-arr="cover.fields">＋ Add line</button>${F.num("cover.fieldSize","Size (pt)",5,30,0.5)}</div>
+      <div class="hint">Caption can go <b>under</b> the line (e.g. FINANCIAL SECRETARY under the signature) or <b>after</b> it. Auto‑fill: <b>card #</b> uses the Numbering tab; <b>church list</b> uses the church names entered there. Leave as <b>blank</b> to write by hand.</div>
+    </fieldset>
+    <fieldset><legend>Motto &amp; box</legend>
+      <div class="row"><div style="flex:3">${F.area("cover.motto","Motto / mission statement / footer text",2)}</div>${F.num("cover.mottoSize","pt",5,30,0.5)}</div>
+      <div class="row">${F.select("cover.mottoAlign","Alignment",[["center","Centre"],["left","Left"],["right","Right"]])}${F.check("cover.mottoBold","Bold")}</div>
+      <div class="row">${F.check("cover.box","Draw border box")}${F.num("cover.boxW","Box thickness (mm)",0.1,3,0.1)}</div>
+      <label>Logo (optional)</label>
+      <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove</button>${F.num("cover.logoH","Logo height (mm)",4,40,1)}</div>
+    </fieldset>`;
+  case "pledge": return `
+    <fieldset><legend>Pledge</legend>
+      <div class="row"><div style="flex:3">${F.text("pledge.head","Heading")}</div>${F.num("pledge.headSize","pt",5,40,0.5)}</div>
+      ${F.check("pledge.underline","Underline heading")}
+      <div class="row"><div style="flex:3">${F.area("pledge.text","Pledge text",6)}</div>${F.num("pledge.textSize","pt",5,30,0.5)}</div>
+      <div class="row">${F.select("pledge.align","Text alignment",[["justify","Justify"],["left","Left"],["center","Centre"],["right","Right"]])}
+      ${F.select("pledge.valign","Vertical position",[["center","Middle"],["flex-start","Top"],["flex-end","Bottom"]])}</div>
+    </fieldset>`;
+  case "table": return `
+    <fieldset><legend>Table heading</legend>
+      <div class="row"><div style="flex:3">${F.area("table.head","Heading (use {year} for the year / session)",2)}</div>${F.num("table.headSize","pt",5,30,0.5)}</div>
+    </fieldset>
+    <fieldset><legend>Year / session</legend>
+      <div class="hint" style="margin-bottom:4px">Wherever the heading contains <b>{year}</b> a printed year or a blank line is inserted. Choose which for each page in the <b>Pages</b> tab (default: blank line).</div>
+      <div class="row"><div style="flex:2">${F.text("table.yearLabel","Label before the line","Year:")}</div>${F.num("table.yearLine","Line length (mm)",5,80,1)}</div>
+      <div class="row">${F.select("table.yearPos","Position",[["inline","Inside the heading text"],["below","On its own line under the heading"],["right","Own line, right‑aligned"]])}${F.num("table.yearSize","pt",5,30,0.5)}</div>
+      <div class="hint">Examples: label “Year:” → <i>Year: ________</i>; label “Session:” → <i>Session: ________</i>; label “20” with a short line → <i>20____</i>.</div>
+    </fieldset>
+    <fieldset><legend>Columns</legend>
+      <div class="list">${S.table.cols.map((c,i)=>`<div class="item"><span class="n">${i+1}</span>
+        <input type="text" data-p="table.cols.${i}.name" value="${esc(c.name)}" placeholder="Column heading">
+        <input type="number" class="w" data-p="table.cols.${i}.w" data-t="num" value="${esc(c.w)}" min="1" max="100" title="Width %">
+        ${arrBtns("table.cols",i,S.table.cols.length)}</div>`).join("")}</div>
+      <div class="btns"><button class="small" data-act="add" data-arr="table.cols">＋ Add column</button></div>
+      <div class="hint">Width is in % of the table (they are scaled to fit). The first column shows the row labels.</div>
+      <div class="row">${F.check("table.showHeader","Show header row")}${F.num("table.headerSize","Header pt",5,30,0.5)}</div>
+      <div class="row">${F.check("table.thFill","Shade header cells")}${F.color("table.thBg","Header shade")}</div>
+    </fieldset>
+    <fieldset><legend>Rows</legend>
+      <div class="list">${S.table.rows.map((r,i)=>`<div class="item"><span class="n">${i+1}</span>
+        <input type="text" data-p="table.rows.${i}" value="${esc(r)}" placeholder="Row label">
+        ${arrBtns("table.rows",i,S.table.rows.length)}</div>`).join("")}</div>
+      <div class="btns"><button class="small" data-act="add" data-arr="table.rows">＋ Add row</button><button class="small" data-act="months">Reset to 12 months</button><button class="small" data-act="numbers">Number rows 1‑12</button></div>
+      <div class="row">${F.num("table.cellSize","Cell text pt",5,30,0.5)}${F.num("table.lineW","Grid line (mm)",0.1,2,0.05)}${F.select("table.rowAlign","Label align",[["left","Left"],["center","Centre"]])}</div>
+      <div class="hint">Rows share the available height automatically – add or remove as many as you need.</div>
+    </fieldset>
+    <fieldset><legend>Extras</legend>
+      ${F.check("table.cardNo","Print card # small under the table")}
+      <div class="row"><div style="flex:3">${F.text("table.note","Footer note under table (optional)")}</div>${F.num("table.noteSize","pt",5,20,0.5)}</div>
+    </fieldset>`;
+  case "grid": return `
+    <fieldset><legend>Monthly record grid</legend>
+      <div class="hint">The “Month of:” page from the offering booklet. Use it on any page in the <b>Pages</b> tab (the Offering Booklet template puts it on the inside and inner sheets).</div>
+      <div class="row"><div style="flex:3">${F.text("grid.title","Page heading (optional)","e.g. OFFERING & ATTENDANCE RECORD")}</div>${F.num("grid.titleSize","pt",5,30,0.5)}</div>
+      ${F.select("grid.layout","Arrangement",[["stacked","Tables under each other – labels down the left, blank columns across (as in the original book)"],["side","Tables side by side – labels as column headers, blank rows down"]])}
+      <div class="row">${F.num("grid.tables","Tables per page",1,4)}
+      ${(S.grid.layout||"stacked")==="stacked"?F.num("grid.blankCols","Blank columns per row",1,20):F.num("grid.rows","Blank rows per table",1,40)}</div>
+      ${(S.grid.layout||"stacked")==="stacked"?`<div class="row">${F.num("grid.labelW","Label column width (%)",5,70)}${F.check("grid.monthRow","First label is a “Month of: ____” line across the table")}</div>`:""}
+    </fieldset>
+    <fieldset><legend>Labels (Month of:, Sunday, Tithe …)</legend>
+      <div class="list">${S.grid.cols.map((c,i)=>`<div class="item"><span class="n">${i+1}</span>
+        <input type="text" data-p="grid.cols.${i}.name" value="${esc(c.name)}" placeholder="Label">
+        <input type="number" class="w" data-p="grid.cols.${i}.w" data-t="num" value="${esc(c.w)}" min="1" max="100" title="Width %">
+        ${arrBtns("grid.cols",i,S.grid.cols.length)}</div>`).join("")}</div>
+      <div class="btns"><button class="small" data-act="add" data-arr="grid.cols">＋ Add label</button><button class="small" data-act="gridreset">Reset to original</button></div>
+      <div class="hint">Width % is only used in the side‑by‑side arrangement.</div>
+      <div class="row">${F.num("grid.headerSize","Header pt",4,20,0.5)}${F.num("grid.cellSize","Cell pt",4,20,0.5)}${F.num("grid.lineW","Grid line (mm)",0.1,2,0.05)}</div>
+      ${(S.grid.layout||"stacked")==="side"?F.check("grid.rotate","Write headers vertically (fits long words in narrow columns)"):""}
+      <div class="row">${F.check("grid.thFill","Shade header cells")}${F.color("grid.thBg","Header shade")}</div>
+    </fieldset>
+    <fieldset><legend>Frame</legend>
+      <div class="row">${F.check("grid.box","Outer border box")}${F.num("grid.boxW","Box thickness (mm)",0.1,3,0.1)}</div>
+      <div class="row">${F.num("grid.pad","Padding inside box (mm)",0,10,0.5)}${F.num("grid.gap","Gap between tables (mm)",0,15,0.5)}</div>
+      ${F.text("grid.note","Footer note (optional)")}
+    </fieldset>`;
+  case "report": { const R=S.report; const list=(arr,ph)=>`<div class="list">${get(S,arr).map((r,i)=>`<div class="item"><span class="n">${i+1}</span><input type="text" data-p="${arr}.${i}" value="${esc(r)}" placeholder="${ph}">${arrBtns(arr,i,get(S,arr).length)}</div>`).join("")}</div><div class="btns"><button class="small" data-act="add" data-arr="${arr}">＋ Add</button></div>`;
+    return `
+    <fieldset><legend>Front cover</legend>
+      <div class="row"><div style="flex:3">${F.text("report.school","School name")}</div>${F.num("report.schoolSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.area("report.addr","Address (one line each)",3)}</div>${F.num("report.addrSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.text("report.title","Card title")}</div>${F.num("report.titleSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.area("report.fields","Fill‑in lines (one per line; use | to put two on the same line)",2)}</div>${F.num("report.fieldSize","pt",5,30,0.5)}</div>
+      ${F.text("report.signHead","Signature section heading")}
+      ${F.area("report.signNote","Signature instruction",2)}
+      <label>Signature table columns</label>
+      <div class="list">${R.signCols.map((c,i)=>`<div class="item"><span class="n">${i+1}</span><input type="text" data-p="report.signCols.${i}.name" value="${esc(c.name)}"><input type="number" class="w" data-p="report.signCols.${i}.w" data-t="num" value="${esc(c.w)}" min="1" max="100" title="Width %">${arrBtns("report.signCols",i,R.signCols.length)}</div>`).join("")}</div>
+      <div class="btns"><button class="small" data-act="add" data-arr="report.signCols">＋ Add column</button>${F.num("report.signSize","Table pt",5,20,0.5)}</div>
+      ${F.check("report.signFill","Stretch signature rows to fill the page (tall rows for signing)")}
+      <label>Signature table rows (periods)</label>${list("report.signRows","Row label")}
+      <div class="row"><div style="flex:3">${F.area("report.note","Note",3)}</div>${F.num("report.noteSize","pt",5,20,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.text("report.motto","Motto")}</div>${F.num("report.mottoSize","pt",5,20,0.5)}</div>
+    </fieldset>
+    <fieldset><legend>Promotion statement</legend>
+      <div class="hint">Type 3 or more underscores (___) anywhere to print a blank line – longer runs give longer lines.</div>
+      <div class="row"><div style="flex:3">${F.text("report.pTitle","Heading")}</div>${F.num("report.pTitleSize","pt",5,30,0.5)}</div>
+      ${F.text("report.pIntro","Opening line")}
+      ${F.area("report.pBody","Statement",3)}
+      <label>Options</label>${list("report.pOptions","Option text")}
+      <label>Signature lines</label>${list("report.pSigns","Title under the line")}
+      ${F.text("report.pDate","Date line")}
+      ${F.text("report.pNote","Note at the bottom")}
+      ${F.num("report.pSize","Text size (pt)",5,20,0.5)}
+    </fieldset>
+    <fieldset><legend>Grades table (inside)</legend>
+      <div class="row"><div style="flex:2">${F.text("report.sem1","First block heading")}</div><div style="flex:2">${F.text("report.sem2","Second block heading")}</div></div>
+      <label>First block columns</label>${list("report.sem1Cols","Column")}
+      <label>Second block columns</label>${list("report.sem2Cols","Column")}
+      ${F.text("report.subjHead","Subjects column heading")}
+      <label>Subjects / rows</label>${list("report.subjects","Subject")}
+      <div class="row">${F.num("report.subjW","Subject column width (% of left page)",10,60)}${F.num("report.gFill","Table height (% of page)",40,95)}</div>
+      <div class="hint">The grades table is split on the fold: SUBJECTS + first semester on the left page, second semester on the right page. Both halves are exactly the same width and their rows line up.</div>
+      <div class="row">${F.num("report.gSize","Cell pt",5,20,0.5)}${F.num("report.gHeadSize","Header pt",5,20,0.5)}${F.num("report.gLineW","Grid line (mm)",0.1,2,0.05)}</div>
+      <div class="row"><div style="flex:3">${F.area("report.scale","Grading scale (one per line)",5)}</div>${F.num("report.scaleSize","pt",5,20,0.5)}</div>
+      ${F.text("report.gNote","Note beside the scale")}
+    </fieldset>
+    <fieldset><legend>Frame</legend>
+      <div class="row">${F.check("report.box","Border box around cover / statement")}${F.num("report.boxW","Box thickness (mm)",0.1,3,0.1)}</div>
+    </fieldset>`; }
+  case "numbering": return `
+    <fieldset><legend>Quantity</legend>
+      ${F.num("numbering.sheets","Number of booklets/cards sets (each set = 3 cards)",1,300)}
+      <div class="hint">A set is one A4 front + one A4 back (plus inner sheets if any) = 3 booklets/cards.</div>
+    </fieldset>
+    <fieldset><legend>Card numbers</legend>
+      ${F.check("numbering.autoNo","Auto‑fill the Card # line (off = leave blank to write by hand)")}
+      <div class="row">${F.num("numbering.startNo","Start number",0,999999)}${F.num("numbering.pad","Zero‑pad digits",0,6)}</div>
+      ${F.text("numbering.prefix","Prefix (e.g. GP‑)")}
+    </fieldset>
+    <fieldset><legend>Church names (optional)</legend>
+      ${F.area("numbering.churches","One church per line, in card order",4)}
+      <div class="hint">Used by any cover line set to “church list”. Leave empty to keep the line blank.</div>
+    </fieldset>`;
+  case "print": return `
+    <fieldset><legend>Print order</legend>
+      ${F.select("print.order","Pages",[["interleaved","Front, Back, Front, Back… (duplex printer)"],["fronts","Fronts only (all sheets)"],["backs","Backs only (all sheets)"],["grouped","All fronts, then all backs"]])}
+      <div class="hint" style="margin-top:8px">
+        <b>Printer settings:</b> paper size matching the layout (A4), margins <b>None</b>, scale <b>100%</b>, background graphics <b>on</b>.<br><br>
+        <b>Duplex:</b> choose <i>Flip on long edge</i> so the back sheet lines up behind the front sheet.<br><br>
+        <b>Single‑sided printer:</b> print “Fronts only”, put the sheets back in the tray, then print “Backs only”.<br><br>
+        <b>Booklets:</b> cut each A4 into 3 strips, fold every strip in the middle, put the inner sheets inside the cover sheet and staple on the fold.<br><br>
+        <b>Coloured paper:</b> untick “Print background colour” in Layout &amp; style.
+      </div>
+    </fieldset>`;
+  }
+}
+function panelEditor(id,label){
+  const p=S.panels[id];
+  return `<div style="border:1px solid var(--ui-border);border-radius:6px;padding:6px 8px 8px;margin-top:8px">
+    <div class="row"><div style="flex:2">${F.select(`panels.${id}.type`,label,PANEL_TYPES)}</div>
+    ${p.type==="table"?F.select(`panels.${id}.yearMode`,"Year / session",[["blank","Blank line to write in"],["fixed","Printed year"],["none","No year"]]):""}
+    ${p.type==="table"&&p.yearMode==="fixed"?F.num(`panels.${id}.year`,"Year",1900,2999):""}</div>
+    ${p.type==="custom"?`${F.text(`panels.${id}.custom.head`,"Heading")}${F.area(`panels.${id}.custom.body`,"Text",3)}`:""}
+  </div>`;
+}
+function renderTabs(){ document.getElementById("tabs").innerHTML = TABS.map(([id,l])=>`<button class="${tab===id?"on":""}" data-tab="${id}">${l}</button>`).join(""); }
+function renderForm(){ document.getElementById("form").innerHTML = formHTML(); }
+
+/* ---- form events (delegated) ---- */
+const form=document.getElementById("form");
+form.addEventListener("input", e=>{
+  const el=e.target, p=el.dataset.p; if(!p) return;
+  let v; if(el.dataset.t==="bool") v=el.checked; else if(el.dataset.t==="num") v=el.value===""?"":Number(el.value); else v=el.value;
+  set(S,p,v); save(); render();
+  if(el.type==="range"){ const lab=el.previousElementSibling; if(lab) lab.textContent=lab.textContent.replace(/\(.*\)$/,`(${v})`); }
+});
+form.addEventListener("change", e=>{
+  const el=e.target, p=el.dataset.p;
+  if(p && (/^panels\.\w+\.(type|yearMode)$/.test(p) || p==="grid.layout")) renderForm();
+  if(el.id==="logoFile"){ const f=el.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{S.cover.logo=r.result;save();render();}; r.readAsDataURL(f); }
+});
+form.addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return; e.preventDefault();
+  if(b.id==="logoClear"){ S.cover.logo=""; save(); render(); return; }
+  const act=b.dataset.act; if(!act) return;
+  if(act==="tpl"){ const id=b.dataset.id; if(S.template===id && !confirm("Reload this template? Your current changes will be replaced.")) return;
+    if(S.template!==id && !confirm(`Switch to “${TEMPLATES[id].name}”? The current design will be replaced.`)) return;
+    loadTemplate(Object.assign({template:id},TEMPLATES[id].settings)); return; }
+  if(act==="utpl-save"){ const name=(document.getElementById("tplName").value||"").trim(); if(!name){alert("Give the template a name first.");return;}
+    const list=userTemplates(); const i=list.findIndex(t=>t.name===name); const entry={name,settings:clone(S)}; if(i>=0) list[i]=entry; else list.push(entry); saveUserTemplates(list); renderForm(); return; }
+  if(act==="utpl-load"){ const t=userTemplates()[Number(b.dataset.i)]; if(t && confirm(`Load “${t.name}”? The current design will be replaced.`)) loadTemplate(t.settings); return; }
+  if(act==="utpl-del"){ const list=userTemplates(); const t=list[Number(b.dataset.i)]; if(t && confirm(`Delete “${t.name}”?`)){ list.splice(Number(b.dataset.i),1); saveUserTemplates(list); renderForm(); } return; }
+  if(act==="months"){ S.table.rows=MONTHS.slice(); }
+  else if(act==="numbers"){ S.table.rows=Array.from({length:12},(_,i)=>String(i+1)); }
+  else if(act==="gridreset"){ Object.assign(S.grid, clone(DEFAULTS.grid)); }
+  else {
+    const arr=get(S,b.dataset.arr), i=Number(b.dataset.i);
+    if(act==="add"){
+      if(b.dataset.arr==="cover.fields") arr.push({label:"Name:",after:"",pos:"under",fill:"none"});
+      else if(b.dataset.arr==="table.cols"||b.dataset.arr==="grid.cols"||b.dataset.arr==="report.signCols") arr.push({name:"NEW",w:12});
+      else arr.push("");
+    } else if(act==="del"){ if(arr.length>1) arr.splice(i,1); }
+    else if(act==="up"){ [arr[i-1],arr[i]]=[arr[i],arr[i-1]]; }
+    else if(act==="down"){ [arr[i+1],arr[i]]=[arr[i],arr[i+1]]; }
+  }
+  save(); renderForm(); render();
+});
+document.getElementById("tabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; tab=b.dataset.tab; renderTabs(); renderForm(); });
+
+/* ===================== CARD RENDERING ===================== */
+const sheetCount=()=>Math.max(1,Math.min(300,parseInt(S.numbering.sheets)||1));
+const innerSheets=()=>Math.max(0,Math.min(12,parseInt(S.numbering.innerSheets)||0));
+const perSheet=()=>Math.max(1,Math.min(6,parseInt(S.layout.perSheet)||3));
+function physList(){ const L=[]; for(let s=0;s<sheetCount();s++){ L.push({set:s,kind:"cover"}); for(let i=0;i<innerSheets();i++) L.push({set:s,kind:"inner",i}); } return L; }
+function cardNumber(idx){ const n=S.numbering; if(!n.autoNo) return ""; return (n.prefix||"")+String((parseInt(n.startNo)||0)+idx).padStart(parseInt(n.pad)||0,"0"); }
+function churchFor(idx){ return (S.numbering.churches||"").split("\n").map(s=>s.trim()).filter(Boolean)[idx]||""; }
+const pt=v=>`calc(${(Number(v)||10)*(Number(S.layout.fs)||1)}pt * var(--k,1))`;
+const pad=()=>`padding:${S.layout.padY}mm ${S.layout.padX}mm;`;
+
+function pledgePanel(){ const p=S.pledge; return `<div class="panel pledge" style="${pad()}justify-content:${p.valign}">
+  <h2 class="${p.underline?"u":""}" style="font-size:${pt(p.headSize)};text-align:${p.align==="center"?"center":"left"}">${esc(p.head)}</h2>
+  <p style="font-size:${pt(p.textSize)};text-align:${p.align};text-align-last:${p.align==="justify"?"left":p.align}">${esc(p.text)}</p></div>`; }
+
+function coverPanel(idx){ const c=S.cover;
+  const fields=c.fields.map(f=>{ let val=""; if(f.fill==="cardno") val=cardNumber(idx); else if(f.fill==="church") val=churchFor(idx);
+    const top=`${f.label?`<span class="lab">${esc(f.label)}</span>`:""}<span class="line"><span class="val">${esc(val)}</span></span>`;
+    if(f.after && (f.pos||"under")==="under")
+      return `<div class="field stack" style="font-size:${pt(c.fieldSize)}"><div class="top">${top}</div><div class="under" style="padding-left:${f.label?Math.max(2,(f.label||"").length*0.55):0}em">${esc(f.after)}</div></div>`;
+    return `<div class="field" style="font-size:${pt(c.fieldSize)}">${top}${f.after?`<span class="after">${esc(f.after)}</span>`:""}</div>`; }).join("");
+  return `<div class="panel cover" style="${pad()}"><div class="box ${c.box?"b":""}" style="--box-w:${c.boxW}mm">
+    ${c.logo?`<img class="logo" src="${c.logo}" style="height:${c.logoH}mm;max-width:80%;object-fit:contain" alt="">`:""}
+    ${c.org?`<p class="org" style="font-size:${pt(c.orgSize)};text-transform:${c.orgCase==="upper"?"uppercase":"none"}">${esc(c.org)}</p>`:""}
+    ${c.addr?`<p class="addr" style="font-size:${pt(c.addrSize)};${c.addrItalic?"font-style:italic;font-weight:700;":""}">${esc(c.addr)}</p>`:""}
+    ${c.title?`<p class="title" style="font-size:${pt(c.titleSize)}">${esc(c.title)}</p>`:""}
+    <div class="fields">${fields}</div>
+    ${c.motto?`<p class="motto" style="font-size:${pt(c.mottoSize)};text-align:${c.mottoAlign||"center"};${c.mottoBold?"font-weight:800;":""}">${esc(c.motto)}</p>`:""}
+  </div></div>`; }
+
+function yearHTML(p){ const t=S.table; const mode=p.yearMode||"blank";
+  if(mode==="none") return "";
+  if(mode==="fixed") return esc(p.year??"");
+  return `<span class="yr" style="font-size:${pt(t.yearSize)}">${esc(t.yearLabel||"")}${t.yearLabel?" ":""}<span class="yline" style="width:${t.yearLine}mm"></span></span>`; }
+function tablePanel(idx,p){ const t=S.table; const mode=p.yearMode||"blank";
+  const tw=t.cols.reduce((a,c)=>a+(Number(c.w)||1),0);
+  const cols=`<colgroup>${t.cols.map(c=>`<col style="width:${(Number(c.w)||1)/tw*100}%">`).join("")}</colgroup>`;
+  const head=t.showHeader?`<thead><tr>${t.cols.map(c=>`<th class="${t.thFill?"fill":""}">${esc(c.name)}</th>`).join("")}</tr></thead>`:"";
+  const rows=t.rows.map(r=>`<tr><td class="m" style="text-align:${t.rowAlign}">${esc(r)}</td>${t.cols.slice(1).map(()=>"<td></td>").join("")}</tr>`).join("");
+  const y=yearHTML(p); const hasTag=/\{year\}/.test(t.head||"");
+  let heading, yearLine="";
+  if(t.yearPos==="inline" || mode!=="blank"){ heading=esc(t.head||"").replace(/\{year\}/g,y).replace(/\s{2,}/g," ").trim(); }
+  else { heading=esc(t.head||"").replace(/\{year\}/g,"").replace(/\s{2,}/g," ").trim(); if(hasTag) yearLine=`<div class="yrow" style="text-align:${t.yearPos==="right"?"right":"center"}">${y}</div>`; }
+  return `<div class="panel records" style="${pad()}--tbl-w:${t.lineW}mm;--th-bg:${t.thBg||"transparent"};--th-fs:${pt(t.headerSize)};--td-fs:${pt(t.cellSize)}">
+    ${heading?`<h3 style="font-size:${pt(t.headSize)}">${heading}</h3>`:""}${yearLine}
+    <table>${cols}${head}<tbody>${rows}</tbody></table>
+    ${t.note?`<div style="font-size:${pt(t.noteSize)};margin-top:1mm">${esc(t.note)}</div>`:""}
+    ${t.cardNo&&cardNumber(idx)?`<div class="cardno">Card # ${esc(cardNumber(idx))}</div>`:""}
+  </div>`; }
+
+function gridPanel(){ const g=S.grid;
+  const tw=g.cols.reduce((a,c)=>a+(Number(c.w)||1),0);
+  const cols=`<colgroup>${g.cols.map(c=>`<col style="width:${(Number(c.w)||1)/tw*100}%">`).join("")}</colgroup>`;
+  const head=`<thead><tr>${g.cols.map((c,i)=>`<th class="${g.rotate&&i>0?"rot":""} ${g.thFill?"fill":""} ${i>0&&!g.rotate?"c":""}"><span>${esc(c.name)}</span></th>`).join("")}</tr></thead>`;
+  const n=Math.max(1,Math.min(40,parseInt(g.rows)||13));
+  const body=`<tbody>${Array.from({length:n},()=>`<tr>${g.cols.map((_,i)=>`<td class="${i===0?"first":""}"></td>`).join("")}</tr>`).join("")}</tbody>`;
+  let tables, stacked=(g.layout||"stacked")==="stacked";
+  const nT=Math.max(1,Math.min(4,parseInt(g.tables)||1));
+  if(stacked){
+    const nb=Math.max(1,Math.min(20,parseInt(g.blankCols)||7));
+    const lw=Math.max(5,Math.min(70,Number(g.labelW)||26));
+    const cg=`<colgroup><col style="width:${lw}%">${Array.from({length:nb},()=>`<col style="width:${(100-lw)/nb}%">`).join("")}</colgroup>`;
+    const labels=g.cols.map(c=>c.name);
+    let trs="";
+    labels.forEach((name,i)=>{
+      if(i===0 && g.monthRow){ trs+=`<tr><td class="mrow" colspan="${nb+1}">${esc(name)}<span class="ml"></span></td></tr>`; return; }
+      trs+=`<tr><td class="lab">${esc(name)}</td>${Array.from({length:nb},()=>"<td></td>").join("")}</tr>`;
+    });
+    tables=Array.from({length:nT},()=>`<table>${cg}<tbody>${trs}</tbody></table>`).join("");
+  } else {
+    tables=Array.from({length:nT},()=>`<table>${cols}${head}${body}</table>`).join("");
+  }
+  return `<div class="panel grid" style="${pad()}--tbl-w:${g.lineW}mm;--th-bg:${g.thBg||"transparent"};--th-fs:${pt(g.headerSize)};--td-fs:${pt(g.cellSize)};--gpad:${g.pad}mm;--ggap:${g.gap}mm;--box-w:${g.boxW}mm">
+    <div class="gbox ${g.box?"b":""}">
+      ${g.title?`<div class="gtitle" style="font-size:${pt(g.titleSize)}">${esc(g.title)}</div>`:""}
+      <div class="gtables ${stacked?"stacked":""}">${tables}</div>
+      ${g.note?`<div class="gnote" style="font-size:${pt(g.cellSize)}">${esc(g.note)}</div>`:""}
+    </div></div>`; }
+
+const blanks=t=>esc(t).replace(/_{3,}/g,m=>`<span class="bl" style="width:${Math.min(80,m.length*2.2)}mm"></span>`);
+function rcoverPanel(){ const R=S.report;
+  const rows=(R.fields||"").split("\n").map(l=>l.trim()).filter(Boolean).map(l=>`<div class="frow" style="font-size:${pt(R.fieldSize)}">${l.split("|").map(f=>`<span class="f"><span class="lab">${esc(f.trim())}</span><span class="line"></span></span>`).join("")}</div>`).join("");
+  const tw=R.signCols.reduce((a,c)=>a+(Number(c.w)||1),0);
+  const tbl=`<table class="${R.signFill?"fill":""}" style="font-size:${pt(R.signSize)}"><colgroup>${R.signCols.map(c=>`<col style="width:${(Number(c.w)||1)/tw*100}%">`).join("")}</colgroup>
+    <thead><tr>${R.signCols.map(c=>`<th>${esc(c.name)}</th>`).join("")}</tr></thead>
+    <tbody>${R.signRows.map(r=>`<tr><td>${esc(r)}</td>${R.signCols.slice(1).map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+  return `<div class="panel rc" style="${pad()}--box-w:${R.boxW}mm"><div class="box ${R.box?"b":""}">
+    <p class="org" style="font-size:${pt(R.schoolSize)}">${esc(R.school)}</p>
+    <p class="addr" style="font-size:${pt(R.addrSize)}">${esc(R.addr)}</p>
+    <p class="title" style="font-size:${pt(R.titleSize)}">${esc(R.title)}</p>
+    ${rows}
+    ${R.signHead?`<p class="sh" style="font-size:${pt(R.fieldSize)}">${esc(R.signHead)}</p>`:""}
+    ${R.signNote?`<p class="sn" style="font-size:${pt(R.noteSize)}">${esc(R.signNote)}</p>`:""}
+    ${tbl}
+    ${R.note?`<p class="note" style="font-size:${pt(R.noteSize)}">${esc(R.note)}</p>`:""}
+    ${R.motto?`<p class="motto" style="font-size:${pt(R.mottoSize)}">${esc(R.motto)}</p>`:""}
+  </div></div>`; }
+function promoPanel(){ const R=S.report; const fs=pt(R.pSize);
+  return `<div class="panel rc" style="${pad()}--box-w:${R.boxW}mm;font-size:${fs}"><div class="box ${R.box?"b":""}">
+    <p class="org" style="font-size:${pt(R.schoolSize)}">${esc(R.school)}</p>
+    <p class="ptitle" style="font-size:${pt(R.pTitleSize)}">${esc(R.pTitle)}</p>
+    ${R.pIntro?`<p class="pintro">${esc(R.pIntro)}</p>`:""}
+    <p class="pbody">${blanks(R.pBody)}</p>
+    <ul class="popt">${R.pOptions.map(o=>`<li>${blanks(o)}</li>`).join("")}</ul>
+    <div class="psig">${R.pSigns.map(t=>`<div class="sg"><div class="ln"></div>${esc(t)}</div>`).join("")}</div>
+    ${R.pDate?`<p class="pdate">${blanks(R.pDate)}</p>`:""}
+    ${R.pNote?`<p class="pnote">${esc(R.pNote)}</p>`:""}
+  </div></div>`; }
+function gradesPanel(side){ const R=S.report;
+  const n1=R.sem1Cols.length, n2=R.sem2Cols.length, sw=Math.max(10,Math.min(60,Number(R.subjW)||24));
+  const rows=R.subjects;
+  let t;
+  if(side==="left"){
+    t=`<table><colgroup><col style="width:${sw}%">${R.sem1Cols.map(()=>`<col style="width:${(100-sw)/n1}%">`).join("")}</colgroup>
+      <thead><tr><th class="sem" style="border:none"></th><th class="sem" colspan="${n1}">${esc(R.sem1)}</th></tr>
+      <tr><th class="sub col">${esc(R.subjHead)}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c)}</th>`).join("")}</tr></thead>
+      <tbody>${rows.map(sj=>`<tr><td class="s">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+  } else {
+    t=`<table><colgroup>${R.sem2Cols.map(()=>`<col>`).join("")}</colgroup>
+      <thead><tr><th class="sem" colspan="${n2}">${esc(R.sem2)}</th></tr>
+      <tr>${R.sem2Cols.map(c=>`<th class="col">${esc(c)}</th>`).join("")}</tr></thead>
+      <tbody>${rows.map(()=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+  }
+  const foot=side==="left"
+    ?`<div class="scale" style="font-size:${pt(R.scaleSize)}">${esc(R.scale)}</div>`
+    :(R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize)};margin-left:auto">${esc(R.gNote)}</div>`:"");
+  return `<div class="panel gr" style="${pad()}--tbl-w:${R.gLineW}mm;--g-fs:${pt(R.gSize)};--gh-fs:${pt(R.gHeadSize)}">
+    <div class="gwrap" style="flex:0 0 ${Math.max(40,Math.min(95,Number(R.gFill)||78))}%">${t}</div>
+    <div class="gfoot">${foot}</div>
+  </div>`; }
+function customPanel(p){ return `<div class="panel free" style="${pad()};justify-content:center">
+  ${p.custom.head?`<h3 style="font-size:${pt(14)}">${esc(p.custom.head)}</h3>`:""}
+  <p style="font-size:${pt(11)}">${esc(p.custom.body)}</p></div>`; }
+
+function panel(id,idx,right){ const p=S.panels[id]; let html;
+  switch(p.type){ case "pledge":html=pledgePanel();break; case "cover":html=coverPanel(idx);break; case "table":html=tablePanel(idx,p);break; case "grid":html=gridPanel();break; case "rcover":html=rcoverPanel();break; case "promo":html=promoPanel();break; case "grades":html=gradesPanel(right?"right":"left");break; case "custom":html=customPanel(p);break; default:html=`<div class="panel" style="${pad()}"></div>`; }
+  html=html.replace('class="panel','data-pid="'+id+'" class="panel'); return right?html.replace('class="panel','class="panel rl'):html; }
+
+function card(ps,side,slot){
+  const L=S.layout,n=perSheet();
+  const gap=n>1?(L.pageH-2*L.marginTop-n*L.cardH)/(n-1):0;
+  const top=L.marginTop+slot*(L.cardH+gap), left=(L.pageW-L.cardW)/2;
+  const idx=ps.set*n+slot;
+  const [l,r]=ps.kind==="inner"?["il","ir"]:(side==="front"?["fl","fr"]:["bl","br"]);
+  return `<div class="card ${L.cardBorder>0?"border":""}" style="left:${left}mm;top:${top}mm;width:${L.cardW}mm;height:${L.cardH}mm">${panel(l,idx,false)}${panel(r,idx,true)}<div class="fold"></div></div>`;
+}
+function sheetHTML(ps,side){
+  const L=S.layout,n=perSheet();
+  const cards=Array.from({length:n},(_,j)=>card(ps,side,j)).join("");
+  const vars=`--card-bg:${L.color};--ink:${L.ink};--line:${L.line};--font:${L.font};--card-border:${L.cardBorder}mm;--divider:${L.divider}mm`;
+  const name=ps.kind==="cover"?"Cover sheet":`Inner sheet ${ps.i+1}`;
+  return `<div class="sheetHolder"><p class="cap">Set ${ps.set+1} · ${name} – ${side==="front"?"FRONT":"BACK"}${ps.kind==="cover"?(side==="front"?" (outside)":" (inside)"):""}</p>
+    <div class="scaleBox"><div class="sheet ${L.guides?"cut":""}" style="width:${L.pageW}mm;height:${L.pageH}mm;${vars}">${cards}</div></div></div>`;
+}
+
+/* ---- auto-fit: shrink text until every panel's content fits its box ---- */
+function overflowOf(el){
+  const kids=[...el.children]; if(!kids.length) return 0;
+  const r=el.getBoundingClientRect(); const sc=r.height/(el.offsetHeight||1);
+  const cs=getComputedStyle(el);
+  const innerH=(el.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom))*sc;
+  const innerW=(el.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight))*sc;
+  let top=Infinity,bot=-Infinity,left=Infinity,right=-Infinity;
+  kids.forEach(k=>{const b=k.getBoundingClientRect(); const m=getComputedStyle(k); top=Math.min(top,b.top-parseFloat(m.marginTop)*sc); bot=Math.max(bot,b.bottom+parseFloat(m.marginBottom)*sc); left=Math.min(left,b.left); right=Math.max(right,b.right);});
+  return Math.max((bot-top)-innerH,(right-left)-innerW)/sc;
+}
+function fitPanel(panel){
+  panel.style.setProperty("--k","1");
+  panel.querySelectorAll("th,td").forEach(c=>c.style.removeProperty("--cf"));
+  if(!S.layout.autofit) return;
+  const roots=[panel, panel.querySelector(".box"), panel.querySelector(".fields"), panel.querySelector(".gbox"), panel.querySelector(".gtables"), panel.querySelector(".gwrap")].filter(Boolean);
+  let k=1;
+  for(let i=0;i<40;i++){
+    let over=0; roots.forEach(r=>{over=Math.max(over,overflowOf(r));});
+    if(over<=0.5) break;
+    k=Math.round((k-0.03)*1000)/1000; if(k<0.35) break;
+    panel.style.setProperty("--k",String(k));
+  }
+  panel.querySelectorAll("th:not(.rot),td").forEach(c=>{
+    if(!c.textContent.trim()) return;
+    let f=1;
+    for(let i=0;i<12 && c.scrollWidth>c.clientWidth+0.5;i++){ f-=0.06; c.style.setProperty("--cf",f.toFixed(2)); }
+  });
+}
+function fitAll(root){
+  const FIT={};
+  root.querySelectorAll(".panel").forEach(p=>{
+    const id=p.dataset.pid; let f=FIT[id];
+    if(!f){ fitPanel(p); f=FIT[id]={style:p.style.cssText, cells:[...p.querySelectorAll("th,td")].map(c=>c.style.getPropertyValue("--cf"))}; return; }
+    p.style.cssText=f.style;
+    p.querySelectorAll("th,td").forEach((c,i)=>{ if(f.cells[i]) c.style.setProperty("--cf",f.cells[i]); });
+  });
+}
+function render(){
+  const L=physList(); currentSheet=Math.min(currentSheet,L.length-1);
+  const ps=L[currentSheet];
+  const wrap=document.getElementById("previewWrap");
+  wrap.innerHTML=sheetHTML(ps,"front")+sheetHTML(ps,"back");
+  fitAll(wrap);
+  const total=sheetCount()*perSheet();
+  document.getElementById("countInfo").textContent=`${sheetCount()} set${sheetCount()>1?"s":""} × ${perSheet()} = ${total} ${innerSheets()?"booklets":"cards"} · ${L.length} A4 sheet${L.length>1?"s":""} (front + back)`+(S.numbering.autoNo?` · #${cardNumber(0)} – #${cardNumber(total-1)}`:"");
+  document.getElementById("sheetInfo").textContent=`Sheet ${currentSheet+1} of ${L.length}`;
+  applyZoom();
+}
+function renderAll(){
+  const L=physList(),o=S.print.order,parts=[];
+  if(o==="fronts"){L.forEach(ps=>parts.push(sheetHTML(ps,"front")));}
+  else if(o==="backs"){L.forEach(ps=>parts.push(sheetHTML(ps,"back")));}
+  else if(o==="grouped"){L.forEach(ps=>parts.push(sheetHTML(ps,"front")));L.forEach(ps=>parts.push(sheetHTML(ps,"back")));}
+  else {L.forEach(ps=>{parts.push(sheetHTML(ps,"front"));parts.push(sheetHTML(ps,"back"));});}
+  const wrap=document.getElementById("previewWrap"); wrap.innerHTML=parts.join(""); fitAll(wrap);
+}
+function applyZoom(){ const z=parseFloat(document.getElementById("zoom").value);
+  document.querySelectorAll(".scaleBox").forEach(b=>{b.style.transform=`scale(${z})`;b.style.width=(S.layout.pageW*z)+"mm";b.style.height=(S.layout.pageH*z)+"mm";}); }
+
+/* ---- toolbar / footer ---- */
+document.getElementById("zoom").addEventListener("input",applyZoom);
+document.getElementById("prevSheet").addEventListener("click",()=>{currentSheet=Math.max(0,currentSheet-1);render();});
+document.getElementById("nextSheet").addEventListener("click",()=>{currentSheet=Math.min(physList().length-1,currentSheet+1);render();});
+document.getElementById("printBtn").addEventListener("click",()=>{
+  document.body.classList.toggle("nobg",!S.layout.printBg);
+  let st=document.getElementById("pageStyle"); if(!st){st=document.createElement("style");st.id="pageStyle";document.head.appendChild(st);}
+  st.textContent=`@page{size:${S.layout.pageW}mm ${S.layout.pageH}mm;margin:0}`;
+  renderAll(); setTimeout(()=>{window.print();setTimeout(render,300);},100);
+});
+window.addEventListener("afterprint",render);
+document.getElementById("saveBtn").addEventListener("click",()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.download="duebook-settings.json";a.click();});
+document.getElementById("loadBtn").addEventListener("click",()=>document.getElementById("loadFile").click());
+document.getElementById("loadFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{loadTemplate(JSON.parse(r.result));}catch(err){alert("Invalid settings file");}};r.readAsText(f);});
+document.getElementById("resetBtn").addEventListener("click",()=>{if(confirm("Reset everything to the default Membership Due Card?")){loadTemplate({});}});
+
+renderTabs(); renderForm(); render();
+})();
+</script>
+</body>
+</html>
