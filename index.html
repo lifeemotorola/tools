@@ -89,6 +89,22 @@
   .card.border{border:var(--card-border) solid var(--line)}
   .panel{width:50%;height:100%;position:relative;display:flex;flex-direction:column;overflow:hidden;overflow-wrap:anywhere}
   .panel.rl{border-left:var(--divider) solid var(--line)}
+  .panel.decorated{isolation:isolate}
+  .panel .deco{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .panel .deco svg{width:100%;height:100%;display:block}
+  .panel.decorated>*:not(.deco){position:relative;z-index:1}
+  .panel.decorated.nobox .box.b{border-color:transparent}
+  .panel.decorated.dh .org,.panel.decorated.dh .title,.panel.decorated.dh h2,.panel.decorated.dh h3,.panel.decorated.dh .ptitle{color:var(--deco-c1)}
+  .panel.decorated.dh .pledge h2.u{text-decoration-color:var(--deco-c1)}
+  #decoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+  #decoGrid .sw{border:2px solid #d1d5db;border-radius:8px;padding:0;cursor:pointer;background:#fff;overflow:hidden;text-align:center;font-size:11px;color:#374151}
+  #decoGrid .sw.on{border-color:#2563eb;box-shadow:0 0 0 2px #bfdbfe}
+  #decoGrid .sw svg{width:100%;aspect-ratio:100/92;display:block;background:#fafafa}
+  #decoGrid .sw span{display:block;padding:3px 2px 4px}
+  #palRow{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  #palRow .pal{width:34px;height:22px;border-radius:6px;border:2px solid #d1d5db;cursor:pointer;padding:0;overflow:hidden;display:flex}
+  #palRow .pal i{flex:1;display:block}
+  #palRow .pal.on{border-color:#2563eb;box-shadow:0 0 0 2px #bfdbfe}
 
   .pledge{justify-content:center}
   .pledge h2{margin:0 0 .3em;font-weight:800;letter-spacing:.03em;line-height:1.15}
@@ -207,7 +223,7 @@
     .sheetHolder{page-break-after:always;break-after:page}
     .sheetHolder:last-child{page-break-after:auto;break-after:auto}
     .sheet{box-shadow:none}
-    .sheet,.card,.records th,.grid th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .sheet,.card,.records th,.grid th,.deco{-webkit-print-color-adjust:exact;print-color-adjust:exact}
     body.nobg .card{background:transparent !important}
   }
 </style>
@@ -298,9 +314,108 @@ const DEFAULTS = {
     scale:"97 -100 = EXCELLENT\n90 -96  = Very Good\n80 -89  = Good\n70-79    = Fail Not Encouraging\nBelow 70 = D Failure", scaleSize:10,
     gNote:"Any Grade below 70 will not be honored for promotion", box:true, boxW:0.6 },
   numbering:{ sheets:1, innerSheets:0, autoNo:false, startNo:1, prefix:"", pad:0, churches:"" },
+  deco:{ on:false, style:"classic", c1:"#1e3a8a", c2:"#d4a017", scale:1, opacity:1, tint:false, tintAmt:0.07, inset:2, hideBox:true, colorHeadings:true, pages:{front:true, frontLeft:false, inside:false} },
   print:{ order:"interleaved" }
 };
 const clone = o => JSON.parse(JSON.stringify(o));
+/* ===================== DECORATIVE COVER DESIGNS ===================== */
+const DECO_STYLES=[["classic","Classic frame"],["elegant","Elegant corners"],["bold","Bold border"],["beaded","Beaded frame"],
+  ["arch","Arch header"],["sunburst","Sunburst"],["seal","Watermark seal"],["waves","Waves"],["diagonal","Diagonal sweep"],
+  ["ribbon","Corner ribbons"],["geometric","Geometric band"],["kente","Kente stripes"],["flag","Tri‑colour bands"],
+  ["floral","Botanical leaves"],["dots","Dot fade"]];
+const DECO_PALETTES=[["Navy & gold","#1e3a8a","#d4a017"],["Burgundy & gold","#7f1d1d","#d4a017"],["Forest & lime","#14532d","#84cc16"],
+  ["Royal purple & gold","#581c87","#eab308"],["Teal & coral","#0f766e","#fb7185"],["Charcoal & red","#1f2937","#dc2626"],
+  ["Liberia red & blue","#bf0a30","#002868"],["Ocean blue & sky","#1d4ed8","#7dd3fc"],["Chocolate & cream","#78350f","#fde68a"],
+  ["Emerald & gold","#047857","#f59e0b"],["Rose & plum","#be185d","#6b21a8"],["Slate & amber","#334155","#f59e0b"]];
+const DECO_BY_CAT={school:[["classic",0],["arch",1],["elegant",2],["bold",7],["beaded",9]],
+  church:[["elegant",3],["sunburst",1],["arch",0],["seal",3],["classic",9]],
+  community:[["kente",6],["geometric",2],["diagonal",9],["flag",6],["ribbon",7]],
+  business:[["diagonal",7],["geometric",5],["bold",11],["ribbon",0]],
+  finance:[["bold",9],["ribbon",0],["classic",8],["diagonal",5]],
+  health:[["waves",4],["dots",7],["arch",4],["beaded",9]],
+  civic:[["flag",6],["geometric",2],["waves",7],["dots",4]],
+  events:[["floral",10],["elegant",1],["beaded",10],["sunburst",8]], other:[["classic",0]]};
+function autoDeco(id,cat){ const list=DECO_BY_CAT[cat]||DECO_BY_CAT.other; let h=0; for(const ch of id) h=(h*31+ch.charCodeAt(0))>>>0;
+  const [style,p]=list[h%list.length]; const pal=DECO_PALETTES[p]; return {on:true,style,c1:pal[1],c2:pal[2]}; }
+function decoSVG(style,W,H,d){
+  const c1=d.c1||"#1e3a8a", c2=d.c2||"#d4a017", s=Number(d.scale)||1, n=(v)=>Math.round(v*100)/100;
+  const tint=d.tint?`<rect width="${W}" height="${H}" fill="${c1}" opacity="${n(d.tintAmt??0.07)}"/>`:"";
+  const corners=(inner)=>[[0,0,1,1],[W,0,-1,1],[0,H,1,-1],[W,H,-1,-1]].map(([x,y,a,b])=>`<g transform="translate(${x} ${y}) scale(${a*s} ${b*s})">${inner}</g>`).join("");
+  let g="";
+  switch(style){
+    case "classic":{ const m=2*s,m2=4*s;
+      g=`<rect x="${m}" y="${m}" width="${n(W-2*m)}" height="${n(H-2*m)}" fill="none" stroke="${c1}" stroke-width="${n(0.9*s)}"/>
+      <rect x="${m2}" y="${m2}" width="${n(W-2*m2)}" height="${n(H-2*m2)}" fill="none" stroke="${c2}" stroke-width="${n(0.35*s)}"/>`
+      +[[m2,m2],[W-m2,m2],[m2,H-m2],[W-m2,H-m2]].map(([x,y])=>`<path d="M${n(x)} ${n(y-1.8*s)} L${n(x+1.8*s)} ${n(y)} L${n(x)} ${n(y+1.8*s)} L${n(x-1.8*s)} ${n(y)}Z" fill="${c2}" stroke="${c1}" stroke-width="${n(0.3*s)}"/>`).join(""); break; }
+    case "elegant":{ const m=3*s;
+      g=`<rect x="${m}" y="${m}" width="${n(W-2*m)}" height="${n(H-2*m)}" fill="none" stroke="${c2}" stroke-width="${n(0.3*s)}"/>`
+      +corners(`<path d="M1.5 16 Q1.5 1.5 16 1.5" fill="none" stroke="${c1}" stroke-width="0.8"/><path d="M4.2 16 Q4.2 4.2 16 4.2" fill="none" stroke="${c2}" stroke-width="0.4"/>
+        <path d="M16 1.5 q3.5 0 3.5 -1.2 M1.5 16 q0 3.5 -1.2 3.5" fill="none" stroke="${c1}" stroke-width="0.6"/><circle cx="1.5" cy="1.5" r="1.3" fill="${c2}"/><circle cx="8" cy="8" r="0.9" fill="${c1}"/>`); break; }
+    case "bold":{ const m=1.5*s,m2=5*s;
+      g=`<rect x="${m}" y="${m}" width="${n(W-2*m)}" height="${n(H-2*m)}" fill="none" stroke="${c1}" stroke-width="${n(3*s)}"/>
+      <rect x="${m2}" y="${m2}" width="${n(W-2*m2)}" height="${n(H-2*m2)}" fill="none" stroke="${c2}" stroke-width="${n(0.5*s)}"/>`
+      +[[m2,m2],[W-m2,m2],[m2,H-m2],[W-m2,H-m2]].map(([x,y])=>`<rect x="${n(x-1.2*s)}" y="${n(y-1.2*s)}" width="${n(2.4*s)}" height="${n(2.4*s)}" fill="${c2}"/>`).join(""); break; }
+    case "beaded":{ const m=3*s,m2=5.2*s;
+      g=`<rect x="${m}" y="${m}" width="${n(W-2*m)}" height="${n(H-2*m)}" fill="none" stroke="${c1}" stroke-width="${n(1.3*s)}" stroke-linecap="round" stroke-dasharray="0 ${n(2.6*s)}"/>
+      <rect x="${m2}" y="${m2}" width="${n(W-2*m2)}" height="${n(H-2*m2)}" fill="none" stroke="${c2}" stroke-width="${n(0.35*s)}"/>`; break; }
+    case "arch":{ const a=4*s;
+      g=`<path d="M0 0 H${W} V${n(a)} Q${n(W/2)} ${n(a+6*s)} 0 ${n(a)} Z" fill="${c1}"/>
+      <path d="M0 ${n(a+1.5*s)} Q${n(W/2)} ${n(a+7.5*s)} ${W} ${n(a+1.5*s)}" fill="none" stroke="${c2}" stroke-width="${n(0.6*s)}"/>
+      <path d="M0 ${n(H*0.62)} Q${n(W/2)} ${n(H*0.62-6*s)} ${W} ${n(H*0.62)} V${H} H0Z" fill="${c1}" opacity="0.05"/>
+      <path d="M${n(W*0.2)} ${n(H-4*s)} H${n(W*0.8)}" stroke="${c1}" stroke-width="${n(0.5*s)}"/>
+      <path d="M${n(W/2)} ${n(H-6.2*s)} l2.2 2.2 -2.2 2.2 -2.2 -2.2Z" fill="${c2}"/>`; break; }
+    case "sunburst":{ const cx=W/2, cy=-8*s, R=H*0.9; let rays="";
+      for(let i=0;i<19;i++){ const a1=(18+i*8)*Math.PI/180, a2=a1+2.2*Math.PI/180;
+        rays+=`<path d="M${n(cx)} ${n(cy)} L${n(cx+R*Math.cos(a1))} ${n(cy+R*Math.sin(a1))} L${n(cx+R*Math.cos(a2))} ${n(cy+R*Math.sin(a2))}Z" fill="${c2}" opacity="0.22"/>`; }
+      g=rays+`<path d="M0 ${H} Q${n(W/2)} ${n(H-16*s)} ${W} ${H}Z" fill="${c1}" opacity="0.14"/><path d="M0 ${H} Q${n(W/2)} ${n(H-16*s)} ${W} ${H}" fill="none" stroke="${c1}" stroke-width="${n(0.7*s)}"/>`; break; }
+    case "seal":{ const cx=W/2, cy=H/2, r=Math.min(W,H)*0.36*s; const star=[]; for(let i=0;i<10;i++){ const rr=i%2?r*0.28:r*0.62, a=-Math.PI/2+i*Math.PI/5; star.push(`${n(cx+rr*Math.cos(a))} ${n(cy+rr*Math.sin(a))}`); }
+      g=`<rect x="${n(2.5*s)}" y="${n(2.5*s)}" width="${n(W-5*s)}" height="${n(H-5*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.4*s)}"/>
+      <circle cx="${n(cx)}" cy="${n(cy)}" r="${n(r)}" fill="none" stroke="${c1}" stroke-width="${n(1.2*s)}" opacity="0.13"/>
+      <circle cx="${n(cx)}" cy="${n(cy)}" r="${n(r-3*s)}" fill="none" stroke="${c2}" stroke-width="${n(0.6*s)}" stroke-dasharray="${n(1.5*s)} ${n(1.5*s)}" opacity="0.3"/>
+      <polygon points="${star.join(" ")}" fill="${c1}" opacity="0.08"/>`; break; }
+    case "waves":{ const wb=(y0,amp,col,op)=>`<path d="M0 ${n(H-y0)} C${n(W*.25)} ${n(H-y0-amp)} ${n(W*.45)} ${n(H-y0+amp)} ${n(W*.65)} ${n(H-y0)} S${n(W*.9)} ${n(H-y0-amp)} ${W} ${n(H-y0+amp*.4)} V${H} H0Z" fill="${col}" opacity="${op}"/>`;
+      g=wb(7*s,3.5*s,c1,0.9)+wb(4*s,2.5*s,c2,0.85)
+      +`<path d="M${n(W*.5)} 0 C${n(W*.65)} ${n(7*s)} ${n(W*.85)} ${n(-2*s)} ${W} ${n(5*s)} V0Z" fill="${c2}" opacity="0.7"/>
+      <path d="M${n(W*.62)} 0 C${n(W*.75)} ${n(5*s)} ${n(W*.9)} ${n(-1*s)} ${W} ${n(3*s)} V0Z" fill="${c1}" opacity="0.8"/>`; break; }
+    case "diagonal":{
+      g=`<path d="M0 ${n(H-30*s)} L${n(W*.55)} ${H} H0Z" fill="${c1}"/>
+      <path d="M0 ${n(H-38*s)} L${n(W*.68)} ${H} H${n(W*.61)} L0 ${n(H-34*s)}Z" fill="${c2}"/>
+      <path d="M${W} ${n(18*s)} L${n(W-30*s)} 0 H${W}Z" fill="${c2}" opacity="0.9"/>
+      <path d="M${W} ${n(25*s)} L${n(W-42*s)} 0 H${n(W-36*s)} L${W} ${n(21.5*s)}Z" fill="${c1}"/>`; break; }
+    case "ribbon":{
+      g=corners(`<path d="M0 10 L10 0 H26 L0 26Z" fill="${c1}"/><path d="M0 28.5 L28.5 0 H31.5 L0 31.5Z" fill="${c2}"/><path d="M0 4 L4 0 M0 8 L8 0" stroke="${c2}" stroke-width="0.5"/>`).replace(/<g transform="translate\(0 [^"]*scale\(1 -1\)">.*?<\/g>|<g transform="translate\([^ ]+ 0\) scale\(-1 1\)">.*?<\/g>/g,""); break; }
+    case "geometric":{ const bw=7*s; let tri=""; for(let y=0;y<H;y+=14*s) tri+=`<path d="M0 ${n(y)} L${n(bw)} ${n(y+7*s)} L0 ${n(y+14*s)}Z" fill="${c2}"/>`;
+      let sq=""; for(let x=bw+3*s;x<W;x+=8*s) sq+=`<rect x="${n(x)}" y="${n(H-3.2*s)}" width="${n(2*s)}" height="${n(2*s)}" fill="${c2}"/>`;
+      g=`<rect width="${n(bw)}" height="${H}" fill="${c1}"/>${tri}<rect y="${n(H-4.4*s)}" width="${W}" height="${n(4.4*s)}" fill="${c1}"/>${sq}<path d="M${n(bw+2*s)} ${n(2.5*s)} H${n(W-2.5*s)}" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`; break; }
+    case "kente":{ const bh=6*s, bw=8*s; const band=(y)=>{ let out=""; let i=0; for(let x=0;x<W;x+=bw,i++){ const k=i%3;
+        if(k===0) out+=`<rect x="${n(x)}" y="${n(y)}" width="${n(bw)}" height="${n(bh)}" fill="${c1}"/>`;
+        else if(k===1) out+=`<rect x="${n(x)}" y="${n(y)}" width="${n(bw)}" height="${n(bh)}" fill="${c2}"/><path d="M${n(x+2*s)} ${n(y)} V${n(y+bh)} M${n(x+4*s)} ${n(y)} V${n(y+bh)} M${n(x+6*s)} ${n(y)} V${n(y+bh)}" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`;
+        else out+=`<rect x="${n(x)}" y="${n(y)}" width="${n(bw)}" height="${n(bh)}" fill="#1f1f1f" opacity="0.85"/><path d="M${n(x)} ${n(y+bh/2)} H${n(x+bw)}" stroke="${c2}" stroke-width="${n(0.7*s)}"/>`; } return out; };
+      g=band(0)+band(H-bh)+`<path d="M0 ${n(bh+1.2*s)} H${W} M0 ${n(H-bh-1.2*s)} H${W}" stroke="${c2}" stroke-width="${n(0.4*s)}"/>`; break; }
+    case "flag":{ const b=3*s; const star=[]; const cx=W-6*s, cy=6*s, r=3*s; for(let i=0;i<10;i++){ const rr=i%2?r*0.4:r, a=-Math.PI/2+i*Math.PI/5; star.push(`${n(cx+rr*Math.cos(a))} ${n(cy+rr*Math.sin(a))}`); }
+      g=`<rect y="${n(H-3*b)}" width="${W}" height="${n(b)}" fill="${c1}"/><rect y="${n(H-2*b)}" width="${W}" height="${n(b)}" fill="#ffffff" stroke="${c1}" stroke-width="0.2"/><rect y="${n(H-b)}" width="${W}" height="${n(b)}" fill="${c2}"/>
+      <path d="M${n(2.5*s)} ${n(2.5*s)} H${n(W-12*s)}" stroke="${c1}" stroke-width="${n(0.6*s)}"/><polygon points="${star.join(" ")}" fill="${c2}" stroke="${c1}" stroke-width="0.25"/>`; break; }
+    case "floral":{ const leaf=(x,y,rot,l,col,op)=>`<ellipse cx="${x}" cy="${y}" rx="${l}" ry="${l*0.38}" transform="rotate(${rot} ${x} ${y})" fill="${col}" opacity="${op}"/>`;
+      const branch=`<path d="M1.5 1.5 Q10 5 17 20 M1.5 1.5 Q6 9 20 12" fill="none" stroke="${c1}" stroke-width="0.6"/>
+        ${leaf(6,4,-40,3.2,c2,.85)}${leaf(9,9,60,3.4,c1,.65)}${leaf(12.5,13.5,-35,3.2,c2,.85)}${leaf(15,18.5,55,3,c1,.65)}${leaf(9,6.5,10,2.6,c1,.55)}${leaf(14,9.5,-60,2.8,c2,.8)}${leaf(18.5,11.5,25,2.6,c1,.6)}
+        <circle cx="17.5" cy="21" r="0.9" fill="${c2}"/><circle cx="21" cy="12.5" r="0.9" fill="${c2}"/><circle cx="1.5" cy="1.5" r="1.1" fill="${c1}"/>`;
+      g=`<g transform="scale(${s})">${branch}</g><g transform="translate(${W} ${H}) scale(${-s} ${-s})">${branch}</g><rect x="${n(2*s)}" y="${n(2*s)}" width="${n(W-4*s)}" height="${n(H-4*s)}" fill="none" stroke="${c2}" stroke-width="${n(0.3*s)}"/>`; break; }
+    case "dots":{ let out=""; for(let i=0;i<6;i++) for(let j=0;j<6;j++){ const r=1.5*s*(1-(i+j)/11); if(r<0.25) continue;
+        out+=`<circle cx="${n(W-3*s-i*4*s)}" cy="${n(3*s+j*4*s)}" r="${n(r)}" fill="${c1}" opacity="0.75"/><circle cx="${n(3*s+i*4*s)}" cy="${n(H-3*s-j*4*s)}" r="${n(r)}" fill="${c2}" opacity="0.85"/>`; }
+      g=out+`<path d="M${n(3*s)} ${n(3*s)} H${n(W*0.55)} M${n(W-3*s)} ${n(H-3*s)} H${n(W*0.45)}" stroke="${c1}" stroke-width="${n(0.6*s)}"/>`; break; }
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${tint}<g opacity="${n(d.opacity??1)}">${g}</g></svg>`;
+}
+function decoFor(id){ const d=S.deco; if(!d||!d.on) return null; const pg=d.pages||{};
+  const ok= id==="fr" ? pg.front!==false : id==="fl" ? !!pg.frontLeft : !!pg.inside; return ok?d:null; }
+function decorate(html,id){ const d=decoFor(id); if(!d) return html;
+  const L=S.layout, W=L.cardW/2, H=L.cardH, ins=Number(d.inset)||0;
+  if(ins>0) html=html.replace(`padding:${L.padY}mm ${L.padX}mm;`,`padding:${L.padY+ins}mm ${L.padX+ins}mm;`);
+  html=html.replace('style="',`style="--deco-c1:${d.c1};`);
+  html=html.replace('class="panel',`class="panel decorated${d.colorHeadings?" dh":""}${d.hideBox!==false?" nobox":""}`);
+  const i=html.indexOf(">"); return html.slice(0,i+1)+`<div class="deco">${decoSVG(d.style,W,H,d)}</div>`+html.slice(i+1); }
+
+
 const deepMerge = (base, over) => {
   if(Array.isArray(base) || Array.isArray(over)) return over !== undefined ? over : base;
   if(typeof base !== "object" || base === null) return over !== undefined ? over : base;
@@ -1507,7 +1622,7 @@ const set = (o,p,v) => { const ks=p.split("."); const last=ks.pop(); const t=ks.
 
 let S = load(); let tab = "templates"; let currentSheet = 0; let tplCat="all", tplQ="";
 const CATS=[["all","All"],["school","School"],["church","Church"],["community","Community"],["business","Business"],["finance","Finance"],["health","Health"],["civic","NGO & civic"],["events","Events & family"],["mine","My templates"]];
-function startSettings(){ const t=TEMPLATES[DEFAULT_TEMPLATE]; return deepMerge(clone(DEFAULTS), Object.assign({template:DEFAULT_TEMPLATE}, t?t.settings:{})); }
+function startSettings(){ const t=TEMPLATES[DEFAULT_TEMPLATE]; return deepMerge(clone(DEFAULTS), Object.assign({template:DEFAULT_TEMPLATE}, t?t.settings:{}, t&&!t.settings.deco?{deco:autoDeco(DEFAULT_TEMPLATE,t.cat||"other")}:{})); }
 function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return deepMerge(clone(DEFAULTS), JSON.parse(raw)); }catch(e){} return startSettings(); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 const OKEY="duebook.tploverrides.v1";
@@ -1518,7 +1633,7 @@ function saveOverrides(o){ localStorage.setItem(OKEY, JSON.stringify(o)); }
 /* every template (built‑in or user) as {id,name,desc,settings,builtin,modified} */
 function allTemplates(){
   const ov=overrides();
-  const b=Object.entries(TEMPLATES).map(([id,t])=>{ const o=ov[id]||{}; return {id, cat:t.cat||"other", name:o.name??t.name, desc:o.desc??t.desc, settings:o.settings??Object.assign({template:id},t.settings), builtin:true, modified:!!ov[id]}; });
+  const b=Object.entries(TEMPLATES).map(([id,t])=>{ const o=ov[id]||{}; const base=t.settings.deco?t.settings:Object.assign({},t.settings,{deco:autoDeco(id,t.cat||"other")}); return {id, cat:t.cat||"other", name:o.name??t.name, desc:o.desc??t.desc, settings:o.settings??Object.assign({template:id},base), builtin:true, modified:!!ov[id]}; });
   const u=userTemplates().map(t=>({id:t.id||("u_"+t.name), cat:"mine", name:t.name, desc:t.desc||"", settings:t.settings, builtin:false}));
   return b.concat(u);
 }
@@ -1542,7 +1657,7 @@ const F = {
 const arrBtns=(arr,i,n)=>`<button class="icon" data-act="up" data-arr="${arr}" data-i="${i}" ${i===0?"disabled":""} title="Move up">${I.up}</button><button class="icon" data-act="down" data-arr="${arr}" data-i="${i}" ${i===n-1?"disabled":""} title="Move down">${I.down}</button><button class="icon danger" data-act="del" data-arr="${arr}" data-i="${i}" title="Remove">${I.x}</button>`;
 
 const PANEL_TYPES=[["pledge","Pledge text"],["cover","Cover (name, address, fill‑in lines)"],["table","Records table (Month / Due / Contribution)"],["grid","Monthly record grid (Month of: …)"],["rcover","Report card – front cover"],["promo","Report card – promotion statement"],["grades","Report card – grades table (First semester on left page, Second on right)"],["custom","Custom text"],["blank","Blank"]];
-const TABS=[["templates","Templates"],["layout","Layout & style"],["panels","Pages"],["cover","Cover"],["pledge","Pledge"],["table","Table"],["grid","Month grid"],["report","Report card"],["numbering","Numbering"],["print","Print"]];
+const TABS=[["templates","Templates"],["layout","Layout & style"],["panels","Pages"],["cover","Cover"],["design","Cover design"],["pledge","Pledge"],["table","Table"],["grid","Month grid"],["report","Report card"],["numbering","Numbering"],["print","Print"]];
 
 function formHTML(){
   switch(tab){
@@ -1643,6 +1758,33 @@ function formHTML(){
       <label>Logo (optional)</label>
       <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove</button>${F.num("cover.logoH","Logo height (mm)",4,40,1)}</div>
     </fieldset>`;
+  case "design": { const d=S.deco; const W=100,H=92;
+    const sw=DECO_STYLES.map(([id,l])=>`<button type="button" class="sw ${d.style===id?"on":""}" data-act="deco-style" data-id="${id}" title="${l}">${decoSVG(id,W,H,Object.assign({},d,{style:id,opacity:1}))}<span>${l}</span></button>`).join("");
+    const pals=DECO_PALETTES.map(([nm,a,b],i)=>`<button type="button" class="pal ${d.c1===a&&d.c2===b?"on":""}" data-act="deco-pal" data-i="${i}" title="${nm}"><i style="background:${a}"></i><i style="background:${b}"></i></button>`).join("");
+    return `
+    <fieldset><legend>Decorative cover design</legend>
+      ${F.check("deco.on","Enable decorative design")}
+      <div class="hint">Adds a printed decoration (frames, corners, bands, waves…) behind the cover text. Every template has its own design preset; switch it off here for a plain cover, or change it and click <b>Save design here</b> in the Templates tab to keep it.</div>
+    </fieldset>
+    <fieldset ${d.on?"":"disabled style='opacity:.55'"}><legend>Style</legend>
+      <div id="decoGrid">${sw}</div>
+    </fieldset>
+    <fieldset ${d.on?"":"disabled style='opacity:.55'"}><legend>Colours</legend>
+      <div id="palRow">${pals}</div>
+      <div class="row">${F.color("deco.c1","Main colour")}${F.color("deco.c2","Accent colour")}</div>
+      ${F.check("deco.colorHeadings","Use the main colour for the organisation name, title and headings")}
+      <div class="row">${F.check("deco.tint","Light tint over the whole page")}${F.range("deco.tintAmt","Tint strength",0.02,0.3,0.01)}</div>
+    </fieldset>
+    <fieldset ${d.on?"":"disabled style='opacity:.55'"}><legend>Size &amp; placement</legend>
+      <div class="row">${F.range("deco.scale","Ornament size",0.5,2,0.05)}${F.range("deco.opacity","Ornament opacity",0.2,1,0.05)}</div>
+      <div class="row">${F.num("deco.inset","Extra text inset (mm)",0,15,0.5)}${F.check("deco.hideBox","Hide the plain border box while decorated")}</div>
+      <div class="hint">Increase the inset if the decoration touches the text. Text still auto‑fits inside the remaining space.</div>
+    </fieldset>
+    <fieldset ${d.on?"":"disabled style='opacity:.55'"}><legend>Which pages</legend>
+      ${F.check("deco.pages.front","Front cover (right page of the front sheet)")}
+      ${F.check("deco.pages.frontLeft","Back cover (left page of the front sheet – pledge / promotion statement)")}
+      ${F.check("deco.pages.inside","Inside pages (tables and grids)")}
+    </fieldset>`; }
   case "pledge": return `
     <fieldset><legend>Pledge</legend>
       <div class="row"><div style="flex:3">${F.text("pledge.head","Heading")}</div>${F.num("pledge.headSize","pt",5,40,0.5)}</div>
@@ -1799,6 +1941,7 @@ form.addEventListener("input", e=>{
   const el=e.target, p=el.dataset.p; if(!p) return;
   let v; if(el.dataset.t==="bool") v=el.checked; else if(el.dataset.t==="num") v=el.value===""?"":Number(el.value); else v=el.value;
   set(S,p,v); save(); render();
+  if(p==="deco.on"){ renderForm(); return; }
   if(el.type==="range"){ const lab=el.previousElementSibling; if(lab) lab.textContent=lab.textContent.replace(/\(.*\)$/,`(${v})`); }
 });
 form.addEventListener("input", e=>{
@@ -1821,6 +1964,8 @@ form.addEventListener("click", e=>{
   if(b.id==="logoClear"){ S.cover.logo=""; save(); render(); return; }
   const act=b.dataset.act; if(!act) return;
   if(act==="tpl-cat"){ tplCat=b.dataset.id; renderForm(); return; }
+  if(act==="deco-style"){ S.deco.style=b.dataset.id; save(); renderForm(); render(); return; }
+  if(act==="deco-pal"){ const p=DECO_PALETTES[+b.dataset.i]; S.deco.c1=p[1]; S.deco.c2=p[2]; save(); renderForm(); render(); return; }
   if(act==="tpl-use"){ const t=getTemplate(b.dataset.id); if(!t) return;
     const cur=getTemplate(S.template);
     askModal({title:S.template===t.id?"Reload template":"Switch template", warn:true,
@@ -1999,6 +2144,7 @@ function customPanel(p){ return `<div class="panel free" style="${pad()};justify
 
 function panel(id,idx,right){ const p=S.panels[id]; let html;
   switch(p.type){ case "pledge":html=pledgePanel();break; case "cover":html=coverPanel(idx);break; case "table":html=tablePanel(idx,p);break; case "grid":html=gridPanel();break; case "rcover":html=rcoverPanel();break; case "promo":html=promoPanel();break; case "grades":html=gradesPanel(right?"right":"left");break; case "custom":html=customPanel(p);break; default:html=`<div class="panel" style="${pad()}"></div>`; }
+  html=decorate(html,id);
   html=html.replace('class="panel','data-pid="'+id+'" class="panel'); return right?html.replace('class="panel','class="panel rl'):html; }
 
 function card(ps,side,slot){
@@ -2020,11 +2166,11 @@ function sheetHTML(ps,side){
 
 /* ---- auto-fit: shrink text until every panel's content fits its box ---- */
 function overflowOf(el){
-  const kids=[...el.children]; if(!kids.length) return 0;
+  const kids=[...el.children].filter(k=>!k.classList.contains("deco")); if(!kids.length) return 0;
   const r=el.getBoundingClientRect(); const sc=r.height/(el.offsetHeight||1);
   const cs=getComputedStyle(el);
-  const innerH=(el.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom))*sc;
-  const innerW=(el.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight))*sc;
+  const innerH=r.height-(parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom)+parseFloat(cs.borderTopWidth)+parseFloat(cs.borderBottomWidth))*sc;
+  const innerW=r.width-(parseFloat(cs.paddingLeft)+parseFloat(cs.paddingRight)+parseFloat(cs.borderLeftWidth)+parseFloat(cs.borderRightWidth))*sc;
   let top=Infinity,bot=-Infinity,left=Infinity,right=-Infinity;
   kids.forEach(k=>{const b=k.getBoundingClientRect(); const m=getComputedStyle(k); top=Math.min(top,b.top-parseFloat(m.marginTop)*sc); bot=Math.max(bot,b.bottom+parseFloat(m.marginBottom)*sc); left=Math.min(left,b.left); right=Math.max(right,b.right);});
   return Math.max((bot-top)-innerH,(right-left)-innerW)/sc;
