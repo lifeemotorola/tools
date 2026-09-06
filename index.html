@@ -459,13 +459,13 @@ Object.assign(TEMPLATES,{
       table:{ head:"MONTHLY DUES {year}", cols:[{name:"MONTH",w:30},{name:"DUE",w:22},{name:"FINE",w:22},{name:"SIGN",w:26}], rows:MONTHS12 } } },
 
 /* ================= HEALTH & FINANCE ================= */
-  patient_card:{ cat:"other", name:"Clinic Patient Record Card", desc:"Bi‑fold card for a clinic: instructions + cover (Name, Age/Sex, Address, Patient #) outside; visit log – Date, Complaint / Diagnosis, Treatment, Next Visit – inside.",
+  patient_card:{ cat:"health", name:"Clinic Patient Record Card", desc:"Bi‑fold card for a clinic: instructions + cover (Name, Age/Sex, Address, Patient #) outside; visit log – Date, Complaint / Diagnosis, Treatment, Next Visit – inside.",
     settings:{ layout:{color:"#ffffff", cardBorder:0.4}, panels:{ fl:{type:"pledge"}, fr:{type:"cover"}, bl:{type:"table",yearMode:"none"}, br:{type:"table",yearMode:"none"} },
       pledge:{ head:"IMPORTANT", align:"left", textSize:11, text:"• Bring this card every time you visit the clinic.\n• Keep it clean and dry.\n• Take all medicines exactly as instructed.\n• Return on the next‑visit date written on this card.\n• In an emergency come to the clinic at any time." },
       cover:{ org:"BREWERVILLE COMMUNITY CLINIC", orgCase:"upper", addr:"Brewerville City\nMontserrado County, Liberia", title:"PATIENT RECORD CARD", motto:"“Your health, our concern”",
         fields:[LINE("Name:"),LINE("Age / Sex:"),LINE("Address:"),LINE("Contact #:"),LINE("Patient #:","cardno")] },
       table:{ head:"VISIT RECORD", cols:[{name:"DATE",w:16},{name:"COMPLAINT / DIAGNOSIS",w:34},{name:"TREATMENT",w:30},{name:"NEXT VISIT",w:20}], rows:BLANK_ROWS(11), cellSize:9 } } },
-  loan_card:{ cat:"other", name:"Loan Repayment Card", desc:"Bi‑fold card for micro‑loans and credit unions: loan terms + cover outside; instalment record – Due Date, Amount, Paid, Balance, Sign – inside.",
+  loan_card:{ cat:"finance", name:"Loan Repayment Card", desc:"Bi‑fold card for micro‑loans and credit unions: loan terms + cover outside; instalment record – Due Date, Amount, Paid, Balance, Sign – inside.",
     settings:{ layout:{color:"#dbeafe"}, panels:{ fl:{type:"pledge"}, fr:{type:"cover"}, bl:{type:"table",yearMode:"none"}, br:{type:"table",yearMode:"none"} },
       pledge:{ head:"LOAN TERMS", align:"left", textSize:11, text:"Loan Amount: ______________   Interest: ________\nStart Date: ______________   Instalments: ________\nGuarantor: ____________________________\n\nI agree to repay this loan in full according to the schedule inside this card.\n\nBorrower’s Signature: ____________________" },
       cover:{ org:"BREWERVILLE CREDIT UNION", addr:"Brewerville City\nMontserrado County, Liberia", title:"LOAN REPAYMENT CARD", motto:"“Save today, prosper tomorrow”",
@@ -473,6 +473,306 @@ Object.assign(TEMPLATES,{
       table:{ head:"REPAYMENT SCHEDULE", cols:[{name:"INST.",w:12},{name:"DUE DATE",w:20},{name:"AMOUNT",w:17},{name:"PAID",w:17},{name:"BALANCE",w:17},{name:"SIGN",w:17}],
         rows:Array.from({length:12},(_,i)=>String(i+1)), cellSize:8.5, headerSize:8 } } }
 });
+
+/* ---- 50 additional built-in templates (factory-built) ---- */
+const TOWN_ADDR="Brewerville City\nMontserrado County, Liberia";
+const STD_PANELS=(ym)=>({ fl:{type:"pledge"}, fr:{type:"cover"}, bl:{type:"table",yearMode:ym||"blank"}, br:{type:"table",yearMode:ym||"blank"} });
+const C=(name,w)=>({name,w});
+const NUM=(n,pre="")=>Array.from({length:n},(_,i)=>pre+(i+1));
+/* due/record card factory */
+function DUE(id,cat,name,desc,o){
+  TEMPLATES[id]={cat,name,desc,settings:{
+    layout:Object.assign({color:o.color||"#ffffff"},o.layout||{}),
+    panels:o.panels||STD_PANELS(o.yearMode),
+    pledge:Object.assign({head:"MY PLEDGE",textSize:12,align:"justify"},o.pledge||{}),
+    cover:Object.assign({org:o.org,addr:o.addr||TOWN_ADDR,title:o.title,motto:o.motto||"",fields:o.fields||[LINE("Name:"),LINE("Card #:","cardno"),SIGNED("SECRETARY")]},o.cover||{}),
+    table:Object.assign({head:o.tableHead||"MONTHLY RECORD {year}",cols:o.cols||[C("MONTH",34),C("DUE",30),C("SIGN",36)],rows:o.rows||MONTHS12},o.table||{}),
+    grid:o.grid, numbering:o.numbering, report:o.report }};
+}
+/* booklet factory (grid pages + inner sheet) */
+function BOOK(id,cat,name,desc,o){
+  DUE(id,cat,name,desc,Object.assign({},o,{
+    panels:{ fl:{type:o.leftPage||"pledge"}, fr:{type:"cover"}, bl:{type:"grid"}, br:{type:"grid"}, il:{type:"grid"}, ir:{type:"grid"} },
+    numbering:{innerSheets:o.inner??1},
+    grid:Object.assign({layout:"side",tables:1,rows:14,rotate:false,title:"",titleSize:9},o.grid||{}) }));
+}
+/* report card factory */
+function RPT(id,name,desc,o){
+  TEMPLATES[id]={cat:"school",name,desc,settings:{ layout:RPT_LAYOUT, panels:RPT_PANELS, report:Object.assign({},RPT_SIZES,{addr:SCHOOL_ADDR},o) }};
+}
+
+/* ================= SCHOOL (10) ================= */
+RPT("report_nursery","Nursery School Report Card","Report card for nursery classes with early‑learning areas and a simple rating scale.",
+  { title:"NURSERY SCHOOL REPORT CARD", subjHead:"LEARNING AREAS", subjW:40,
+    subjects:["Bible Stories","Rhymes & Songs","Alphabet","Numbers 1 – 50","Colouring","Hand Writing","Oral English","Health Habits","Play & Games","Conduct"],
+    sem1Cols:["1st PD","2nd PD","3rd PD","Ave"], sem2Cols:["4th PD","5th PD","6th PD","Ave","Yrly Ave"],
+    scale:"E  = Excellent\nVG = Very Good\nG  = Good\nNI = Needs Improvement", gNote:"Please sign every period.",
+    pBody:"Pupil: ______________ HAS/HAS NOT satisfactorily completed the work of ______ and is therefore",
+    pOptions:["A.  Promoted to __________","B.  Required to repeat the class."] });
+RPT("report_tvet","Technical & Vocational Training Report","Report card for vocational / technical trainees: theory, practical, workshop safety, tools, drawing, entrepreneurship – two terms.",
+  { school:"BREWERVILLE VOCATIONAL TRAINING CENTER", title:"TRAINEE PROGRESS REPORT", addr:TOWN_ADDR, subjW:36,
+    subjHead:"AREAS", subjects:["Theory","Practical Work","Workshop Safety","Tools & Equipment","Technical Drawing","Entrepreneurship","Mathematics","English","Attendance","Conduct","Average"],
+    sem1:"FIRST TERM", sem1Cols:["Test 1","Test 2","Project","Exam","Ave"], sem2:"SECOND TERM", sem2Cols:["Test 1","Test 2","Project","Exam","Ave","Final"],
+    fields:"Trainee Name:\nTrade: | Level:", signHead:"PARENTS / SPONSORS", signCols:[C("TERM",18),C("INSTRUCTOR",41),C("PARENT / SPONSOR",41)], signRows:["1st","2nd","3rd"], signRowH:8,
+    pBody:"Trainee: ______________ HAS/HAS NOT satisfactorily completed the training requirements of ______ and is therefore",
+    pOptions:["A.  Promoted to Level __________","B.  Required to repeat the level.","C.  Recommended for certification."],
+    pSigns:["Instructor","Director"], motto:"MOTTO: “SKILLS FOR LIFE”", note:"NOTE: A trainee who scores below 70% in practical work will not be certified." });
+RPT("report_adult","Adult Literacy Progress Card","Progress card for adult literacy learners: reading, writing, numeracy, life skills, health and civic education.",
+  { school:"BREWERVILLE ADULT LITERACY PROGRAM", title:"LEARNER PROGRESS CARD", addr:TOWN_ADDR, subjW:38,
+    subjHead:"AREAS", subjects:["Reading","Writing","Numeracy","Life Skills","Health Education","Civic Education","Participation","Attendance","Conduct","Average"],
+    sem1:"FIRST CYCLE", sem2:"SECOND CYCLE", fields:"Learner Name:\nLevel: | Facilitator:",
+    signHead:"FACILITATOR / SUPERVISOR", signCols:[C("PERIOD",18),C("FACILITATOR",41),C("SUPERVISOR",41)],
+    pBody:"Learner: ______________ HAS/HAS NOT satisfactorily completed Level ______ and is therefore",
+    pOptions:["A.  Promoted to Level __________","B.  Required to repeat the level."], pSigns:["Facilitator","Program Coordinator"],
+    motto:"MOTTO: “IT IS NEVER TOO LATE TO LEARN”", note:"NOTE: Learners are encouraged to attend all sessions and practise at home." });
+DUE("teacher_att","school","Teacher Attendance Record Card","Monthly record of days present, absent, late and the principal’s signature for each teacher.",
+  { color:"#e0f2fe", org:"SAME GOD NEW GENERATION ACADEMY", addr:SCHOOL_ADDR, title:"TEACHER ATTENDANCE RECORD CARD", motto:"MOTTO: “NO CHILD LEFT BEHIND”",
+    pledge:{head:"TEACHER’S COMMITMENT", text:"I commit to be present and punctual every school day, to prepare my lessons diligently and to be a good example to the students entrusted to my care."},
+    fields:[LINE("Teacher’s Name:"),LINE("Subject / Class:"),LINE("Staff #:","cardno"),SIGNED("PRINCIPAL")],
+    tableHead:"ATTENDANCE {year}", cols:[C("MONTH",26),C("PRESENT",17),C("ABSENT",17),C("LATE",16),C("SIGN",24)] });
+DUE("pta_dues","school","PTA Dues Card","Parent‑Teacher Association dues card: monthly dues, project levy and the treasurer’s signature.",
+  { color:"#fef3c7", org:"SAME GOD NEW GENERATION ACADEMY – PTA", addr:SCHOOL_ADDR, title:"PTA DUES CARD", motto:"“Together for our children”",
+    pledge:{head:"PTA PLEDGE", text:"As a parent/guardian I pledge to attend PTA meetings, to pay my dues faithfully and to support the school in giving my child a quality education."},
+    fields:[LINE("Parent / Guardian:"),LINE("Child(ren):"),LINE("Contact #:"),SIGNED("PTA TREASURER")],
+    tableHead:"PTA DUES {year}", cols:[C("MONTH",28),C("DUES",22),C("PROJECT LEVY",26),C("SIGN",24)] });
+DUE("transport_fee","school","School Bus / Transport Fee Card","Monthly transport fee record with route and pick‑up point on the cover.",
+  { color:"#fee2e2", org:"SAME GOD NEW GENERATION ACADEMY", addr:SCHOOL_ADDR, title:"SCHOOL TRANSPORT FEE CARD",
+    pledge:{head:"TRANSPORT RULES", align:"left", textSize:11, text:"1. Fees are paid before the 5th of every month.\n2. Be at the pick‑up point 5 minutes early.\n3. Remain seated while the bus is moving.\n4. Respect the driver and attendant."},
+    fields:[LINE("Student Name:"),LINE("Route / Pick‑up:"),LINE("Grade:"),SIGNED("TRANSPORT OFFICER")],
+    tableHead:"TRANSPORT FEES {year}", cols:[C("MONTH",28),C("AMOUNT",24),C("RECEIPT #",24),C("SIGN",24)] });
+DUE("exam_permit","school","Exam Clearance Card","Semester exam clearance: fees, library and lab clearance signatures on the inside, student details on the cover.",
+  { color:"#dcfce7", org:"SAME GOD NEW GENERATION ACADEMY", addr:SCHOOL_ADDR, title:"EXAMINATION CLEARANCE CARD", yearMode:"blank",
+    pledge:{head:"EXAM REGULATIONS", align:"left", textSize:11, text:"1. Present this card at the door of every exam.\n2. No student is admitted without clearance.\n3. Cheating in any form leads to cancellation of the paper.\n4. Be seated 15 minutes before each paper."},
+    fields:[LINE("Student Name:"),LINE("Grade / Class:"),LINE("ID #:","cardno"),SIGNED("REGISTRAR")],
+    tableHead:"CLEARANCE – {year}", table:{yearLabel:"Semester:", yearLine:20}, cols:[C("OFFICE",30),C("CLEARED (Y/N)",22),C("DATE",22),C("SIGN",26)],
+    rows:["Business Office","Registrar","Library","Laboratory","Class Sponsor","Dean of Students","Principal"] });
+DUE("scholarship","school","Scholarship Disbursement Card","Record of scholarship payments made to or for a student each semester.",
+  { color:"#ede9fe", org:"SAME GOD NEW GENERATION ACADEMY", addr:SCHOOL_ADDR, title:"SCHOLARSHIP DISBURSEMENT CARD", yearMode:"none",
+    pledge:{head:"SCHOLAR’S PLEDGE", text:"I pledge to maintain a good academic standing and conduct, to attend school regularly and to make the best use of this scholarship."},
+    fields:[LINE("Scholar:"),LINE("Sponsor:"),LINE("Grade:"),SIGNED("BUSINESS MANAGER")],
+    tableHead:"DISBURSEMENTS", cols:[C("DATE",18),C("SEMESTER",20),C("ITEM",26),C("AMOUNT",18),C("SIGN",18)], rows:BLANK_ROWS(12) });
+BOOK("homework_diary","school","Homework Diary","Stapled diary: Date · Subject · Assignment · Parent’s signature on every page.",
+  { color:"#ffffff", org:"SAME GOD NEW GENERATION ACADEMY", addr:SCHOOL_ADDR, title:"HOMEWORK DIARY", motto:"MOTTO: “NO CHILD LEFT BEHIND”", leftPage:"pledge",
+    pledge:{head:"TO PARENTS", textSize:11, text:"Please check this diary every evening, make sure the assignment is done and sign. Your signature tells the teacher you have seen the work."},
+    fields:[LINE("Student Name:"),LINE("Grade / Class:"),LINE("Class Sponsor:")],
+    grid:{cols:[C("DATE",15),C("SUBJECT",20),C("ASSIGNMENT",45),C("PARENT SIGN",20)], rows:13, title:"HOMEWORK RECORD"} });
+BOOK("lesson_plan","school","Teacher’s Lesson Record Book","Stapled record: Date · Class · Topic taught · Remarks · Principal’s initials.",
+  { color:"#ffffff", org:"SAME GOD NEW GENERATION ACADEMY", addr:SCHOOL_ADDR, title:"LESSON RECORD BOOK", leftPage:"blank",
+    fields:[LINE("Teacher:"),LINE("Subject:"),LINE("Semester:"),SIGNED("PRINCIPAL")],
+    grid:{cols:[C("DATE",14),C("CLASS",12),C("TOPIC TAUGHT",42),C("REMARKS",20),C("INIT.",12)], rows:13} });
+
+/* ================= CHURCH (12) ================= */
+DUE("ushers","church","Ushers Board Due Card","Monthly dues and uniform contribution for members of the Ushers Board.",
+  { color:"#e0e7ff", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"USHERS BOARD DUE CARD",
+    pledge:{head:"USHER’S PLEDGE", text:"“I had rather be a doorkeeper in the house of my God.” – Psalm 84:10\n\nI pledge to serve with a smile, to be punctual and neat, and to keep order in the house of God."},
+    fields:[LINE("Name:"),LINE("Church:","church"),LINE("Card #:","cardno"),SIGNED("HEAD USHER")],
+    tableHead:"MONTHLY DUES {year}", cols:[C("MONTH",28),C("DUE",22),C("UNIFORM",24),C("SIGN",26)] });
+DUE("intercessors","church","Prayer Band Attendance Card","Weekly attendance record for intercessors / prayer band members.",
+  { color:"#fce7f3", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"PRAYER BAND ATTENDANCE CARD",
+    pledge:{head:"MY COMMITMENT", text:"“Pray without ceasing.” – 1 Thessalonians 5:17\n\nI commit to attend every prayer meeting and to stand in the gap for my church, my family and my nation."},
+    fields:[LINE("Name:"),LINE("Church:","church"),SIGNED("PRAYER LEADER")],
+    tableHead:"ATTENDANCE {year}", cols:[C("MONTH",26),C("WK 1",12),C("WK 2",12),C("WK 3",12),C("WK 4",12),C("WK 5",12),C("TOTAL",14)], table:{cellSize:8.5,headerSize:8} });
+BOOK("evangelism","church","Evangelism Outreach Record Book","Stapled record of outreach: Date · Area · Contacts · Decisions · Follow‑up.",
+  { color:"#ffffff", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"EVANGELISM RECORD BOOK",
+    pledge:{head:"THE GREAT COMMISSION", text:"“Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.” – Matthew 28:19"},
+    fields:[LINE("Team / Evangelist:"),LINE("Church:","church"),LINE("Period:"),SIGNED("EVANGELISM DIRECTOR")],
+    grid:{cols:[C("DATE",14),C("AREA / COMMUNITY",30),C("CONTACTS",14),C("DECISIONS",14),C("FOLLOW‑UP / REMARKS",28)], rows:13} });
+DUE("new_members","church","New Members’ Class Card","Attendance record for baptism / new members’ classes with lesson topics as rows.",
+  { color:"#dcfce7", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"NEW MEMBERS’ CLASS CARD", yearMode:"none",
+    pledge:{head:"WELCOME", text:"We thank God for you. These classes will help you understand the faith, the doctrine and the life of this church. Attend every lesson and bring your Bible."},
+    fields:[LINE("Name:"),LINE("Date Started:"),LINE("Teacher:"),SIGNED("PASTOR")],
+    tableHead:"LESSON ATTENDANCE", cols:[C("LESSON",44),C("DATE",22),C("PRESENT",14),C("SIGN",20)],
+    rows:["1. Salvation","2. The Bible","3. Prayer","4. Baptism","5. The Church","6. Holy Communion","7. Stewardship","8. Christian Living","9. Spiritual Gifts","10. Our Church","Baptism Date","Reception Date"] });
+BOOK("ss_teacher","church","Sunday School Teacher’s Record Book","Stapled record: Date · Lesson · Pupils present · Offering · Superintendent’s initials.",
+  { color:"#ffffff", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"SUNDAY SCHOOL TEACHER’S RECORD", leftPage:"blank",
+    fields:[LINE("Teacher:"),LINE("Class:"),LINE("Year:"),SIGNED("SUPERINTENDENT")],
+    grid:{cols:[C("DATE",14),C("LESSON / TOPIC",40),C("PUPILS",13),C("OFFERING",17),C("INIT.",16)], rows:13} });
+DUE("harvest","church","Harvest & Thanksgiving Pledge Card","Pledge card for the annual harvest: pledge statement outside, instalment record inside.",
+  { color:"#fef08a", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"HARVEST & THANKSGIVING PLEDGE CARD", yearMode:"blank",
+    pledge:{head:"MY HARVEST PLEDGE", align:"left", text:"“Honour the LORD with thy substance, and with the firstfruits of all thine increase.” – Proverbs 3:9\n\nWith a thankful heart I pledge ____________________ for this year’s harvest.\n\nSigned: ______________  Date: __________"},
+    fields:[LINE("Name:"),LINE("Church:","church"),LINE("Pledge #:","cardno"),SIGNED("HARVEST CHAIRMAN")],
+    tableHead:"HARVEST PAYMENTS {year}", cols:[C("DATE",22),C("AMOUNT",24),C("BALANCE",24),C("SIGN",30)], rows:BLANK_ROWS(12) });
+DUE("mission_fund","church","Mission Fund Contribution Card","Monthly contributions to the mission / church‑planting fund.",
+  { color:"#ccfbf1", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"MISSION FUND CONTRIBUTION CARD",
+    pledge:{head:"MISSION PLEDGE", text:"“How shall they hear without a preacher? and how shall they preach, except they be sent?” – Romans 10:14‑15\n\nI pledge to support the sending of missionaries and the planting of new churches."},
+    fields:[LINE("Name:"),LINE("Church:","church"),LINE("Card #:","cardno"),SIGNED("MISSION DIRECTOR")],
+    tableHead:"MISSION CONTRIBUTIONS {year}", cols:[C("MONTH",30),C("AMOUNT",26),C("RECEIPT #",20),C("SIGN",24)] });
+DUE("deacons","church","Deacon Board Dues Card","Monthly dues and special levies for deacons and deaconesses.",
+  { color:"#e5e7eb", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"DEACON BOARD DUES CARD",
+    pledge:{head:"DEACON’S PLEDGE", text:"“Likewise must the deacons be grave, not doubletongued, not given to much wine, not greedy of filthy lucre.” – 1 Timothy 3:8\n\nI pledge to serve faithfully and to support the work of the board."},
+    fields:[LINE("Name:"),LINE("Church:","church"),LINE("Card #:","cardno"),SIGNED("CHAIRMAN OF DEACONS")],
+    tableHead:"MONTHLY DUES {year}", cols:[C("MONTH",28),C("DUE",22),C("LEVY",22),C("SIGN",28)] });
+DUE("choir_att","church","Choir Attendance Card","Weekly rehearsal and service attendance for choir members.",
+  { color:"#e0e7ff", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"CHOIR ATTENDANCE CARD",
+    pledge:{head:"CHOIR PLEDGE", text:"I pledge to attend every rehearsal and service on time and to sing with all my heart to the glory of God."},
+    fields:[LINE("Name:"),LINE("Voice Part:"),SIGNED("CHOIR DIRECTOR")],
+    tableHead:"ATTENDANCE {year}", cols:[C("MONTH",24),C("REH. 1",11),C("REH. 2",11),C("REH. 3",11),C("REH. 4",11),C("SERVICES",16),C("TOTAL",16)], table:{cellSize:8.5,headerSize:8} });
+DUE("children_church","church","Children’s Church Attendance Card","Weekly attendance for children with a memory‑verse column.",
+  { color:"#fef3c7", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"CHILDREN’S CHURCH ATTENDANCE CARD",
+    pledge:{head:"MY PROMISE", textSize:13, text:"I love Jesus.\nI will come to church every Sunday.\nI will learn my memory verse.\nI will obey my parents and teachers."},
+    fields:[LINE("Name:"),LINE("Age:"),LINE("Teacher:"),SIGNED("CHILDREN’S PASTOR")],
+    tableHead:"ATTENDANCE {year}", cols:[C("MONTH",26),C("WK 1",11),C("WK 2",11),C("WK 3",11),C("WK 4",11),C("VERSES",15),C("STARS",15)], table:{cellSize:8.5,headerSize:8} });
+DUE("pastor_fund","church","Pastor’s Appreciation Fund Card","Monthly contributions toward the pastor’s welfare and appreciation.",
+  { color:"#fae8ff", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"PASTOR’S APPRECIATION FUND CARD",
+    pledge:{head:"WHY WE GIVE", text:"“Let the elders that rule well be counted worthy of double honour, especially they who labour in the word and doctrine.” – 1 Timothy 5:17"},
+    fields:[LINE("Name:"),LINE("Church:","church"),LINE("Card #:","cardno"),SIGNED("CHAIRMAN")],
+    tableHead:"CONTRIBUTIONS {year}", cols:[C("MONTH",30),C("AMOUNT",26),C("SIGN",44)] });
+BOOK("cell_group","church","Cell Group Offering Book","Stapled record for home cells: Date · Attendance · Offering · Tithe · Leader’s signature.",
+  { color:"#ffffff", org:"GREATER PRAISE PASTORAL NET WORK", addr:CHURCH_ADDR, title:"CELL GROUP RECORD BOOK",
+    pledge:{head:"CELL VISION", text:"“And they, continuing daily with one accord in the temple, and breaking bread from house to house, did eat their meat with gladness and singleness of heart.” – Acts 2:46"},
+    fields:[LINE("Cell Name:"),LINE("Leader:"),LINE("Location:"),SIGNED("CELL COORDINATOR")],
+    grid:{cols:[C("DATE",16),C("ATTEND.",14),C("OFFERING",18),C("TITHE",18),C("LEADER SIGN",34)], rows:14} });
+
+/* ================= COMMUNITY (8) ================= */
+DUE("town_levy","community","Town Development Levy Card","Annual and monthly development levy paid by households to the town council.",
+  { color:"#d1fae5", org:"JAMAH TOWN COUNCIL", addr:"Jamah Town, Brewerville City\nMontserrado County, Liberia", title:"DEVELOPMENT LEVY CARD", motto:"“Development is everybody’s business”",
+    pledge:{head:"NOTICE", align:"left", textSize:11, text:"Every household in Jamah Town is required to pay the development levy. Funds are used for roads, drainage, street lights and community projects. Keep this card and present it when paying."},
+    fields:[LINE("Head of Household:"),LINE("House / Zone:"),LINE("Card #:","cardno"),SIGNED("TOWN CHIEF")],
+    tableHead:"LEVY PAYMENTS {year}", cols:[C("MONTH",28),C("AMOUNT",24),C("RECEIPT #",22),C("SIGN",26)] });
+DUE("hand_pump","community","Hand Pump Maintenance Fee Card","Monthly water‑point maintenance fee for households using the community hand pump.",
+  { color:"#dbeafe", org:"JAMAH TOWN WATER COMMITTEE", addr:"Jamah Town, Brewerville City\nMontserrado County, Liberia", title:"HAND PUMP MAINTENANCE FEE CARD", motto:"“Clean water for all”",
+    pledge:{head:"WATER POINT RULES", align:"left", textSize:11, text:"1. Pay your maintenance fee every month.\n2. Keep the pump area clean.\n3. No washing at the pump.\n4. Report any fault to the committee immediately."},
+    fields:[LINE("Household:"),LINE("Pump / Location:"),LINE("Card #:","cardno"),SIGNED("COMMITTEE TREASURER")],
+    tableHead:"MAINTENANCE FEES {year}", cols:[C("MONTH",30),C("FEE",24),C("SIGN",46)] });
+DUE("comm_watch","community","Community Watch Team Card","Dues and duty‑night record for neighbourhood watch volunteers.",
+  { color:"#e5e7eb", org:"BREWERVILLE COMMUNITY WATCH FORUM", title:"COMMUNITY WATCH TEAM CARD", motto:"“Our safety, our responsibility”",
+    pledge:{head:"WATCH TEAM PLEDGE", text:"I pledge to protect my community, to report on duty as scheduled, to respect the rights of every resident and to work closely with the Liberia National Police."},
+    fields:[LINE("Name:"),LINE("Zone:"),LINE("Team #:","cardno"),SIGNED("TEAM COMMANDER")],
+    tableHead:"DUES & DUTY {year}", cols:[C("MONTH",26),C("DUE",20),C("NIGHTS",18),C("SIGN",36)] });
+DUE("football_club","community","Football Club Membership Card","Player membership card with jersey number and monthly dues record.",
+  { color:"#dcfce7", org:"BREWERVILLE UNITED FOOTBALL CLUB", title:"PLAYER MEMBERSHIP CARD", motto:"“One team, one dream”",
+    pledge:{head:"PLAYER’S PLEDGE", text:"I pledge to train hard, to play fair, to respect referees, opponents and team‑mates, and to represent this club with pride on and off the field."},
+    fields:[LINE("Player Name:"),LINE("Position:"),LINE("Jersey #:"),LINE("Member #:","cardno"),SIGNED("CLUB SECRETARY")],
+    tableHead:"MONTHLY DUES {year}", cols:[C("MONTH",28),C("DUE",22),C("FINE",22),C("SIGN",28)] });
+DUE("league_reg","community","Sports League Player Registration Card","League registration card: player details, club and match‑day sign‑in record.",
+  { color:"#fef9c3", org:"BREWERVILLE COMMUNITY SPORTS LEAGUE", title:"PLAYER REGISTRATION CARD", yearMode:"blank",
+    pledge:{head:"LEAGUE RULES", align:"left", textSize:11, text:"1. A player may register for one club only per season.\n2. This card must be presented before every match.\n3. Red‑carded players sit out the next match.\n4. Any alteration of this card leads to suspension."},
+    fields:[LINE("Player Name:"),LINE("Club:"),LINE("Date of Birth:"),LINE("Reg. #:","cardno"),SIGNED("LEAGUE SECRETARY")],
+    tableHead:"MATCH RECORD – {year}", table:{yearLabel:"Season:", yearLine:20}, cols:[C("DATE",18),C("OPPONENT",34),C("GOALS",14),C("CARDS",14),C("REF.",20)], rows:BLANK_ROWS(12) });
+DUE("farmers_coop","community","Farmers’ Cooperative Dues Card","Monthly dues and share contributions for cooperative members with farm details on the cover.",
+  { color:"#d9f99d", org:"BREWERVILLE FARMERS’ COOPERATIVE SOCIETY", title:"MEMBERSHIP DUES CARD", motto:"“Feed the nation”",
+    pledge:{head:"COOPERATIVE PLEDGE", text:"As a member I pledge to pay my dues and shares faithfully, to sell my produce through the cooperative and to attend general meetings."},
+    fields:[LINE("Name:"),LINE("Farm Location:"),LINE("Main Crop:"),LINE("Member #:","cardno"),SIGNED("TREASURER")],
+    tableHead:"DUES & SHARES {year}", cols:[C("MONTH",26),C("DUES",20),C("SHARES",22),C("SIGN",32)] });
+DUE("fishermen","community","Fishermen’s Association Card","Monthly dues and landing‑fee record for canoe owners and fishermen.",
+  { color:"#cffafe", org:"BREWERVILLE FISHERMEN’S ASSOCIATION", title:"MEMBERSHIP CARD", motto:"“Safe seas, good catch”",
+    pledge:{head:"ASSOCIATION RULES", align:"left", textSize:11, text:"1. Pay dues and landing fees monthly.\n2. Carry life jackets on every trip.\n3. Respect the closed season.\n4. Report accidents at sea to the association."},
+    fields:[LINE("Name:"),LINE("Canoe Name / #:"),LINE("Landing Site:"),LINE("Member #:","cardno"),SIGNED("CHAIRMAN")],
+    tableHead:"DUES {year}", cols:[C("MONTH",26),C("DUES",20),C("LANDING FEE",24),C("SIGN",30)] });
+DUE("tailors","community","Tailors’ Union Dues Card","Monthly dues for tailors and seamstresses with shop location on the cover.",
+  { color:"#fce7f3", org:"BREWERVILLE TAILORS & SEAMSTRESSES UNION", title:"MEMBERSHIP DUES CARD", motto:"“Stitch by stitch”",
+    pledge:{head:"UNION PLEDGE", text:"I pledge to uphold the standards of the union, to deliver quality work on time, to pay my dues and to support fellow members."},
+    fields:[LINE("Name:"),LINE("Shop Location:"),LINE("Member #:","cardno"),SIGNED("FINANCIAL SECRETARY")] });
+
+/* ================= BUSINESS (7) ================= */
+DUE("layaway","business","Customer Layaway Payment Card","Shop card for goods paid in instalments: item, price and payment record.",
+  { color:"#fef3c7", org:"BLESSED HANDS ENTERPRISE", title:"LAYAWAY PAYMENT CARD", motto:"“Pay small small, take it home”", yearMode:"none",
+    pledge:{head:"LAYAWAY TERMS", align:"left", textSize:11, text:"Item: ________________________\nTotal Price: ______________  Deposit: __________\nBalance: ______________  Final Date: __________\n\nGoods are released only when fully paid. Deposits are not refundable after 30 days."},
+    fields:[LINE("Customer:"),LINE("Contact #:"),LINE("Card #:","cardno"),SIGNED("MANAGER")],
+    tableHead:"PAYMENTS", cols:[C("DATE",22),C("AMOUNT",24),C("BALANCE",24),C("SIGN",30)], rows:BLANK_ROWS(12) });
+DUE("shop_credit","business","Shop Credit Book Card","Record of goods taken on credit and payments made by a regular customer.",
+  { color:"#ffedd5", org:"BLESSED HANDS ENTERPRISE", title:"CUSTOMER CREDIT CARD", yearMode:"none",
+    pledge:{head:"CREDIT TERMS", align:"left", textSize:11, text:"1. Credit is granted to registered customers only.\n2. Balances must be cleared within 30 days.\n3. Both customer and cashier sign every entry.\n4. This card remains the property of the shop."},
+    fields:[LINE("Customer:"),LINE("Address:"),LINE("Contact #:"),SIGNED("MANAGER")],
+    tableHead:"CREDIT RECORD", cols:[C("DATE",16),C("ITEMS",30),C("TAKEN",16),C("PAID",16),C("BALANCE",22)], rows:BLANK_ROWS(12) });
+DUE("salary_advance","business","Salary Advance Record Card","Employee card recording salary advances and monthly deductions.",
+  { color:"#e0f2fe", org:"BLESSED HANDS ENTERPRISE", title:"SALARY ADVANCE CARD", yearMode:"blank",
+    pledge:{head:"CONDITIONS", align:"left", textSize:11, text:"1. Advances may not exceed 50% of monthly salary.\n2. Advances are recovered from the next salary.\n3. Only one advance may be outstanding at a time.\n4. Employee and cashier sign every entry."},
+    fields:[LINE("Employee:"),LINE("Position:"),LINE("Staff #:","cardno"),SIGNED("ACCOUNTANT")],
+    tableHead:"ADVANCES & DEDUCTIONS {year}", cols:[C("MONTH",22),C("ADVANCE",20),C("DEDUCTED",20),C("BALANCE",18),C("SIGN",20)] });
+DUE("staff_att","business","Staff Attendance Card","Monthly summary of days worked, absent, late and overtime for each employee.",
+  { color:"#e5e7eb", org:"BLESSED HANDS ENTERPRISE", title:"STAFF ATTENDANCE CARD",
+    pledge:{head:"WORK RULES", align:"left", textSize:11, text:"1. Working hours are 8:00 a.m. – 5:00 p.m.\n2. Report absence before 8:00 a.m.\n3. Three unexcused absences lead to a warning.\n4. Overtime must be approved in advance."},
+    fields:[LINE("Employee:"),LINE("Department:"),LINE("Staff #:","cardno"),SIGNED("SUPERVISOR")],
+    tableHead:"ATTENDANCE {year}", cols:[C("MONTH",22),C("WORKED",16),C("ABSENT",16),C("LATE",14),C("O/T HRS",14),C("SIGN",18)] });
+BOOK("petty_cash","business","Petty Cash Book","Stapled cash book: Date · Particulars · In · Out · Balance · Initials.",
+  { color:"#ffffff", org:"BLESSED HANDS ENTERPRISE", title:"PETTY CASH BOOK", leftPage:"blank",
+    fields:[LINE("Custodian:"),LINE("Department:"),LINE("Period:"),SIGNED("ACCOUNTANT")],
+    grid:{cols:[C("DATE",13),C("PARTICULARS",41),C("IN",13),C("OUT",13),C("BALANCE",14),C("INIT.",6)], rows:14} });
+DUE("rent_card","business","Rent Payment Card","Tenant’s rent card: property details on the cover, monthly rent and receipt record inside.",
+  { color:"#fef9c3", org:"J. K. PROPERTIES", title:"RENT PAYMENT CARD", yearMode:"blank",
+    pledge:{head:"TENANCY TERMS", align:"left", textSize:11, text:"Property: ________________________\nMonthly Rent: ____________  Due Date: ______\nDeposit: ____________  Lease Start: __________\n\nRent is payable in advance. Keep this card as proof of payment."},
+    fields:[LINE("Tenant:"),LINE("Contact #:"),LINE("Unit #:"),SIGNED("LANDLORD / AGENT")],
+    tableHead:"RENT PAYMENTS {year}", cols:[C("MONTH",26),C("AMOUNT",22),C("RECEIPT #",22),C("SIGN",30)] });
+DUE("biz_assoc","business","Business Association Membership Card","Membership and dues card for a traders’ or business owners’ association.",
+  { color:"#ede9fe", org:"BREWERVILLE BUSINESS OWNERS ASSOCIATION", title:"MEMBERSHIP CARD", motto:"“Growing together”",
+    pledge:{head:"MEMBER’S PLEDGE", text:"I pledge to conduct my business honestly, to pay my dues, to attend meetings and to promote the interests of the business community of Brewerville."},
+    fields:[LINE("Business Name:"),LINE("Owner:"),LINE("Location:"),LINE("Member #:","cardno"),SIGNED("SECRETARY GENERAL")],
+    tableHead:"MONTHLY DUES {year}", cols:[C("MONTH",28),C("DUE",22),C("LEVY",22),C("SIGN",28)] });
+
+/* ================= FINANCE (5) ================= */
+DUE("vsla","finance","Village Savings & Loan (VSLA) Passbook","Weekly shares, savings total, loan taken, repaid and social fund for savings‑group members.",
+  { color:"#dcfce7", org:"UNITY VILLAGE SAVINGS & LOAN ASSOCIATION", title:"MEMBER PASSBOOK", motto:"“Save together, grow together”", yearMode:"blank",
+    pledge:{head:"GROUP RULES", align:"left", textSize:11, text:"1. Meet every week at the agreed time.\n2. Buy 1 – 5 shares at every meeting.\n3. Loans are repaid with the agreed service charge.\n4. Social fund contributions are compulsory.\n5. Share‑out is at the end of the cycle."},
+    fields:[LINE("Member:"),LINE("Group #:"),LINE("Member #:","cardno"),SIGNED("RECORD KEEPER")],
+    tableHead:"CYCLE {year}", table:{yearLabel:"Cycle:", yearLine:18, cellSize:8, headerSize:7.5}, cols:[C("WEEK",13),C("SHARES",14),C("SAV. TOTAL",17),C("LOAN",14),C("REPAID",14),C("SOCIAL",14),C("SIGN",14)], rows:NUM(13,"Wk ") });
+BOOK("daily_susu","finance","Daily Susu Collection Card","Daily collection card: two blocks of 16 days per page (Day · Amount · Collector’s sign).",
+  { color:"#fef3c7", org:"TRUST DAILY SUSU", title:"DAILY COLLECTION CARD", motto:"“Your money, your future”", inner:0,
+    pledge:{head:"HOW IT WORKS", align:"left", textSize:11, text:"1. The collector visits every day at the agreed time.\n2. Each day’s payment is signed by the collector.\n3. At month end you receive 30 days’ savings; one day’s payment is the collector’s fee.\n4. Report any missing signature immediately."},
+    fields:[LINE("Client:"),LINE("Business / Location:"),LINE("Daily Amount:"),LINE("Client #:","cardno"),SIGNED("COLLECTOR")],
+    grid:{tables:2, rows:16, cols:[C("DAY",18),C("AMOUNT",40),C("SIGN",42)], title:"MONTH OF: ____________________"} });
+DUE("mm_agent","finance","Mobile Money Agent Float Card","Daily record of opening float, cash‑in, cash‑out and closing balance for an agent.",
+  { color:"#fee2e2", org:"BREWERVILLE MOBILE MONEY SERVICES", title:"AGENT FLOAT RECORD CARD", yearMode:"blank",
+    pledge:{head:"AGENT RULES", align:"left", textSize:11, text:"1. Balance your float every evening.\n2. Never process a transaction without a PIN confirmation.\n3. Keep your agent phone and SIM secure.\n4. Report discrepancies the same day."},
+    fields:[LINE("Agent Name:"),LINE("Agent #:","cardno"),LINE("Location:"),SIGNED("SUPERVISOR")],
+    tableHead:"FLOAT RECORD – {year}", table:{yearLabel:"Week of:", yearLine:24}, cols:[C("DAY",16),C("OPENING",17),C("CASH IN",17),C("CASH OUT",17),C("CLOSING",17),C("SIGN",16)],
+    rows:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] });
+DUE("coop_shares","finance","Cooperative Share Contribution Card","Record of share capital paid by members of a cooperative or credit union.",
+  { color:"#dbeafe", org:"BREWERVILLE CREDIT UNION", title:"SHARE CONTRIBUTION CARD",
+    pledge:{head:"ABOUT SHARES", text:"Shares are the member’s ownership in the cooperative. They earn dividends at the end of the year and are refundable when a member withdraws. Minimum: one share per month."},
+    fields:[LINE("Member:"),LINE("Account #:","cardno"),SIGNED("TREASURER")],
+    tableHead:"SHARES {year}", cols:[C("MONTH",26),C("SHARES",18),C("AMOUNT",20),C("TOTAL",18),C("SIGN",18)] });
+DUE("burial_ins","finance","Funeral Insurance Premium Card","Monthly premium record for a family funeral‑cover plan with beneficiaries on the cover.",
+  { color:"#e5e7eb", org:"PEACE FUNERAL COVER PLAN", title:"PREMIUM PAYMENT CARD", motto:"“Dignity for every family”",
+    pledge:{head:"PLAN SUMMARY", align:"left", textSize:11, text:"Plan: __________  Monthly Premium: ________\nCover Amount: ______________\nWaiting Period: 6 months from first payment.\nA policy lapses after 3 months of non‑payment."},
+    fields:[LINE("Policy Holder:"),LINE("Beneficiary:"),LINE("Policy #:","cardno"),SIGNED("AGENT")],
+    tableHead:"PREMIUMS {year}", cols:[C("MONTH",28),C("PREMIUM",24),C("RECEIPT #",22),C("SIGN",26)] });
+
+/* ================= HEALTH (6) ================= */
+DUE("immunization","health","Child Immunization Card","Vaccination schedule (BCG to Measles 2) with date given, next date and vaccinator’s signature.",
+  { color:"#fef9c3", org:"BREWERVILLE COMMUNITY CLINIC", title:"CHILD IMMUNIZATION CARD", motto:"“Every child, fully immunized”", yearMode:"none",
+    pledge:{head:"TO THE PARENT", align:"left", textSize:11, text:"• Bring this card to every clinic visit.\n• Vaccines protect your child from deadly diseases.\n• Mild fever after a vaccine is normal.\n• Come back on the next date written on this card."},
+    fields:[LINE("Child’s Name:"),LINE("Date of Birth:"),LINE("Mother’s Name:"),LINE("Address:"),LINE("Card #:","cardno")],
+    tableHead:"VACCINATION RECORD", table:{cellSize:8.5,headerSize:8}, cols:[C("VACCINE",32),C("DATE GIVEN",24),C("NEXT DATE",24),C("SIGN",20)],
+    rows:["BCG","OPV 0","Penta 1 / PCV 1","OPV 1 / Rota 1","Penta 2 / PCV 2","OPV 2 / Rota 2","Penta 3 / PCV 3","OPV 3 / IPV","Measles 1","Yellow Fever","Measles 2","Vitamin A"] });
+DUE("antenatal","health","Antenatal Clinic Card","Antenatal visit record: weeks, blood pressure, weight, Hb and next visit for each visit.",
+  { color:"#fce7f3", org:"BREWERVILLE COMMUNITY CLINIC", title:"ANTENATAL CARD", motto:"“Safe mother, safe baby”", yearMode:"none",
+    pledge:{head:"DANGER SIGNS", align:"left", textSize:11, text:"Come to the clinic at once if you have:\n• Bleeding  • Severe headache  • Blurred vision\n• Swollen face or hands  • Fever\n• Baby not moving  • Water breaking early\n\nEDD: ______________  Blood Group: ______"},
+    fields:[LINE("Name:"),LINE("Age:"),LINE("Address:"),LINE("Contact #:"),LINE("ANC #:","cardno")],
+    tableHead:"ANTENATAL VISITS", table:{cellSize:8.5,headerSize:8}, cols:[C("VISIT",12),C("DATE",16),C("WEEKS",12),C("BP",14),C("WEIGHT",14),C("Hb",10),C("NEXT",22)], rows:NUM(8) });
+DUE("bp_card","health","Blood Pressure & Sugar Monitoring Card","Follow‑up card for hypertension / diabetes patients: date, BP, sugar, weight, remarks.",
+  { color:"#e0f2fe", org:"BREWERVILLE COMMUNITY CLINIC", title:"BP & SUGAR MONITORING CARD", yearMode:"none",
+    pledge:{head:"LIVING WELL", align:"left", textSize:11, text:"• Take your medicines every day, even when you feel well.\n• Reduce salt, sugar and oil.\n• Walk at least 30 minutes daily.\n• Do not stop treatment without seeing the nurse.\n\nDiagnosis: ____________________"},
+    fields:[LINE("Name:"),LINE("Age / Sex:"),LINE("Contact #:"),LINE("Patient #:","cardno")],
+    tableHead:"MONITORING RECORD", cols:[C("DATE",18),C("BP",16),C("SUGAR",16),C("WEIGHT",16),C("REMARKS",34)], rows:BLANK_ROWS(12) });
+DUE("drug_refill","health","Pharmacy Refill Card","Record of monthly medicine refills for patients on long‑term treatment.",
+  { color:"#dcfce7", org:"BREWERVILLE COMMUNITY CLINIC – PHARMACY", title:"MEDICINE REFILL CARD", yearMode:"none",
+    pledge:{head:"MY MEDICINES", align:"left", textSize:11, text:"1. ______________________  Dose: ________\n2. ______________________  Dose: ________\n3. ______________________  Dose: ________\n\nCollect your refill before your medicines finish."},
+    fields:[LINE("Name:"),LINE("Contact #:"),LINE("Patient #:","cardno"),SIGNED("PHARMACIST")],
+    tableHead:"REFILLS", cols:[C("DATE",18),C("MEDICINE(S)",36),C("QTY",12),C("NEXT REFILL",18),C("SIGN",16)], rows:BLANK_ROWS(12) });
+DUE("family_planning","health","Family Planning Follow‑up Card","Appointment card for family planning clients with method and next‑visit record.",
+  { color:"#fae8ff", org:"BREWERVILLE COMMUNITY CLINIC", title:"FAMILY PLANNING CARD", motto:"“Plan your family, plan your future”", yearMode:"none",
+    pledge:{head:"REMEMBER", align:"left", textSize:11, text:"• Come on your appointment date.\n• Come early if you have side effects.\n• Family planning is free and confidential.\n\nMethod: ____________________\nStart Date: ____________"},
+    fields:[LINE("Client Name:"),LINE("Age:"),LINE("Contact #:"),LINE("Client #:","cardno")],
+    tableHead:"VISITS", cols:[C("DATE",18),C("METHOD",26),C("BP / WEIGHT",20),C("NEXT VISIT",20),C("SIGN",16)], rows:BLANK_ROWS(12) });
+DUE("tb_adherence","health","TB / Treatment Adherence Card","Daily‑dose record for patients on directly observed treatment (weeks 1–13 per page).",
+  { color:"#fef3c7", org:"BREWERVILLE COMMUNITY CLINIC – TB UNIT", title:"TREATMENT ADHERENCE CARD", yearMode:"none",
+    pledge:{head:"FINISH YOUR TREATMENT", align:"left", textSize:11, text:"• Take every dose, every day, for the full course.\n• Stopping early makes the disease come back stronger.\n• Cover your mouth when coughing.\n• Eat well and rest.\n\nTreatment Start: ____________  Phase: ________"},
+    fields:[LINE("Patient:"),LINE("Age / Sex:"),LINE("Address:"),LINE("Treatment Supporter:"),LINE("TB #:","cardno")],
+    tableHead:"DAILY DOSES (tick each day)", table:{cellSize:8,headerSize:8}, cols:[C("WEEK",16),C("M",12),C("T",12),C("W",12),C("T",12),C("F",12),C("S",12),C("S",12)], rows:NUM(13,"Wk ") });
+
+/* ================= CIVIC & NGO (2) ================= */
+DUE("ngo_distribution","civic","NGO Beneficiary Distribution Card","Beneficiary card for relief / project distributions: household details and record of items received.",
+  { color:"#ffffff", layout:{cardBorder:0.4}, org:"HOPE FOR LIBERIA FOUNDATION", title:"BENEFICIARY CARD", motto:"“Serving with compassion”", yearMode:"none",
+    pledge:{head:"BENEFICIARY INFORMATION", align:"left", textSize:11, text:"Household size: ______  Children under 5: ______\nVulnerability: ____________________\nCommunity: ____________________\n\nThis card is not transferable. Present it at every distribution."},
+    fields:[LINE("Head of Household:"),LINE("Contact #:"),LINE("Beneficiary #:","cardno"),SIGNED("FIELD OFFICER")],
+    tableHead:"DISTRIBUTION RECORD", cols:[C("DATE",18),C("ITEM(S) RECEIVED",40),C("QTY",12),C("SIGN / THUMB",30)], rows:BLANK_ROWS(12) });
+DUE("trainee_att","civic","Skills Training Attendance Card","Attendance and stipend record for participants in a skills‑training or empowerment programme.",
+  { color:"#d1fae5", org:"HOPE FOR LIBERIA FOUNDATION", title:"TRAINING ATTENDANCE CARD", motto:"“Skills for a better tomorrow”", yearMode:"blank",
+    pledge:{head:"PARTICIPANT’S COMMITMENT", text:"I commit to attend all training sessions punctually, to complete assignments, to respect the trainers and fellow participants, and to use the skills gained to improve my life and community."},
+    fields:[LINE("Participant:"),LINE("Course:"),LINE("Trainer:"),LINE("ID #:","cardno"),SIGNED("PROGRAM OFFICER")],
+    tableHead:"ATTENDANCE & STIPEND – {year}", table:{yearLabel:"Cohort:", yearLine:20}, cols:[C("WEEK",14),C("DAYS PRESENT",22),C("STIPEND",20),C("SIGN",44)], rows:NUM(12,"Week ") });
+
 
 
 const svg=(d,extra="")=>`<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${d}</svg>`;
@@ -517,7 +817,7 @@ const get = (o,p) => p.split(".").reduce((a,k)=>a==null?undefined:a[k], o);
 const set = (o,p,v) => { const ks=p.split("."); const last=ks.pop(); const t=ks.reduce((a,k)=>a[k]=a[k]??{}, o); t[last]=v; };
 
 let S = load(); let tab = "templates"; let currentSheet = 0; let tplCat="all", tplQ="";
-const CATS=[["all","All"],["school","School"],["church","Church"],["community","Community"],["other","Health & finance"],["mine","My templates"]];
+const CATS=[["all","All"],["school","School"],["church","Church"],["community","Community"],["business","Business"],["finance","Finance"],["health","Health"],["civic","NGO & civic"],["mine","My templates"]];
 function startSettings(){ const t=TEMPLATES[DEFAULT_TEMPLATE]; return deepMerge(clone(DEFAULTS), Object.assign({template:DEFAULT_TEMPLATE}, t?t.settings:{})); }
 function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return deepMerge(clone(DEFAULTS), JSON.parse(raw)); }catch(e){} return startSettings(); }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
