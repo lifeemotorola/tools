@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2212%22 fill=%22#1e3a8a%22/%3E%3Cpath d=%22M12 16h18v34H12z%22 fill=%22#fff%22/%3E%3Cpath d=%22M34 16h18v34H34z%22 fill=%22#e0e7ff%22/%3E%3Cpath d=%22M31 14v38%22 stroke=%22#1e3a8a%22 stroke-width=%222%22 stroke-dasharray=%223 2%22/%3E%3Cg stroke=%22#1e3a8a%22 stroke-width=%222%22%3E%3Cpath d=%22M16 24h10M16 30h10M16 36h10M16 42h10%22/%3E%3Cpath d=%22M38 24h10M38 30h10M38 36h10M38 42h10%22 stroke=%22#3b82f6%22/%3E%3C/g%3E%3Ccircle cx=%2249%22 cy=%2215%22 r=%229%22 fill=%22#f59e0b%22/%3E%3Cpath d=%22M45 15l3 3 5-6%22 fill=%22none%22 stroke=%22#fff%22 stroke-width=%222.4%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAFIklEQVR4nO3dv04VQRiG8TknNhJaOoO1t4C9CddgRaKXIK2xxUuQhMrSmsTSRG7BWmJHS7DEggwu58+e2d1v5pt59/mVBpchefIxs2c5ZxEKOzw6uy/9PeHn+up0UfL7Zf9mBIyu3IFnuTgRI0WOuE0vSMgYwzJskwsRMixYhD3pAoSMHKaEvRz7H4kZuUxpa1TQxIzcxjY2aLQTMjwM2YIkT2hihpch7SUFTczwltrgzqCJGbVIaXH0XQ6gRr1BM51Rm11Nbg2amFGrvjY3Bk3MqN22Rp+VXgjq9+vdp6Sve3X+MfNKhlu7Yc10np/UgHfxCHz1RRcm9IxZhbx6Pc/J/aRupvM8WIe8Tamwu1Oa+9AzUyrm0t8reiyb6azNI66u3NM6Tmkm9Ax4x1xyDQQtroaYoxJrWYbAdkNVTTFHudYUG2ZCi6ox5ijn2ghaUM0xR7nWSNCQsmD/rKWF6dxlfTuPCS2ktZhDsF8zQUMKQYtocTpHlmsnaJjZO7n1XgJBK6hhOseYx0Zt9TMQNCZbjXjv5NZtWhM0svGImqAxSV+0dxf7BVfygKAb57l/to7Z4mchaIxSwx2NTQgag+2K2WOrERE0Bqk55hAIevYstw7eMYdA0LM29MWQ2u5obELQM7XpxZAhX99VS8whEPQsbYtz6L/XqIq3Avv984P3Eky9fP056et+fDP4uS+H37u9u9jvjbc7cWs/BK6qImiUtyvq1GvUhi1H426Ox28HpgSZI2aLP8ci6Jm7u9gfHGeNkzkiaIQQ0iOtOeYQCBodtceagqAFTNlHr+qLOmfwVm9nQNBYsyncVqY3t+1E3BzfhoNLu+hKBmz5ZjNMaEghaCGWe+lSeCsw9Gop6hwfU0HQkELQglqY0rk+RIigRdUcdc5PxCJoYTVGnfvj3QhaXE1Rl/hkWYKegRqiLvUxybxSOBMxastXE1OU/iB7JvTMlJzWpWMOodEJnfo3e5a8/+7x7Ze/hle7CSGE8P3FgeE1//MIOWoyaNh488c2bM+QI4LGY9hRauBr25fz8r85VxE01nQD//r+ueNKhuNQCClNTmjvA5qH1ialFyY0pBA0pBA0pBA0pBA0pBA0pBA0pBA0pBA0pBA0pBA0pDT5LAcP+JfT2jMkTGhIIWhIIWhIIWhIafJQ6H1A89Da4cwLExpSCBpSCBpSCBpSCBpSCBpSCBpSCBpSCBpSCBpSCBpSmnyWgwf8y2ntGRImNKQQNKQQNKQQNKQ0eSj0PqB5aO1w5oUJDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSkEDSlNPsvBA/7ltPYMCRMaUggaUggaUggaUpo8FHof0Dy0djjzwoSGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGFIKGlMXh0dm99yIAK0xoSCFoSCFoSCFoSCFoSCFoSCFoSCFoSCFoSCFoSFleX50uvBcBWLi+Ol0woSGFoCGFoCFlGcLD3sN7IcAUsWEmNKQQNKQ8Bs22A63qtsuEhpQnQTOl0ZrVZpnQkLIWNFMardjUKhMaUjYGzZRG7bY1unVCEzVq1ddm75aDqFGbXU2yh4aUnUEzpVGLlBaTJjRRw1tqg8lbDqKGlyHtjYqUt+BFCWOG6KhDIdMauY1tbPRdDqJGLlPaMomSLQgsWAxJ0ylL2BjD8rd9lm0DYSNFjm1r9n0wcaMr99mr+MGOwOel9M2Df+CTh8KA6FlyAAAAAElFTkSuQmCC">
 <title>Card & Booklet Generator – report cards, due books, record books</title>
@@ -64,6 +66,17 @@
   .tpl.on{border-color:var(--accent);box-shadow:0 0 0 2px #0f766e22}
   .tpl b{font-size:13px}.tpl p{font-size:11.5px;color:#555;margin:4px 0 8px;line-height:1.4}
   #footer{padding:10px 14px;border-top:1px solid var(--ui-border);background:#fafafa}
+  #lockScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:2000;background:rgba(15,23,42,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  #lockScreen.on{display:flex}
+  #lockScreen .lk{background:#fff;border-radius:16px;padding:28px 30px;width:340px;max-width:92vw;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  #lockScreen .lki svg{width:40px;height:40px;stroke:#1e3a8a}
+  #lockScreen h2{margin:6px 0 2px;font-size:20px}#lockScreen p{margin:4px 0 12px;color:#4b5563;font-size:13px}
+  #lockScreen input{width:100%;font-size:16px;padding:9px 12px;border:1px solid #d1d5db;border-radius:8px;box-sizing:border-box;text-align:center;letter-spacing:.2em}
+  #lockScreen .lke{color:#b91c1c;font-size:12px;min-height:16px;margin:6px 0}
+  #lockScreen button{width:100%;padding:10px;font-size:14px}
+  #lockScreen .lkh{font-size:11px;color:#6b7280;margin-top:14px}
+  body.locked #app{filter:blur(6px);pointer-events:none;user-select:none}
+  @media print{ body.locked #app{display:none} }
   #modal{position:fixed;inset:0;background:rgba(17,24,39,.45);display:none;align-items:center;justify-content:center;z-index:1000}
   #modal.open{display:flex}
   #modal .dlg{background:#fff;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.25);width:min(420px,92vw);padding:20px 22px 18px;animation:pop .15s ease-out}
@@ -97,6 +110,7 @@
   .panel.decorated.dh .org,.panel.decorated.dh .title,.panel.decorated.dh h2,.panel.decorated.dh h3,.panel.decorated.dh .ptitle{color:var(--deco-c1)}
   .panel.decorated.dh .pledge h2.u{text-decoration-color:var(--deco-c1)}
   #decoGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}
+  #decoGrid>.chips,#decoGrid>.hint,#decoGrid>.btns{grid-column:1/-1}
   #decoGrid .sw{border:2px solid #d1d5db;border-radius:8px;padding:0;cursor:pointer;background:#fff;overflow:hidden;text-align:center;font-size:11px;color:#374151}
   #decoGrid .sw.on{border-color:#2563eb;box-shadow:0 0 0 2px #bfdbfe}
   #decoGrid .sw svg{width:100%;aspect-ratio:100/92;display:block;background:#fafafa}
@@ -327,14 +341,14 @@ const DECO_PALETTES=[["Navy & gold","#1e3a8a","#d4a017"],["Burgundy & gold","#7f
   ["Royal purple & gold","#581c87","#eab308"],["Teal & coral","#0f766e","#fb7185"],["Charcoal & red","#1f2937","#dc2626"],
   ["Liberia red & blue","#bf0a30","#002868"],["Ocean blue & sky","#1d4ed8","#7dd3fc"],["Chocolate & cream","#78350f","#fde68a"],
   ["Emerald & gold","#047857","#f59e0b"],["Rose & plum","#be185d","#6b21a8"],["Slate & amber","#334155","#f59e0b"]];
-const DECO_BY_CAT={school:[["classic",0],["arch",1],["elegant",2],["bold",7],["beaded",9]],
-  church:[["elegant",3],["sunburst",1],["arch",0],["seal",3],["classic",9]],
-  community:[["kente",6],["geometric",2],["diagonal",9],["flag",6],["ribbon",7]],
-  business:[["diagonal",7],["geometric",5],["bold",11],["ribbon",0]],
-  finance:[["bold",9],["ribbon",0],["classic",8],["diagonal",5]],
-  health:[["waves",4],["dots",7],["arch",4],["beaded",9]],
-  civic:[["flag",6],["geometric",2],["waves",7],["dots",4]],
-  events:[["floral",10],["elegant",1],["beaded",10],["sunburst",8]], other:[["classic",0]]};
+const DECO_BY_CAT={school:[["classic",0],["arch",1],["elegant",2],["bold",7],["beaded",9],["certificate",0],["graduation",2],["open_book",8],["header_bar",7],["greek_key",0]],
+  church:[["elegant",3],["sunburst",1],["arch",0],["seal",3],["classic",9],["cross",1],["dove",7],["filigree",3],["laurel",9],["double_gold",0],["baroque",1],["banner",3]],
+  community:[["kente",6],["geometric",2],["diagonal",9],["flag",6],["ribbon",7],["adinkra",2],["mudcloth",8],["kente2",6],["tribal_tri",9],["basket",8],["handshake",0],["ankara",4]],
+  business:[["diagonal",7],["geometric",5],["bold",11],["ribbon",0],["split_tone",5],["speed_lines",7],["frame_cut",11],["side_bar",0],["paper_fold",7],["circuit",5]],
+  finance:[["bold",9],["ribbon",0],["classic",8],["diagonal",5],["coins",9],["shield",0],["certificate",8],["triple_line",5],["header_bar",9]],
+  health:[["waves",4],["dots",7],["arch",4],["beaded",9],["stethoscope",4],["raindrops",7],["footer_wave",4],["rounded_pill",4],["blob",7]],
+  civic:[["flag",6],["geometric",2],["waves",7],["dots",4],["handshake",2],["twin_stripes",6],["chevron_band",7],["olive",2]],
+  events:[["floral",10],["elegant",1],["beaded",10],["sunburst",8],["hibiscus",10],["heart_ring",10],["confetti",1],["butterfly",10],["olive",1],["vine_border",10]], other:[["classic",0]]};
 function autoDeco(id,cat){ const list=DECO_BY_CAT[cat]||DECO_BY_CAT.other; let h=0; for(const ch of id) h=(h*31+ch.charCodeAt(0))>>>0;
   const [style,p]=list[h%list.length]; const pal=DECO_PALETTES[p]; return {on:true,style,c1:pal[1],c2:pal[2]}; }
 function decoSVG(style,W,H,d){
@@ -404,8 +418,289 @@ function decoSVG(style,W,H,d){
         out+=`<circle cx="${n(W-3*s-i*4*s)}" cy="${n(3*s+j*4*s)}" r="${n(r)}" fill="${c1}" opacity="0.75"/><circle cx="${n(3*s+i*4*s)}" cy="${n(H-3*s-j*4*s)}" r="${n(r)}" fill="${c2}" opacity="0.85"/>`; }
       g=out+`<path d="M${n(3*s)} ${n(3*s)} H${n(W*0.55)} M${n(W-3*s)} ${n(H-3*s)} H${n(W*0.45)}" stroke="${c1}" stroke-width="${n(0.6*s)}"/>`; break; }
   }
+  if(!g) g=decoSVG2(style,W,H,d);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${tint}<g opacity="${n(d.opacity??1)}">${g}</g></svg>`;
 }
+/* ===================== 60+ MORE COVER DESIGNS ===================== */
+const DECO_GROUPS=[["frames","Frames & borders"],["corners","Corner ornaments"],["bands","Headers & bands"],["patterns","Patterns & textures"],["african","African & cultural"],["nature","Nature & floral"],["modern","Modern & abstract"],["themed","Themed & symbolic"]];
+const DECO_GROUP_OF={classic:"frames",elegant:"corners",bold:"frames",beaded:"frames",arch:"bands",sunburst:"modern",seal:"themed",waves:"modern",diagonal:"modern",ribbon:"corners",geometric:"african",kente:"african",flag:"themed",floral:"nature",dots:"patterns"};
+const DECO_MORE=[
+ /* frames */
+ ["double_gold","Double gold rule","frames"],["greek_key","Greek key border","frames"],["rope","Rope border","frames"],["chain","Chain link frame","frames"],
+ ["stitched","Stitched frame","frames"],["art_deco","Art‑deco frame","frames"],["celtic","Celtic knot corners","frames"],["baroque","Baroque scroll frame","frames"],
+ ["ticket","Ticket stub edge","frames"],["certificate","Certificate border","frames"],["shadow_box","Shadow box","frames"],["rounded_pill","Rounded pill frame","frames"],
+ ["triple_line","Triple line frame","frames"],["stamp","Postage stamp edge","frames"],
+ /* corners */
+ ["filigree","Filigree corners","corners"],["fleur","Fleur‑de‑lis corners","corners"],["fan","Fan corners","corners"],["laurel","Laurel wreath corners","corners"],
+ ["brackets","Bold brackets","corners"],["sunray_corner","Sun‑ray corner","corners"],["scroll_corner","Scroll corner","corners"],["vine_corner","Vine corner","corners"],
+ /* bands */
+ ["header_bar","Solid header bar","bands"],["banner","Ribbon banner","bands"],["scallop","Scalloped header","bands"],["chevron_band","Chevron band","bands"],
+ ["twin_stripes","Twin stripes","bands"],["footer_wave","Footer wave","bands"],["side_bar","Side accent bar","bands"],["notch","Notched header","bands"],
+ ["zigzag_band","Zig‑zag band","bands"],["step_band","Stepped band","bands"],
+ /* patterns */
+ ["crosshatch","Crosshatch corner","patterns"],["halftone","Halftone gradient","patterns"],["diamonds","Diamond lattice","patterns"],["hexagons","Hexagon mesh","patterns"],
+ ["circles","Concentric circles","patterns"],["stars_field","Star field","patterns"],["confetti","Confetti","patterns"],["grid_paper","Grid paper","patterns"],
+ ["herringbone","Herringbone edge","patterns"],["polka","Polka border","patterns"],
+ /* african */
+ ["adinkra","Adinkra symbols","african"],["mudcloth","Mud‑cloth (bogolan)","african"],["ankara","Ankara wax print","african"],["kente2","Kente weave II","african"],
+ ["shweshwe","Shweshwe dots","african"],["basket","Basket weave","african"],["cowrie","Cowrie shell border","african"],["tribal_tri","Tribal triangles","african"],
+ /* nature */
+ ["palm","Palm fronds","nature"],["olive","Olive branches","nature"],["wheat","Wheat sheaves","nature"],["hibiscus","Hibiscus bloom","nature"],
+ ["ferns","Fern corners","nature"],["vine_border","Vine border","nature"],["sunrise","Sunrise horizon","nature"],["mountains","Mountain skyline","nature"],
+ ["raindrops","Raindrops","nature"],["butterfly","Butterflies","nature"],
+ /* modern */
+ ["gradient_wash","Gradient wash","modern"],["blob","Soft blobs","modern"],["memphis","Memphis shapes","modern"],["circuit","Circuit lines","modern"],
+ ["speed_lines","Speed lines","modern"],["split_tone","Split tone","modern"],["ribbon_curve","Curved ribbon","modern"],["frame_cut","Cut‑corner frame","modern"],
+ ["neon_glow","Neon outline","modern"],["paper_fold","Paper fold","modern"],
+ /* themed */
+ ["cross","Cross & rays","themed"],["dove","Dove & olive","themed"],["open_book","Open book","themed"],["crescent","Crescent & star","themed"],
+ ["stethoscope","Medical cross","themed"],["coins","Coins & growth","themed"],["graduation","Graduation cap","themed"],["handshake","Unity hands","themed"],
+ ["heart_ring","Hearts & rings","themed"],["shield","Shield crest","themed"],["music","Music notes","themed"],["football","Football pitch","themed"]
+];
+DECO_MORE.forEach(([id,l,g])=>{ DECO_STYLES.push([id,l]); DECO_GROUP_OF[id]=g; });
+const DECO_PALETTES_MORE=[["Black & gold","#111827","#d4a017"],["Crimson & cream","#991b1b","#fef3c7"],["Sky & navy","#0284c7","#1e3a8a"],["Olive & sand","#4d7c0f","#e7d7a8"],
+  ["Plum & blush","#6b21a8","#fbcfe8"],["Terracotta & teal","#c2410c","#0f766e"],["Midnight & silver","#0f172a","#cbd5e1"],["Mint & charcoal","#10b981","#374151"],
+  ["Sunset orange & purple","#ea580c","#7e22ce"],["Copper & ivory","#b45309","#fffbeb"],["Pan‑African","#0a8f3c","#e11d1d"],["Lagoon","#0e7490","#a5f3fc"]];
+DECO_PALETTES_MORE.forEach(p=>DECO_PALETTES.push(p));
+
+/* helper primitives shared by the generators */
+const DX={
+  rect:(x,y,w,h,f,extra)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" ${f?`fill="${f}"`:'fill="none"'} ${extra||""}/>`,
+  path:(d,stroke,w,f,extra)=>`<path d="${d}" fill="${f||"none"}" ${stroke?`stroke="${stroke}" stroke-width="${w}"`:""} ${extra||""}/>`,
+  star:(cx,cy,r,pts,inner)=>{ const p=[]; for(let i=0;i<pts*2;i++){ const rr=i%2?r*(inner||0.45):r, a=-Math.PI/2+i*Math.PI/pts; p.push(`${(cx+rr*Math.cos(a)).toFixed(2)} ${(cy+rr*Math.sin(a)).toFixed(2)}`); } return p.join(" "); },
+  poly:(cx,cy,r,n,rot)=>{ const p=[]; for(let i=0;i<n;i++){ const a=(rot||0)+i*2*Math.PI/n; p.push(`${(cx+r*Math.cos(a)).toFixed(2)} ${(cy+r*Math.sin(a)).toFixed(2)}`); } return p.join(" "); },
+  corners4:(W,H,s,inner)=>[[0,0,1,1],[W,0,-1,1],[0,H,1,-1],[W,H,-1,-1]].map(([x,y,a,b])=>`<g transform="translate(${x} ${y}) scale(${a*s} ${b*s})">${inner}</g>`).join(""),
+  cornersTB:(W,H,s,inner)=>[[0,0,1,1],[W,H,-1,-1]].map(([x,y,a,b])=>`<g transform="translate(${x} ${y}) scale(${a*s} ${b*s})">${inner}</g>`).join(""),
+  frame:(W,H,m,stroke,w,extra)=>`<rect x="${m}" y="${m}" width="${(W-2*m).toFixed(2)}" height="${(H-2*m).toFixed(2)}" fill="none" stroke="${stroke}" stroke-width="${w}" ${extra||""}/>`,
+  repeatX:(W,step,x0,fn)=>{ let o=""; for(let x=x0;x<W;x+=step) o+=fn(x); return o; },
+  repeatY:(H,step,y0,fn)=>{ let o=""; for(let y=y0;y<H;y+=step) o+=fn(y); return o; },
+  rnd:(seed)=>{ let s=seed>>>0||1; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+};
+function decoSVG2(style,W,H,d){
+  const c1=d.c1||"#1e3a8a", c2=d.c2||"#d4a017", s=Number(d.scale)||1, n=v=>Math.round(v*100)/100, m=3*s;
+  const R=DX, F=(mm,col,w,ex)=>R.frame(W,H,mm,col,w,ex);
+  switch(style){
+    /* ---------- frames ---------- */
+    case "double_gold": return F(2*s,c2,1.2*s)+F(4.2*s,c2,0.4*s)+F(5.2*s,c1,0.25*s);
+    case "greek_key":{ const u=2.2*s; const key=(x,y)=>`<path d="M${x} ${y+u*2} V${y} H${x+u*2} V${y+u*1.4} H${x+u*0.7} V${y+u*0.7} H${x+u*1.4}" fill="none" stroke="${c1}" stroke-width="${n(0.45*s)}"/>`;
+      let o=R.repeatX(W-u*2,u*2.6,u,x=>key(x,1.2*s))+R.repeatX(W-u*2,u*2.6,u,x=>`<g transform="translate(${x} ${n(H-1.2*s)}) scale(1 -1)">${key(0,0)}</g>`);
+      return o+F(u*2+2*s,c2,0.35*s)+R.rect(0,0,W,u*2+1.2*s,"none")+`<path d="M0 ${n(u*2+1.6*s)} H${W} M0 ${n(H-u*2-1.6*s)} H${W}" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`; }
+    case "rope":{ const mm=2.5*s; const len=2*(W+H-4*mm); let o=F(mm,c2,1.6*s); const step=2.2*s;
+      for(let t=0;t<len;t+=step){ let x,y,a; const w=W-2*mm,h=H-2*mm; if(t<w){x=mm+t;y=mm;a=45;} else if(t<w+h){x=W-mm;y=mm+(t-w);a=135;} else if(t<2*w+h){x=W-mm-(t-w-h);y=H-mm;a=45;} else {x=mm;y=H-mm-(t-2*w-h);a=135;}
+        o+=`<line x1="${n(x-0.8*s)}" y1="${n(y-0.8*s)}" x2="${n(x+0.8*s)}" y2="${n(y+0.8*s)}" transform="rotate(${a-45} ${n(x)} ${n(y)})" stroke="${c1}" stroke-width="${n(0.4*s)}"/>`; } return o+F(mm+2.2*s,c1,0.3*s); }
+    case "chain":{ const mm=2.5*s,r=1.1*s; let o=""; const ring=(x,y)=>`<circle cx="${n(x)}" cy="${n(y)}" r="${n(r)}" fill="none" stroke="${c1}" stroke-width="${n(0.45*s)}"/>`;
+      o+=R.repeatX(W,r*1.7,mm,x=>ring(x,mm)+ring(x,H-mm)); o+=R.repeatY(H-mm,r*1.7,mm+r*1.7,y=>ring(mm,y)+ring(W-mm,y)); return o+F(mm+2*s,c2,0.35*s); }
+    case "stitched": return F(2.5*s,c1,0.5*s,`stroke-dasharray="${n(2*s)} ${n(1.2*s)}"`)+F(4.5*s,c2,0.5*s,`stroke-dasharray="${n(2*s)} ${n(1.2*s)}" stroke-dashoffset="${n(1.6*s)}"`)+R.rect(0,0,W,H,c2,'opacity="0.05"');
+    case "art_deco":{ const cut=6*s,mm=2.2*s; const oct=`M${mm+cut} ${mm} H${W-mm-cut} L${W-mm} ${mm+cut} V${H-mm-cut} L${W-mm-cut} ${H-mm} H${mm+cut} L${mm} ${H-mm-cut} V${mm+cut}Z`;
+      let o=R.path(oct,c1,0.9*s)+R.path(oct.replace(/[\d.]+ [\d.]+/g,x=>x),c2,0.3*s,"",`transform="translate(${n(W/2)} ${n(H/2)}) scale(0.94) translate(${n(-W/2)} ${n(-H/2)})"`);
+      const ray=(cx,cy,dx,dy)=>{ let r=""; for(let i=0;i<5;i++) r+=`<line x1="${n(cx)}" y1="${n(cy)}" x2="${n(cx+dx*(4+i*1.5)*s*Math.cos(i*0.32))}" y2="${n(cy+dy*(4+i*1.5)*s*Math.sin(i*0.32+0.2))}" stroke="${c2}" stroke-width="${n(0.4*s)}"/>`; return r; };
+      return o+ray(mm+cut*0.7,mm+cut*0.7,1,1)+ray(W-mm-cut*0.7,mm+cut*0.7,-1,1)+ray(mm+cut*0.7,H-mm-cut*0.7,1,-1)+ray(W-mm-cut*0.7,H-mm-cut*0.7,-1,-1); }
+    case "celtic":{ const k=`<path d="M2 12 C2 4 4 2 12 2 M4 12 C4 6 6 4 12 4 M2 12 C6 12 8 10 8 6 C8 4 10 2 12 2 M12 4 C10 4 10 6 10 8 C10 10 8 12 4 12" fill="none" stroke="${c1}" stroke-width="0.7"/><path d="M6 6 C7 5 9 5 9 7 C9 9 7 9 6 8Z" fill="${c2}"/>`;
+      return F(2*s,c2,0.35*s)+R.corners4(W,H,s*1.1,k); }
+    case "baroque":{ const sc=`<path d="M1.5 1.5 C6 1 8 4 7 8 C6 11 3 11 3 8.5 C3 7 5 6.5 5.5 8 M1.5 1.5 C1 6 4 8 8 7 C11 6 11 3 8.5 3 C7 3 6.5 5 8 5.5" fill="none" stroke="${c1}" stroke-width="0.6"/><circle cx="4.5" cy="4.5" r="0.8" fill="${c2}"/><path d="M9 1.5 h9 M1.5 9 v9" stroke="${c2}" stroke-width="0.5"/>`;
+      return F(3*s,c1,0.4*s)+F(4.2*s,c2,0.25*s)+R.corners4(W,H,s*1.2,sc); }
+    case "ticket":{ const r=1.6*s; let o=R.rect(0,0,W,H,c1,'opacity="0.07"'); o+=R.repeatY(H,r*2.6,r*1.3,y=>`<circle cx="0" cy="${n(y)}" r="${n(r)}" fill="#fff"/><circle cx="${W}" cy="${n(y)}" r="${n(r)}" fill="#fff"/>`);
+      return o+`<path d="M${n(4.5*s)} ${n(3*s)} V${n(H-3*s)} M${n(W-4.5*s)} ${n(3*s)} V${n(H-3*s)}" stroke="${c1}" stroke-width="${n(0.5*s)}" stroke-dasharray="${n(1.2*s)} ${n(1*s)}"/>`; }
+    case "certificate":{ let o=F(2*s,c1,1.6*s)+F(4.2*s,c2,0.4*s)+F(5*s,c1,0.25*s); const g=`<path d="M0 0 L9 0 L0 9Z" fill="${c1}"/><path d="M2.5 2.5 L7 2.5 L2.5 7Z" fill="${c2}"/>`; return o+R.corners4(W,H,s,g); }
+    case "shadow_box": return R.rect(4*s,4*s,W-6*s,H-6*s,c1,'opacity="0.18"')+R.rect(2.5*s,2.5*s,W-6*s,H-6*s,"#fff",`stroke="${c1}" stroke-width="${n(0.5*s)}" opacity="0.9"`)+`<path d="M${n(2.5*s)} ${n(H-3.5*s)} h${n(W-6*s)}" stroke="${c2}" stroke-width="${n(1.5*s)}"/>`;
+    case "rounded_pill": return `<rect x="${n(2*s)}" y="${n(2*s)}" width="${n(W-4*s)}" height="${n(H-4*s)}" rx="${n(8*s)}" fill="none" stroke="${c1}" stroke-width="${n(1*s)}"/><rect x="${n(4*s)}" y="${n(4*s)}" width="${n(W-8*s)}" height="${n(H-8*s)}" rx="${n(6*s)}" fill="none" stroke="${c2}" stroke-width="${n(0.35*s)}"/>`;
+    case "triple_line": return F(2*s,c1,0.4*s)+F(3.2*s,c2,0.9*s)+F(4.6*s,c1,0.4*s);
+    case "stamp":{ const r=1.3*s,st=r*2.4; let o=R.rect(r,r,W-2*r,H-2*r,c2,'opacity="0.1"'); o+=R.repeatX(W,st,st/2,x=>`<circle cx="${n(x)}" cy="0" r="${n(r)}" fill="#fff"/><circle cx="${n(x)}" cy="${H}" r="${n(r)}" fill="#fff"/>`); o+=R.repeatY(H,st,st/2,y=>`<circle cx="0" cy="${n(y)}" r="${n(r)}" fill="#fff"/><circle cx="${W}" cy="${n(y)}" r="${n(r)}" fill="#fff"/>`); return o+F(4*s,c1,0.4*s); }
+    /* ---------- corners ---------- */
+    case "filigree":{ const f=`<path d="M1 1 C8 1 10 6 8 10 C6 13 2 12 2.5 9 C3 7 6 7 6 9 M1 1 C1 8 6 10 10 8 C13 6 12 2 9 2.5 C7 3 7 6 9 6 M1 1 L14 14" fill="none" stroke="${c1}" stroke-width="0.55"/><circle cx="14" cy="14" r="0.9" fill="${c2}"/><circle cx="1" cy="1" r="1" fill="${c2}"/>`; return R.corners4(W,H,s*1.15,f)+F(2.2*s,c2,0.3*s); }
+    case "fleur":{ const f=`<g transform="translate(6 6)"><path d="M0 -5 C1.5 -3 1.5 -1 0 1 C-1.5 -1 -1.5 -3 0 -5Z M0 1 C2.5 -1 5 -1 5 1.5 C5 3 3 3.5 2 2 C1 1 0.5 1 0 1Z M0 1 C-2.5 -1 -5 -1 -5 1.5 C-5 3 -3 3.5 -2 2 C-1 1 -0.5 1 0 1Z M-2 3 H2 V4 H-2Z M0 4 V6" fill="${c1}"/><circle cx="0" cy="1" r="0.8" fill="${c2}"/></g><path d="M12 2 H30 M2 12 V30" stroke="${c2}" stroke-width="0.5"/>`; return R.corners4(W,H,s,f)+F(2*s,c1,0.35*s); }
+    case "fan":{ let f=""; for(let i=0;i<7;i++){ const a=i*(Math.PI/2)/6; f+=`<path d="M1.5 1.5 L${n(1.5+16*Math.cos(a))} ${n(1.5+16*Math.sin(a))}" stroke="${i%2?c2:c1}" stroke-width="${i%2?0.4:0.7}"/>`; } f+=`<path d="M17.5 1.5 A16 16 0 0 1 1.5 17.5" fill="none" stroke="${c1}" stroke-width="0.8"/><path d="M12 1.5 A10.5 10.5 0 0 1 1.5 12" fill="none" stroke="${c2}" stroke-width="0.4"/>`; return R.corners4(W,H,s,f)+F(2.5*s,c1,0.3*s); }
+    case "laurel":{ const leaf=(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="2.4" ry="1" transform="rotate(${r} ${x} ${y})" fill="${c1}"/>`; let br=`<path d="M2 20 Q4 8 16 2" fill="none" stroke="${c1}" stroke-width="0.6"/>`; for(let i=0;i<6;i++){ const t=i/5, x=2+(16-2)*Math.pow(t,0.8), y=20-(20-2)*Math.pow(t,1.2); br+=leaf(x-1.5,y-1.5,-60+i*8)+leaf(x+1.5,y+1.5,30+i*8); } br+=`<circle cx="16.5" cy="1.5" r="1" fill="${c2}"/>`; return R.corners4(W,H,s,br); }
+    case "brackets":{ const b=`<path d="M2 14 V2 H14" fill="none" stroke="${c1}" stroke-width="2.2"/><path d="M5 12 V5 H12" fill="none" stroke="${c2}" stroke-width="0.6"/>`; return R.corners4(W,H,s,b); }
+    case "sunray_corner":{ let f=`<circle cx="0" cy="0" r="7" fill="${c2}" opacity="0.9"/>`; for(let i=1;i<10;i++){ const a=i*(Math.PI/2)/10; f+=`<path d="M0 0 L${n(28*Math.cos(a-0.03))} ${n(28*Math.sin(a-0.03))} L${n(28*Math.cos(a+0.03))} ${n(28*Math.sin(a+0.03))}Z" fill="${c1}" opacity="0.25"/>`; } return R.cornersTB(W,H,s,f); }
+    case "scroll_corner":{ const sc=`<path d="M1.5 12 C1.5 4 4 1.5 12 1.5 M1.5 12 C4 12 5 10 5 8 C5 6 3.5 5.5 3 7 M12 1.5 C12 4 10 5 8 5 C6 5 5.5 3.5 7 3" fill="none" stroke="${c1}" stroke-width="0.7"/><path d="M14 1.5 H22 M1.5 14 V22" stroke="${c2}" stroke-width="0.6"/><circle cx="4" cy="4" r="0.7" fill="${c2}"/>`; return R.corners4(W,H,s*1.1,sc)+F(1.5*s,c1,0.25*s); }
+    case "vine_corner":{ let v=`<path d="M1 1 C6 3 8 8 9 16 M1 1 C3 6 8 8 16 9" fill="none" stroke="${c1}" stroke-width="0.6"/>`; [[4,3.2,-30],[6.5,6,20],[8,10,-40],[9,13.5,15],[3.2,4,60],[6,6.5,-20],[10,8,50],[13.5,9,-15]].forEach(([x,y,r],i)=>v+=`<ellipse cx="${x}" cy="${y}" rx="1.9" ry="0.8" transform="rotate(${r} ${x} ${y})" fill="${i%2?c2:c1}" opacity="0.85"/>`); return R.corners4(W,H,s,v); }
+    /* ---------- bands ---------- */
+    case "header_bar": return R.rect(0,0,W,3.2*s,c1)+R.rect(0,3.2*s,W,0.8*s,c2)+R.rect(0,H-2*s,W,2*s,c1)+`<circle cx="${n(W/2)}" cy="${n(H-1*s)}" r="${n(0.6*s)}" fill="${c2}"/>`;
+    case "banner":{ const y=1.5*s,h=5*s,ins=6*s; return `<path d="M${n(ins)} ${n(y)} H${n(W-ins)} V${n(y+h)} H${n(ins)}Z" fill="${c1}"/><path d="M${n(ins)} ${n(y+1.2*s)} H${n(ins-4*s)} L${n(ins-2*s)} ${n(y+h/2+0.6*s)} L${n(ins-4*s)} ${n(y+h)} H${n(ins)}Z" fill="${c2}"/><path d="M${n(W-ins)} ${n(y+1.2*s)} H${n(W-ins+4*s)} L${n(W-ins+2*s)} ${n(y+h/2+0.6*s)} L${n(W-ins+4*s)} ${n(y+h)} H${n(W-ins)}Z" fill="${c2}"/><path d="M${n(ins)} ${n(y+h)} L${n(ins-1.2*s)} ${n(y+h+1.2*s)} L${n(ins)} ${n(y+h+1.2*s)}Z M${n(W-ins)} ${n(y+h)} L${n(W-ins+1.2*s)} ${n(y+h+1.2*s)} L${n(W-ins)} ${n(y+h+1.2*s)}Z" fill="${c1}" opacity="0.6"/>`+F(2*s,c1,0.3*s); }
+    case "scallop":{ const r=4*s; let d=`M0 0 H${W} V${n(3*s)} `; for(let x=W;x>0;x-=2*r) d+=`A${n(r)} ${n(r)} 0 0 1 ${n(x-2*r)} ${n(3*s)} `; d+="Z"; return R.path(d,"",0,c1)+`<path d="${d}" fill="none" stroke="${c2}" stroke-width="${n(0.6*s)}" transform="translate(0 ${n(1.2*s)})" opacity="0.9"/>`; }
+    case "chevron_band":{ const h=5*s,w=5*s; let d=`M0 ${n(H-h)} `; for(let x=0;x<=W;x+=w) d+=`L${n(x+w/2)} ${n(H-h*0.4)} L${n(x+w)} ${n(H-h)} `; d+=`V${H} H0Z`; return R.path(d,"",0,c1)+R.path(d.replace(/^M0 ([\d.]+)/,(m,y)=>`M0 ${n(+y-1.5*s)}`),c2,0.5*s,"")+R.rect(0,0,W,1.2*s,c1); }
+    case "twin_stripes": return R.rect(0,2*s,W,1.6*s,c1)+R.rect(0,4.2*s,W,0.6*s,c2)+R.rect(0,H-4.8*s,W,0.6*s,c2)+R.rect(0,H-3.6*s,W,1.6*s,c1);
+    case "footer_wave": return `<path d="M0 ${n(H-9*s)} Q${n(W*0.25)} ${n(H-14*s)} ${n(W*0.5)} ${n(H-9*s)} T${W} ${n(H-9*s)} V${H} H0Z" fill="${c1}" opacity="0.12"/><path d="M0 ${n(H-6*s)} Q${n(W*0.25)} ${n(H-10*s)} ${n(W*0.5)} ${n(H-6*s)} T${W} ${n(H-6*s)} V${H} H0Z" fill="${c1}"/><path d="M0 ${n(H-3*s)} Q${n(W*0.3)} ${n(H-5.5*s)} ${n(W*0.55)} ${n(H-3*s)} T${W} ${n(H-3.5*s)} V${H} H0Z" fill="${c2}"/>`;
+    case "side_bar": return R.rect(0,0,4*s,H,c1)+R.rect(4*s,0,1*s,H,c2)+R.rect(W-1.2*s,0,1.2*s,H,c1)+`<path d="M${n(7*s)} ${n(H-3*s)} H${n(W-4*s)}" stroke="${c2}" stroke-width="${n(0.5*s)}"/>`;
+    case "notch":{ const h=6*s,nw=14*s; return `<path d="M0 0 H${W} V${n(h)} H${n(W/2+nw/2)} L${n(W/2)} ${n(h+3*s)} L${n(W/2-nw/2)} ${n(h)} H0Z" fill="${c1}"/><path d="M0 ${n(h+1*s)} H${n(W/2-nw/2-1.5*s)} M${n(W/2+nw/2+1.5*s)} ${n(h+1*s)} H${W}" stroke="${c2}" stroke-width="${n(0.6*s)}"/><polygon points="${R.star(W/2,h*0.5,2.2*s,5)}" fill="${c2}"/>`+R.rect(0,H-1.5*s,W,1.5*s,c1); }
+    case "zigzag_band":{ const z=3*s; let top=`M0 0 H${W} V${n(3*s)} `; for(let x=W;x>0;x-=z) top+=`L${n(x-z/2)} ${n(3*s+z*0.7)} L${n(x-z)} ${n(3*s)} `; top+="Z"; let bot=`M0 ${H} H${W} V${n(H-3*s)} `; for(let x=W;x>0;x-=z) bot+=`L${n(x-z/2)} ${n(H-3*s-z*0.7)} L${n(x-z)} ${n(H-3*s)} `; bot+="Z"; return R.path(top,"",0,c1)+R.path(bot,"",0,c2); }
+    case "step_band":{ let o=""; for(let i=0;i<4;i++) o+=R.rect(0,i*1.4*s,W*(0.55-i*0.1),1.4*s,i%2?c2:c1); for(let i=0;i<4;i++) o+=R.rect(W*(0.45+i*0.1),H-(i+1)*1.4*s,W,1.4*s,i%2?c2:c1); return o; }
+    /* ---------- patterns ---------- */
+    case "crosshatch":{ let o=`<defs><pattern id="ch${s}" width="${n(2*s)}" height="${n(2*s)}" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="${n(2*s)}" stroke="${c1}" stroke-width="${n(0.35*s)}"/></pattern></defs>`; o+=`<path d="M0 0 H${n(W*0.45)} L0 ${n(H*0.5)}Z" fill="url(#ch${s})"/><path d="M${W} ${H} H${n(W*0.55)} L${W} ${n(H*0.5)}Z" fill="url(#ch${s})"/>`; return o+F(2*s,c2,0.5*s); }
+    case "halftone":{ let o=""; const cols=12,rows=6; for(let i=0;i<cols;i++) for(let j=0;j<rows;j++){ const t=(i/cols)*0.7+(j/rows)*0.3; const r=1.6*s*(1-t); if(r<0.15) continue; o+=`<circle cx="${n(2*s+i*3.6*s)}" cy="${n(H-2*s-j*3.6*s)}" r="${n(r)}" fill="${c1}" opacity="0.8"/>`; } return o+R.rect(0,0,W,2*s,c1)+R.rect(0,2*s,W,0.6*s,c2); }
+    case "diamonds":{ let o=`<defs><pattern id="dm${s}" width="${n(6*s)}" height="${n(6*s)}" patternUnits="userSpaceOnUse"><path d="M${n(3*s)} 0 L${n(6*s)} ${n(3*s)} L${n(3*s)} ${n(6*s)} L0 ${n(3*s)}Z" fill="none" stroke="${c1}" stroke-width="${n(0.3*s)}"/></pattern></defs>`; o+=R.rect(0,0,W,7*s,`url(#dm${s})`)+R.rect(0,H-7*s,W,7*s,`url(#dm${s})`); return o+`<path d="M0 ${n(7.5*s)} H${W} M0 ${n(H-7.5*s)} H${W}" stroke="${c2}" stroke-width="${n(0.7*s)}"/>`; }
+    case "hexagons":{ let o=""; const r=2.6*s; for(let row=0;row<4;row++) for(let col=0;col<5;col++){ const x=W-3*s-col*r*1.75-(row%2?r*0.875:0), y=3*s+row*r*1.5; const op=0.9-(row+col)*0.1; if(op<0.1) continue; o+=`<polygon points="${R.poly(x,y,r,6,Math.PI/6)}" fill="none" stroke="${c1}" stroke-width="${n(0.4*s)}" opacity="${n(op)}"/>`; }
+      for(let row=0;row<4;row++) for(let col=0;col<5;col++){ const x=3*s+col*r*1.75+(row%2?r*0.875:0), y=H-3*s-row*r*1.5; const op=0.9-(row+col)*0.1; if(op<0.1) continue; o+=`<polygon points="${R.poly(x,y,r,6,Math.PI/6)}" fill="${c2}" opacity="${n(op*0.5)}"/>`; } return o; }
+    case "circles":{ let o=""; for(let i=1;i<=7;i++) o+=`<circle cx="${W}" cy="0" r="${n(i*5*s)}" fill="none" stroke="${i%2?c1:c2}" stroke-width="${n(0.5*s)}" opacity="${n(0.7-i*0.07)}"/>`; for(let i=1;i<=7;i++) o+=`<circle cx="0" cy="${H}" r="${n(i*5*s)}" fill="none" stroke="${i%2?c2:c1}" stroke-width="${n(0.5*s)}" opacity="${n(0.7-i*0.07)}"/>`; return o; }
+    case "stars_field":{ const rnd=R.rnd(7); let o=R.rect(0,0,W,H,c1,'opacity="0.06"'); for(let i=0;i<40;i++){ const x=rnd()*W,y=rnd()*H; const edge=Math.min(x,W-x,y,H-y); if(edge>9*s) continue; const r=(0.5+rnd()*1.3)*s; o+=`<polygon points="${R.star(x,y,r,5)}" fill="${rnd()>0.5?c1:c2}" opacity="${n(0.5+rnd()*0.5)}"/>`; } return o; }
+    case "confetti":{ const rnd=R.rnd(11); let o=""; for(let i=0;i<60;i++){ const x=rnd()*W,y=rnd()*H; const edge=Math.min(x,W-x,y,H-y); if(edge>10*s) continue; const k=rnd(); const col=k<0.4?c1:k<0.8?c2:"#f43f5e"; const rot=rnd()*360; o+=k<0.3?`<circle cx="${n(x)}" cy="${n(y)}" r="${n(0.9*s)}" fill="${col}"/>`:`<rect x="${n(x)}" y="${n(y)}" width="${n(2*s)}" height="${n(0.9*s)}" rx="0.2" fill="${col}" transform="rotate(${n(rot)} ${n(x)} ${n(y)})"/>`; } return o; }
+    case "grid_paper":{ const g=4*s; let o=`<defs><pattern id="gp${s}" width="${n(g)}" height="${n(g)}" patternUnits="userSpaceOnUse"><path d="M${n(g)} 0 V${n(g)} H0" fill="none" stroke="${c1}" stroke-width="0.15" opacity="0.35"/></pattern></defs>`+R.rect(0,0,W,H,`url(#gp${s})`); return o+R.rect(0,0,2*s,H,c1)+R.rect(2*s,0,0.6*s,H,c2); }
+    case "herringbone":{ let o=""; const w=3*s; for(let y=0;y<H;y+=w) o+=`<path d="M0 ${n(y)} L${n(w)} ${n(y+w/2)} L0 ${n(y+w)}" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}"/><path d="M${n(w)} ${n(y)} L${n(2*w)} ${n(y+w/2)} L${n(w)} ${n(y+w)}" fill="none" stroke="${c2}" stroke-width="${n(0.5*s)}"/>`; return o+`<g transform="translate(${W} ${H}) rotate(180)">${o}</g>`+`<path d="M${n(2.4*w)} 0 V${H}" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`; }
+    case "polka":{ let o=""; const st=4*s; o+=R.repeatX(W,st,st/2,x=>`<circle cx="${n(x)}" cy="${n(2.2*s)}" r="${n(1*s)}" fill="${c1}"/><circle cx="${n(x)}" cy="${n(H-2.2*s)}" r="${n(1*s)}" fill="${c2}"/>`); o+=R.repeatY(H-st,st,st*1.2,y=>`<circle cx="${n(2.2*s)}" cy="${n(y)}" r="${n(1*s)}" fill="${c2}"/><circle cx="${n(W-2.2*s)}" cy="${n(y)}" r="${n(1*s)}" fill="${c1}"/>`); return o+F(4.5*s,c1,0.3*s); }
+    /* ---------- african ---------- */
+    case "adinkra":{ const sym=[ `<circle r="3" fill="none" stroke="${c1}" stroke-width="0.6"/><circle r="1.2" fill="${c1}"/>`, `<path d="M-3 -3 L3 3 M3 -3 L-3 3" stroke="${c1}" stroke-width="0.7"/><circle r="3" fill="none" stroke="${c1}" stroke-width="0.5"/>`, `<path d="M0 -3.2 C2 -1 2 1 0 3.2 C-2 1 -2 -1 0 -3.2Z" fill="${c1}"/><path d="M-3.2 0 C-1 2 1 2 3.2 0 C1 -2 -1 -2 -3.2 0Z" fill="none" stroke="${c1}" stroke-width="0.5"/>`, `<path d="M0 -3 L3 0 L0 3 L-3 0Z" fill="none" stroke="${c1}" stroke-width="0.7"/><path d="M0 -1.4 L1.4 0 L0 1.4 L-1.4 0Z" fill="${c2}"/>`, `<path d="M-2.5 -2.5 A3.5 3.5 0 1 0 2.5 -2.5" fill="none" stroke="${c1}" stroke-width="0.7"/><circle cy="-2.5" r="0.9" fill="${c2}"/>` ];
+      let o=""; const st=8.5*s; let i=0; for(let x=st/2+2*s;x<W-2*s;x+=st,i++) o+=`<g transform="translate(${n(x)} ${n(4.5*s)}) scale(${s})">${sym[i%5]}</g><g transform="translate(${n(x)} ${n(H-4.5*s)}) scale(${s})">${sym[(i+2)%5]}</g>`; return o+`<path d="M${n(2*s)} ${n(8.5*s)} H${n(W-2*s)} M${n(2*s)} ${n(H-8.5*s)} H${n(W-2*s)}" stroke="${c2}" stroke-width="${n(0.6*s)}"/>`; }
+    case "mudcloth":{ const bw=8*s; let o=R.rect(0,0,bw,H,"#f5f0e6")+R.rect(W-bw,0,bw,H,"#f5f0e6"); const row=(x0)=>{ let r=""; for(let y=0;y<H;y+=6*s){ const k=Math.round(y/(6*s))%3; if(k===0) r+=`<path d="M${n(x0+1*s)} ${n(y+3*s)} L${n(x0+4*s)} ${n(y+1*s)} L${n(x0+7*s)} ${n(y+3*s)} L${n(x0+4*s)} ${n(y+5*s)}Z" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`; else if(k===1) r+=`<path d="M${n(x0+1*s)} ${n(y+1.5*s)} H${n(x0+7*s)} M${n(x0+1*s)} ${n(y+4.5*s)} H${n(x0+7*s)}" stroke="${c1}" stroke-width="${n(0.6*s)}"/><circle cx="${n(x0+4*s)}" cy="${n(y+3*s)}" r="${n(0.7*s)}" fill="${c2}"/>`; else r+=`<path d="M${n(x0+1*s)} ${n(y+1*s)} L${n(x0+7*s)} ${n(y+5*s)} M${n(x0+7*s)} ${n(y+1*s)} L${n(x0+1*s)} ${n(y+5*s)}" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`; } return r; }; return o+row(0)+row(W-bw)+`<path d="M${n(bw+1*s)} 0 V${H} M${n(W-bw-1*s)} 0 V${H}" stroke="${c1}" stroke-width="${n(0.6*s)}"/>`; }
+    case "ankara":{ const rnd=R.rnd(3); let o=""; const st=7*s; for(let x=st/2;x<W;x+=st) for(let y=st/2;y<H;y+=st){ const edge=Math.min(x,W-x,y,H-y); if(edge>8*s) continue; const k=(Math.round(x/st)+Math.round(y/st))%3; if(k===0) o+=`<circle cx="${n(x)}" cy="${n(y)}" r="${n(2.6*s)}" fill="${c2}" opacity="0.85"/><circle cx="${n(x)}" cy="${n(y)}" r="${n(1.2*s)}" fill="${c1}"/>`; else if(k===1) o+=`<polygon points="${R.poly(x,y,2.6*s,4,Math.PI/4)}" fill="${c1}" opacity="0.85"/><circle cx="${n(x)}" cy="${n(y)}" r="${n(0.8*s)}" fill="#fff"/>`; else o+=`<path d="M${n(x-2.4*s)} ${n(y)} Q${n(x)} ${n(y-3*s)} ${n(x+2.4*s)} ${n(y)} Q${n(x)} ${n(y+3*s)} ${n(x-2.4*s)} ${n(y)}Z" fill="${c1}"/>`; } return o; }
+    case "kente2":{ const bh=7*s; const strip=(y)=>{ let o=R.rect(0,y,W,bh,c2); for(let x=0;x<W;x+=10*s){ o+=R.rect(x,y,5*s,bh,c1)+R.rect(x+5*s,y+bh*0.35,5*s,bh*0.3,"#1f1f1f")+`<path d="M${n(x+1*s)} ${n(y+1*s)} L${n(x+4*s)} ${n(y+bh-1*s)} M${n(x+4*s)} ${n(y+1*s)} L${n(x+1*s)} ${n(y+bh-1*s)}" stroke="${c2}" stroke-width="${n(0.5*s)}"/>`; } return o; }; return strip(0)+strip(H-bh)+R.rect(0,bh+0.8*s,W,0.6*s,c1)+R.rect(0,H-bh-1.4*s,W,0.6*s,c1); }
+    case "shweshwe":{ let o=""; const st=3.2*s; for(let x=st/2;x<W;x+=st) for(let y=st/2;y<H;y+=st){ const edge=Math.min(x,W-x,y,H-y); if(edge>7*s) continue; const big=(Math.round(x/st)+Math.round(y/st))%2===0; o+=`<circle cx="${n(x)}" cy="${n(y)}" r="${n(big?0.9*s:0.4*s)}" fill="${big?c1:c2}"/>`; } return o+F(8*s,c1,0.4*s); }
+    case "basket":{ const u=3*s; let o=""; for(let y=0;y<H;y+=u) for(let x=0;x<W;x+=u){ const edge=Math.min(x,W-x,y,H-y); if(edge>6*s) continue; const h=(Math.round(x/u)+Math.round(y/u))%2===0; o+=h?`<path d="M${n(x)} ${n(y+u*0.3)} H${n(x+u)} M${n(x)} ${n(y+u*0.7)} H${n(x+u)}" stroke="${c1}" stroke-width="${n(0.6*s)}"/>`:`<path d="M${n(x+u*0.3)} ${n(y)} V${n(y+u)} M${n(x+u*0.7)} ${n(y)} V${n(y+u)}" stroke="${c2}" stroke-width="${n(0.6*s)}"/>`; } return o+F(7*s,c1,0.5*s); }
+    case "cowrie":{ const sh=(x,y,r)=>`<g transform="translate(${n(x)} ${n(y)}) rotate(${r})"><ellipse rx="${n(1.6*s)}" ry="${n(1.1*s)}" fill="#fdf6e3" stroke="${c1}" stroke-width="${n(0.35*s)}"/><path d="M${n(-1*s)} 0 H${n(1*s)}" stroke="${c1}" stroke-width="${n(0.4*s)}" stroke-dasharray="${n(0.3*s)} ${n(0.3*s)}"/></g>`; let o=""; o+=R.repeatX(W,4.2*s,3*s,x=>sh(x,2.6*s,0)+sh(x,H-2.6*s,0)); o+=R.repeatY(H-4*s,4.2*s,6*s,y=>sh(2.6*s,y,90)+sh(W-2.6*s,y,90)); return o+F(5.2*s,c2,0.5*s); }
+    case "tribal_tri":{ const t=4*s; let top="",bot=""; for(let x=0;x<W;x+=t){ top+=`<path d="M${n(x)} 0 L${n(x+t)} 0 L${n(x+t/2)} ${n(t)}Z" fill="${Math.round(x/t)%2?c1:c2}"/>`; bot+=`<path d="M${n(x)} ${H} L${n(x+t)} ${H} L${n(x+t/2)} ${n(H-t)}Z" fill="${Math.round(x/t)%2?c2:c1}"/>`; } return top+bot+`<path d="M0 ${n(t+1.2*s)} H${W} M0 ${n(H-t-1.2*s)} H${W}" stroke="${c1}" stroke-width="${n(0.5*s)}" stroke-dasharray="${n(2*s)} ${n(1*s)}"/>`; }
+    /* ---------- nature ---------- */
+    case "palm":{ const frond=(rot)=>{ let o=`<path d="M0 0 Q6 6 16 20" fill="none" stroke="${c1}" stroke-width="0.7"/>`; for(let i=1;i<9;i++){ const t=i/9; const x=t*t*16, y=t*20*(0.3+0.7*t); const L=5-Math.abs(4.5-i)*0.5; o+=`<path d="M${n(x)} ${n(y)} q${n(-L)} ${n(-L*0.6)} ${n(-L*1.6)} ${n(L*0.4)}" fill="none" stroke="${c1}" stroke-width="0.5" opacity="0.85"/><path d="M${n(x)} ${n(y)} q${n(L*0.6)} ${n(-L)} ${n(L*1.4)} ${n(-L*0.4)}" fill="none" stroke="${c1}" stroke-width="0.5" opacity="0.85"/>`; } return `<g transform="rotate(${rot})">${o}</g>`; }; return R.cornersTB(W,H,s*1.1,frond(0)+frond(35)+frond(-30)); }
+    case "olive":{ const leaf=(x,y,r,col)=>`<ellipse cx="${x}" cy="${y}" rx="2.6" ry="0.8" transform="rotate(${r} ${x} ${y})" fill="${col}"/>`; let br=`<path d="M2 24 Q6 10 22 2" fill="none" stroke="${c1}" stroke-width="0.6"/>`; for(let i=0;i<6;i++){ const t=i/5; const x=2+20*Math.pow(t,0.9), y=24-22*Math.pow(t,1.1); br+=leaf(x-1.6,y-1.4,-50+i*6,c1)+leaf(x+1.6,y+1.4,40+i*6,c1); if(i%2) br+=`<circle cx="${n(x)}" cy="${n(y)}" r="1" fill="${c2}"/>`; } return R.cornersTB(W,H,s,br)+`<g transform="translate(${W} 0) scale(-1 1)"><g transform="scale(${s})">${br}</g></g><g transform="translate(0 ${H}) scale(1 -1)"><g transform="scale(${s})">${br}</g></g>`; }
+    case "wheat":{ const ear=(rot)=>{ let o=`<path d="M0 0 V22" stroke="${c1}" stroke-width="0.6"/>`; for(let i=0;i<7;i++){ const y=2+i*2.6; o+=`<ellipse cx="-1.6" cy="${y}" rx="1.9" ry="0.8" transform="rotate(-35 -1.6 ${y})" fill="${c2}" stroke="${c1}" stroke-width="0.2"/><ellipse cx="1.6" cy="${y}" rx="1.9" ry="0.8" transform="rotate(35 1.6 ${y})" fill="${c2}" stroke="${c1}" stroke-width="0.2"/>`; } return `<g transform="rotate(${rot})">${o}</g>`; }; const bunch=ear(0)+ear(18)+ear(-18); return `<g transform="translate(${n(6*s)} ${n(H-4*s)}) scale(${s}) rotate(180)">${bunch}</g><g transform="translate(${n(W-6*s)} ${n(4*s)}) scale(${s})">${bunch}</g>`+F(2*s,c1,0.3*s); }
+    case "hibiscus":{ const pet=(r)=>`<path d="M0 0 C3 -6 9 -7 9 -2 C9 1 4 3 0 0Z" fill="${c2}" stroke="${c1}" stroke-width="0.25" transform="rotate(${r})"/>`; let fl=""; for(let i=0;i<5;i++) fl+=pet(i*72); fl+=`<circle r="1.4" fill="${c1}"/><path d="M0 0 L2 -9" stroke="${c1}" stroke-width="0.5"/><circle cx="2" cy="-9" r="0.8" fill="${c1}"/>`; const leaf=`<path d="M0 0 C-4 -3 -8 -1 -10 4 C-6 5 -2 4 0 0Z" fill="${c1}" opacity="0.8"/>`; return `<g transform="translate(${n(W-9*s)} ${n(H-9*s)}) scale(${s})">${leaf}<g transform="rotate(120)">${leaf}</g>${fl}</g><g transform="translate(${n(8*s)} ${n(8*s)}) scale(${s*0.7}) rotate(180)">${leaf}${fl}</g>`+F(2*s,c2,0.3*s); }
+    case "ferns":{ const fern=()=>{ let o=`<path d="M1 1 Q8 8 12 24" fill="none" stroke="${c1}" stroke-width="0.6"/>`; for(let i=1;i<10;i++){ const t=i/10; const x=1+11*t*t*0.9+t*2, y=1+23*t*t; const L=4*(1-Math.abs(t-0.45)); o+=`<path d="M${n(x)} ${n(y)} q${n(-L)} ${n(-L*0.2)} ${n(-L*1.5)} ${n(L*0.5)}" fill="none" stroke="${c1}" stroke-width="0.45"/><path d="M${n(x)} ${n(y)} q${n(L*0.3)} ${n(-L)} ${n(L*1.3)} ${n(-L*0.8)}" fill="none" stroke="${c1}" stroke-width="0.45"/>`; } return o; }; return R.corners4(W,H,s,fern()); }
+    case "vine_border":{ let d=`M0 ${n(3*s)} `; for(let x=0;x<W;x+=8*s) d+=`q${n(4*s)} ${n(-3*s)} ${n(8*s)} 0 `; let o=`<path d="${d}" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}"/><path d="${d}" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}" transform="translate(0 ${n(H-6*s)}) scale(1 1)"/>`; for(let x=4*s;x<W;x+=8*s) o+=`<ellipse cx="${n(x)}" cy="${n(1.6*s)}" rx="${n(1.6*s)}" ry="${n(0.7*s)}" transform="rotate(-30 ${n(x)} ${n(1.6*s)})" fill="${c1}"/><ellipse cx="${n(x)}" cy="${n(H-1.6*s)}" rx="${n(1.6*s)}" ry="${n(0.7*s)}" transform="rotate(30 ${n(x)} ${n(H-1.6*s)})" fill="${c1}"/><circle cx="${n(x+4*s)}" cy="${n(3*s)}" r="${n(0.6*s)}" fill="${c2}"/><circle cx="${n(x+4*s)}" cy="${n(H-3*s)}" r="${n(0.6*s)}" fill="${c2}"/>`; return o; }
+    case "sunrise":{ let o=""; for(let i=0;i<9;i++){ const a=Math.PI+i*Math.PI/8; o+=`<line x1="${n(W/2)}" y1="${H}" x2="${n(W/2+H*1.2*Math.cos(a))}" y2="${n(H+H*1.2*Math.sin(a))}" stroke="${c2}" stroke-width="${n(0.5*s)}" opacity="0.35"/>`; } o+=`<circle cx="${n(W/2)}" cy="${H}" r="${n(12*s)}" fill="${c2}" opacity="0.35"/><path d="M0 ${n(H-6*s)} Q${n(W*0.3)} ${n(H-9*s)} ${n(W*0.5)} ${n(H-6*s)} T${W} ${n(H-7*s)} V${H} H0Z" fill="${c1}"/>`; return o; }
+    case "mountains": return `<path d="M0 ${n(H-4*s)} L${n(W*0.15)} ${n(H-16*s)} L${n(W*0.28)} ${n(H-9*s)} L${n(W*0.42)} ${n(H-20*s)} L${n(W*0.55)} ${n(H-11*s)} L${n(W*0.68)} ${n(H-17*s)} L${n(W*0.82)} ${n(H-8*s)} L${W} ${n(H-14*s)} V${H} H0Z" fill="${c1}" opacity="0.15"/><path d="M0 ${n(H-2*s)} L${n(W*0.2)} ${n(H-10*s)} L${n(W*0.35)} ${n(H-5*s)} L${n(W*0.5)} ${n(H-13*s)} L${n(W*0.65)} ${n(H-6*s)} L${n(W*0.8)} ${n(H-11*s)} L${W} ${n(H-4*s)} V${H} H0Z" fill="${c1}"/><circle cx="${n(W*0.8)}" cy="${n(9*s)}" r="${n(4*s)}" fill="${c2}"/>`;
+    case "raindrops":{ const rnd=R.rnd(5); let o=""; for(let i=0;i<30;i++){ const x=rnd()*W,y=rnd()*H; const edge=Math.min(x,W-x,y,H-y); if(edge>9*s) continue; const r=(1+rnd()*1.2)*s; o+=`<path d="M${n(x)} ${n(y-r*1.6)} C${n(x+r)} ${n(y-r*0.2)} ${n(x+r)} ${n(y+r)} ${n(x)} ${n(y+r)} C${n(x-r)} ${n(y+r)} ${n(x-r)} ${n(y-r*0.2)} ${n(x)} ${n(y-r*1.6)}Z" fill="${rnd()>0.5?c1:c2}" opacity="${n(0.4+rnd()*0.5)}"/>`; } return o; }
+    case "butterfly":{ const bf=(x,y,sc,rot)=>`<g transform="translate(${n(x)} ${n(y)}) scale(${n(sc)}) rotate(${rot})"><path d="M0 0 C-4 -6 -9 -5 -8 -1 C-7 2 -3 2 0 0 C-3 1 -7 3 -6 5 C-5 7 -2 5 0 0Z" fill="${c2}" stroke="${c1}" stroke-width="0.3"/><path d="M0 0 C4 -6 9 -5 8 -1 C7 2 3 2 0 0 C3 1 7 3 6 5 C5 7 2 5 0 0Z" fill="${c2}" stroke="${c1}" stroke-width="0.3"/><path d="M0 -1.5 V4" stroke="${c1}" stroke-width="0.7"/><circle cx="-3.5" cy="-2" r="0.7" fill="${c1}"/><circle cx="3.5" cy="-2" r="0.7" fill="${c1}"/></g>`; return bf(W-9*s,9*s,s,-15)+bf(W-18*s,4*s,s*0.6,20)+bf(8*s,H-8*s,s*0.9,160)+bf(17*s,H-4*s,s*0.55,140)+F(2*s,c1,0.3*s); }
+    /* ---------- modern ---------- */
+    case "gradient_wash": return `<defs><linearGradient id="gw${s}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}" stop-opacity="0.35"/><stop offset="0.5" stop-color="${c1}" stop-opacity="0"/><stop offset="1" stop-color="${c2}" stop-opacity="0.4"/></linearGradient></defs>`+R.rect(0,0,W,H,`url(#gw${s})`)+R.rect(0,0,W,1.5*s,c1)+R.rect(0,H-1.5*s,W,1.5*s,c2);
+    case "blob": return `<path d="M${n(W*0.7)} ${n(-4*s)} C${n(W*0.95)} ${n(-2*s)} ${n(W+4*s)} ${n(H*0.15)} ${n(W*0.98)} ${n(H*0.3)} C${n(W*0.9)} ${n(H*0.42)} ${n(W*0.72)} ${n(H*0.3)} ${n(W*0.68)} ${n(H*0.18)} C${n(W*0.64)} ${n(H*0.08)} ${n(W*0.6)} ${n(-2*s)} ${n(W*0.7)} ${n(-4*s)}Z" fill="${c1}" opacity="0.18"/><path d="M${n(-4*s)} ${n(H*0.7)} C${n(W*0.1)} ${n(H*0.55)} ${n(W*0.3)} ${n(H*0.7)} ${n(W*0.28)} ${n(H*0.85)} C${n(W*0.26)} ${n(H*0.98)} ${n(W*0.1)} ${n(H+3*s)} ${n(-4*s)} ${n(H+3*s)}Z" fill="${c2}" opacity="0.45"/><circle cx="${n(W*0.88)}" cy="${n(H*0.2)}" r="${n(2.5*s)}" fill="${c2}"/>`;
+    case "memphis":{ let o=`<path d="M${n(W-14*s)} ${n(3*s)} h${n(10*s)} v${n(10*s)}" fill="none" stroke="${c1}" stroke-width="${n(1*s)}"/><circle cx="${n(6*s)}" cy="${n(H-6*s)}" r="${n(4*s)}" fill="${c2}"/><path d="M${n(3*s)} ${n(3*s)} l${n(6*s)} 0 l${n(-3*s)} ${n(5*s)}Z" fill="${c1}"/>`; for(let i=0;i<5;i++) o+=`<path d="M${n(W-8*s-i*2.2*s)} ${n(H-3*s)} q${n(1.1*s)} ${n(-2*s)} ${n(2.2*s)} 0" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}"/>`; for(let i=0;i<4;i++) for(let j=0;j<3;j++) o+=`<circle cx="${n(W-20*s+i*2.5*s)}" cy="${n(H-10*s+j*2.5*s)}" r="${n(0.5*s)}" fill="${c1}"/>`; return o; }
+    case "circuit":{ const rnd=R.rnd(9); let o=""; for(let i=0;i<9;i++){ const y=3*s+i*4*s; const len=(8+rnd()*22)*s; const x0=rnd()>0.5?0:W-len; o+=`<path d="M${n(x0)} ${n(y)} h${n(len*0.6)} l${n(len*0.15)} ${n(rnd()>0.5?2*s:-2*s)} h${n(len*0.25)}" fill="none" stroke="${c1}" stroke-width="${n(0.4*s)}" opacity="0.6"/><circle cx="${n(x0===0?len:W-len)}" cy="${n(y+(rnd()>0.5?0:0))}" r="${n(0.8*s)}" fill="${c2}"/>`; } return o+R.rect(0,H-1.5*s,W,1.5*s,c1); }
+    case "speed_lines":{ let o=""; for(let i=0;i<9;i++){ const y=H-2*s-i*2.2*s; const len=(30-i*3)*s; o+=`<rect x="${n(W-len)}" y="${n(y)}" width="${n(len)}" height="${n(0.9*s)}" fill="${i%3===0?c2:c1}" opacity="${n(0.9-i*0.08)}"/>`; } for(let i=0;i<6;i++){ const y=2*s+i*2.2*s; const len=(22-i*3)*s; o+=`<rect x="0" y="${n(y)}" width="${n(len)}" height="${n(0.9*s)}" fill="${i%3===0?c2:c1}" opacity="${n(0.9-i*0.1)}"/>`; } return o; }
+    case "split_tone": return `<path d="M0 0 H${n(W*0.32)} L${n(W*0.2)} ${H} H0Z" fill="${c1}"/><path d="M${n(W*0.32)} 0 H${n(W*0.36)} L${n(W*0.24)} ${H} H${n(W*0.2)}Z" fill="${c2}"/>`;
+    case "ribbon_curve": return `<path d="M-2 ${n(H*0.35)} C${n(W*0.3)} ${n(H*0.2)} ${n(W*0.6)} ${n(H*0.55)} ${n(W+2)} ${n(H*0.4)} L${n(W+2)} ${n(H*0.48)} C${n(W*0.6)} ${n(H*0.63)} ${n(W*0.3)} ${n(H*0.28)} -2 ${n(H*0.43)}Z" fill="${c1}" opacity="0.1"/><path d="M-2 ${n(H-8*s)} C${n(W*0.3)} ${n(H-14*s)} ${n(W*0.6)} ${n(H-2*s)} ${n(W+2)} ${n(H-9*s)} L${n(W+2)} ${n(H-6*s)} C${n(W*0.6)} ${n(H+1*s)} ${n(W*0.3)} ${n(H-11*s)} -2 ${n(H-5*s)}Z" fill="${c1}"/><path d="M-2 ${n(H-4*s)} C${n(W*0.3)} ${n(H-9*s)} ${n(W*0.6)} ${n(H+1*s)} ${n(W+2)} ${n(H-5*s)} L${n(W+2)} ${n(H-3.5*s)} C${n(W*0.6)} ${n(H+2.5*s)} ${n(W*0.3)} ${n(H-7.5*s)} -2 ${n(H-2.5*s)}Z" fill="${c2}"/>`;
+    case "frame_cut":{ const c=7*s,mm=2*s; return `<path d="M${n(mm+c)} ${n(mm)} H${n(W-mm)} V${n(H-mm-c)} L${n(W-mm-c)} ${n(H-mm)} H${n(mm)} V${n(mm+c)}Z" fill="none" stroke="${c1}" stroke-width="${n(1*s)}"/><path d="M${n(mm)} ${n(mm)} L${n(mm+c)} ${n(mm)} L${n(mm)} ${n(mm+c)}Z M${n(W-mm)} ${n(H-mm)} L${n(W-mm-c)} ${n(H-mm)} L${n(W-mm)} ${n(H-mm-c)}Z" fill="${c2}"/>`; }
+    case "neon_glow": return `<rect x="${n(3*s)}" y="${n(3*s)}" width="${n(W-6*s)}" height="${n(H-6*s)}" rx="${n(3*s)}" fill="none" stroke="${c2}" stroke-width="${n(3*s)}" opacity="0.18"/><rect x="${n(3*s)}" y="${n(3*s)}" width="${n(W-6*s)}" height="${n(H-6*s)}" rx="${n(3*s)}" fill="none" stroke="${c2}" stroke-width="${n(1.4*s)}" opacity="0.4"/><rect x="${n(3*s)}" y="${n(3*s)}" width="${n(W-6*s)}" height="${n(H-6*s)}" rx="${n(3*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.6*s)}"/>`;
+    case "paper_fold": return `<path d="M${n(W-16*s)} 0 H${W} V${n(16*s)}Z" fill="${c1}" opacity="0.12"/><path d="M${n(W-16*s)} 0 L${W} ${n(16*s)} L${n(W-16*s)} ${n(16*s)}Z" fill="${c2}"/><path d="M${n(W-16*s)} 0 L${W} ${n(16*s)}" stroke="${c1}" stroke-width="${n(0.4*s)}"/>`+F(2*s,c1,0.4*s)+`<path d="M${n(2*s)} ${n(H-2*s)} H${n(W*0.5)}" stroke="${c2}" stroke-width="${n(1.5*s)}"/>`;
+    /* ---------- themed ---------- */
+    case "cross":{ const cx=W/2, cy=H/2; let o=""; for(let i=0;i<24;i++){ const a=i*Math.PI/12; o+=`<line x1="${n(cx)}" y1="${n(cy)}" x2="${n(cx+W*Math.cos(a))}" y2="${n(cy+W*Math.sin(a))}" stroke="${c2}" stroke-width="${n(0.4*s)}" opacity="0.18"/>`; } const r=Math.min(W,H)*0.3*s; o+=`<path d="M${n(cx-r*0.18)} ${n(cy-r)} h${n(r*0.36)} v${n(r*0.55)} h${n(r*0.55)} v${n(r*0.36)} h${n(-r*0.55)} v${n(r*1.1)} h${n(-r*0.36)} v${n(-r*1.1)} h${n(-r*0.55)} v${n(-r*0.36)} h${n(r*0.55)}Z" fill="${c1}" opacity="0.09"/>`; return o+F(2*s,c1,0.4*s); }
+    case "dove":{ const dove=`<ellipse cx="10" cy="6" rx="8" ry="3.4" fill="${c1}"/><path d="M15 4.2 q2.2 -1.6 3.6 -0.2 q-0.6 1.6 -2.6 2.2 Z" fill="${c1}"/><path d="M18.4 3.9 l2.6 0.5 l-2.4 0.8Z" fill="${c2}"/><circle cx="16.8" cy="4.1" r="0.35" fill="#fff"/><path d="M6 5 C4 0 9 -4 14 -3 C11 -1 10 2 9.6 4.8Z" fill="${c1}"/><path d="M9.6 4.6 C10.5 -0.5 15 -2.5 19 -1.4 C15.5 0.5 13.5 2.5 12.5 5Z" fill="${c1}" opacity="0.8"/><path d="M2.5 6.6 L-3 4.5 L-2 8 L-3.6 10.5 L2.6 8.4Z" fill="${c1}"/><path d="M21 5 c1.6 -0.6 2.8 0.4 3.6 1.4 c-1.4 -0.1 -2.4 0.3 -3.2 0.9" fill="none" stroke="${c2}" stroke-width="0.5"/><ellipse cx="23.2" cy="6" rx="1.3" ry="0.5" transform="rotate(20 23.2 6)" fill="${c2}" opacity="0.8"/>`; let rays=""; for(let i=0;i<7;i++){ const a=Math.PI+0.3+i*0.2; rays+=`<line x1="${W}" y1="0" x2="${n(W+40*s*Math.cos(a))}" y2="${n(40*s*Math.sin(a))}" stroke="${c2}" stroke-width="${n(0.5*s)}" opacity="0.4"/>`; } return rays+`<g transform="translate(${n(W-27*s)} ${n(6*s)}) scale(${s*0.9})">${dove}</g>`+`<path d="M0 ${n(H-4*s)} Q${n(W/2)} ${n(H-8*s)} ${W} ${n(H-4*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.6*s)}"/>`; }
+    case "open_book":{ const bk=`<path d="M0 6 C6 2 12 2 18 6 V26 C12 22 6 22 0 26Z" fill="#fff" stroke="${c1}" stroke-width="0.7"/><path d="M36 6 C30 2 24 2 18 6 V26 C24 22 30 22 36 26Z" fill="#fff" stroke="${c1}" stroke-width="0.7"/><path d="M18 6 V26" stroke="${c1}" stroke-width="0.7"/><path d="M3 10 H14 M3 13 H14 M3 16 H14 M3 19 H12 M22 10 H33 M22 13 H33 M22 16 H33 M22 19 H31" stroke="${c2}" stroke-width="0.6"/>`; return `<g transform="translate(${n(W/2-18*s*0.9)} ${n(H-28*s*0.9)}) scale(${s*0.9})" opacity="0.28">${bk}</g>`+F(2*s,c1,0.5*s)+R.rect(2*s,2*s,W-4*s,2*s,c1); }
+    case "crescent":{ const cx=W-11*s, cy=10*s, r=7*s; return `<circle cx="${n(cx)}" cy="${n(cy)}" r="${n(r)}" fill="${c2}"/><circle cx="${n(cx+2.6*s)}" cy="${n(cy-1.2*s)}" r="${n(r*0.85)}" fill="#fff"/><polygon points="${R.star(cx+4*s,cy+1*s,2.2*s,5)}" fill="${c1}"/>`+`<path d="M${n(3*s)} ${n(H-6*s)} H${n(W-3*s)}" stroke="${c1}" stroke-width="${n(0.8*s)}"/>`+R.repeatX(W-3*s,4*s,5*s,x=>`<path d="M${n(x)} ${n(H-6*s)} l${n(2*s)} ${n(-2.2*s)} l${n(2*s)} ${n(2.2*s)}" fill="none" stroke="${c2}" stroke-width="${n(0.5*s)}"/>`)+F(2*s,c1,0.3*s); }
+    case "stethoscope":{ const cr=(x,y,r)=>`<path d="M${n(x-r*0.3)} ${n(y-r)} h${n(r*0.6)} v${n(r*0.7)} h${n(r*0.7)} v${n(r*0.6)} h${n(-r*0.7)} v${n(r*0.7)} h${n(-r*0.6)} v${n(-r*0.7)} h${n(-r*0.7)} v${n(-r*0.6)} h${n(r*0.7)}Z" fill="${c1}"/>`; let o=cr(W-8*s,8*s,5*s)+`<circle cx="${n(W-8*s)}" cy="${n(8*s)}" r="${n(7.2*s)}" fill="none" stroke="${c2}" stroke-width="${n(0.8*s)}"/>`; let hb=`M${n(3*s)} ${n(H-5*s)} h${n(W*0.25)} l${n(2*s)} ${n(-3*s)} l${n(2.5*s)} ${n(6*s)} l${n(2.5*s)} ${n(-8*s)} l${n(2.5*s)} ${n(6*s)} l${n(1.5*s)} ${n(-1*s)} H${n(W-3*s)}`; return o+`<path d="${hb}" fill="none" stroke="${c1}" stroke-width="${n(0.8*s)}" stroke-linejoin="round"/>`; }
+    case "coins":{ let o=""; const coin=(x,y,r)=>`<circle cx="${n(x)}" cy="${n(y)}" r="${n(r)}" fill="${c2}" stroke="${c1}" stroke-width="${n(0.4*s)}"/><circle cx="${n(x)}" cy="${n(y)}" r="${n(r*0.65)}" fill="none" stroke="${c1}" stroke-width="${n(0.3*s)}"/>`; for(let i=0;i<3;i++) for(let j=0;j<=i;j++) o+=coin(5*s+j*5.5*s,H-4*s-(2-i)*3.2*s,2.6*s); o+=`<path d="M${n(W-24*s)} ${n(H-4*s)} L${n(W-16*s)} ${n(H-9*s)} L${n(W-10*s)} ${n(H-7*s)} L${n(W-4*s)} ${n(H-14*s)}" fill="none" stroke="${c1}" stroke-width="${n(1*s)}"/><path d="M${n(W-8*s)} ${n(H-14*s)} h${n(4*s)} v${n(4*s)}" fill="none" stroke="${c1}" stroke-width="${n(1*s)}"/>`; return o+F(2*s,c1,0.3*s); }
+    case "graduation":{ const cap=`<path d="M0 -4 L14 2 L0 8 L-14 2Z" fill="${c1}"/><path d="M-8 4.5 V10 C-8 13 8 13 8 10 V4.5" fill="none" stroke="${c1}" stroke-width="1.6"/><path d="M14 2 V12" stroke="${c2}" stroke-width="0.8"/><circle cx="14" cy="13" r="1.3" fill="${c2}"/>`; return `<g transform="translate(${n(W-14*s)} ${n(9*s)}) scale(${s*0.8})">${cap}</g>`+F(2*s,c1,0.5*s)+R.rect(2*s,H-4.5*s,W-4*s,2.5*s,c1)+R.rect(2*s,H-6*s,W-4*s,0.6*s,c2); }
+    case "handshake":{ const cx=W/2, cy=H/2, r=Math.min(W,H)*0.34*s; let o=`<circle cx="${n(cx)}" cy="${n(cy)}" r="${n(r)}" fill="${c2}" opacity="0.12"/>`; for(let i=0;i<8;i++){ const a=i*Math.PI/4; o+=`<path d="M${n(cx+r*0.55*Math.cos(a))} ${n(cy+r*0.55*Math.sin(a))} L${n(cx+r*0.95*Math.cos(a-0.12))} ${n(cy+r*0.95*Math.sin(a-0.12))} L${n(cx+r*0.95*Math.cos(a+0.12))} ${n(cy+r*0.95*Math.sin(a+0.12))}Z" fill="${c1}" opacity="0.1"/>`; } return o+`<path d="M0 ${n(H-3*s)} H${W}" stroke="${c1}" stroke-width="${n(1.4*s)}"/><path d="M0 ${n(3*s)} H${W}" stroke="${c2}" stroke-width="${n(1.4*s)}"/>`; }
+    case "heart_ring":{ const heart=(x,y,sc,col)=>`<path d="M0 3 C-4 -1 -4 -5 0 -4 C4 -5 4 -1 0 3Z" fill="${col}" transform="translate(${n(x)} ${n(y)}) scale(${n(sc)})"/>`; const ring=(x,y,r)=>`<circle cx="${n(x)}" cy="${n(y)}" r="${n(r)}" fill="none" stroke="${c2}" stroke-width="${n(0.9*s)}"/>`; return ring(W-9*s,7*s,3.4*s)+ring(W-13*s,7*s,3.4*s)+heart(6*s,H-6*s,s*1.4,c1)+heart(11*s,H-9*s,s*0.8,c2)+heart(3*s,H-11*s,s*0.6,c2)+`<rect x="${n(2*s)}" y="${n(2*s)}" width="${n(W-4*s)}" height="${n(H-4*s)}" rx="${n(4*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.4*s)}"/>`; }
+    case "shield":{ const cx=W/2, cy=H/2, r=Math.min(W,H)*0.36*s; const sh=`M${n(cx-r*0.8)} ${n(cy-r)} H${n(cx+r*0.8)} V${n(cy)} C${n(cx+r*0.8)} ${n(cy+r*0.6)} ${n(cx+r*0.3)} ${n(cy+r*0.9)} ${n(cx)} ${n(cy+r*1.05)} C${n(cx-r*0.3)} ${n(cy+r*0.9)} ${n(cx-r*0.8)} ${n(cy+r*0.6)} ${n(cx-r*0.8)} ${n(cy)}Z`; return `<path d="${sh}" fill="${c1}" opacity="0.07"/><path d="${sh}" fill="none" stroke="${c1}" stroke-width="${n(0.6*s)}" opacity="0.25"/><path d="M${n(cx-r*0.8)} ${n(cy-r*0.3)} H${n(cx+r*0.8)}" stroke="${c2}" stroke-width="${n(0.6*s)}" opacity="0.4"/>`+F(2*s,c1,0.6*s)+F(3.4*s,c2,0.3*s); }
+    case "music":{ const note=(x,y,sc)=>`<g transform="translate(${n(x)} ${n(y)}) scale(${n(sc)})"><ellipse cx="0" cy="0" rx="2.2" ry="1.5" transform="rotate(-20)" fill="${c1}"/><path d="M1.9 -0.6 V-11 q4 0 5 3" fill="none" stroke="${c1}" stroke-width="0.9"/></g>`; let o=""; for(let i=0;i<5;i++) o+=`<path d="M${n(W*0.55)} ${n(H-9*s+i*1.6*s)} H${n(W-3*s)}" stroke="${c2}" stroke-width="${n(0.35*s)}"/>`; return o+note(W*0.68,H-5*s,s)+note(W*0.8,H-6.6*s,s)+note(W*0.9,H-4*s,s*0.9)+note(8*s,10*s,s*1.1)+F(2*s,c1,0.3*s); }
+    case "football":{ const g=`<rect x="${n(3*s)}" y="${n(3*s)}" width="${n(W-6*s)}" height="${n(H-6*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.6*s)}"/><circle cx="${n(W/2)}" cy="${n(H/2)}" r="${n(8*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}" opacity="0.5"/><path d="M${n(W/2)} ${n(3*s)} V${n(H-3*s)}" stroke="${c1}" stroke-width="${n(0.5*s)}" opacity="0.5"/><rect x="${n(3*s)}" y="${n(H/2-12*s)}" width="${n(9*s)}" height="${n(24*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}" opacity="0.5"/><rect x="${n(W-12*s)}" y="${n(H/2-12*s)}" width="${n(9*s)}" height="${n(24*s)}" fill="none" stroke="${c1}" stroke-width="${n(0.5*s)}" opacity="0.5"/>`; return R.rect(0,0,W,H,"#22c55e",'opacity="0.08"')+g+`<circle cx="${n(W-8*s)}" cy="${n(8*s)}" r="${n(3.5*s)}" fill="#fff" stroke="${c1}" stroke-width="${n(0.5*s)}"/><polygon points="${R.poly(W-8*s,8*s,1.6*s,5,-Math.PI/2)}" fill="${c1}"/>`; }
+  }
+  return "";
+}
+
+/* ===================== SECURITY MODULE =====================
+   1. Input hardening  – every settings / template file that is imported is
+      validated and sanitised before it touches the app (type checks, size
+      limits, safe strings, safe colours, safe fonts, safe image data‑URIs).
+   2. CSS injection guard – colours, font names and numbers that end up inside
+      style="" attributes are whitelisted.
+   3. Storage integrity – saved data carries a checksum; tampered or corrupt
+      data is discarded instead of executed.
+   4. Session lock – optional passcode (PBKDF2‑SHA‑256, never stored in clear)
+      with auto‑lock after inactivity; lock blurs the preview and the editor.
+   5. Safety backup – automatic rolling backup of settings + templates with a
+      one‑click restore, so a bad import or a wiped browser store is recoverable.
+   6. Audit log – last 100 security‑relevant events (imports, locks, rejects).
+   ============================================================ */
+const SEC={ LIMITS:{ file:2*1024*1024, logo:600*1024, str:4000, arr:200, depth:8, keys:120 },
+  KEY:"duebook.security.v1", LOG:"duebook.seclog.v1", BAK:"duebook.backup.v1",
+  cfg:null, locked:false, timer:null, log:[] };
+SEC.defaults=()=>({ lockEnabled:false, hash:"", salt:"", autoLockMin:10, requireOnOpen:true, backups:true, strictImport:true, watermark:false });
+SEC.load=function(){ try{ SEC.cfg=Object.assign(SEC.defaults(), JSON.parse(localStorage.getItem(SEC.KEY)||"{}")); }catch(e){ SEC.cfg=SEC.defaults(); }
+  try{ SEC.log=JSON.parse(localStorage.getItem(SEC.LOG)||"[]"); }catch(e){ SEC.log=[]; } return SEC.cfg; };
+SEC.save=function(){ localStorage.setItem(SEC.KEY, JSON.stringify(SEC.cfg)); };
+SEC.audit=function(type,msg){ SEC.log.unshift({t:Date.now(),type,msg:String(msg).slice(0,200)}); SEC.log=SEC.log.slice(0,100); try{ localStorage.setItem(SEC.LOG, JSON.stringify(SEC.log)); }catch(e){} };
+
+/* ---------- sanitisers ---------- */
+SEC.safeStr=(v,max)=>{ if(v==null) return ""; let s=String(v); if(s.length>(max||SEC.LIMITS.str)) s=s.slice(0,max||SEC.LIMITS.str);
+  s=s.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,""); // control chars
+  s=s.replace(/javascript:|vbscript:|data:text\/html/gi,""); return s; };
+SEC.safeColor=(v,fb)=>{ const s=String(v||"").trim(); if(/^#[0-9a-f]{3,8}$/i.test(s)) return s; if(/^(rgb|hsl)a?\(\s*[\d.,%\s]+\)$/i.test(s)) return s; if(/^[a-z]{3,20}$/i.test(s)) return s; if(s==="") return ""; return fb??"#000000"; };
+SEC.safeFont=(v,fb)=>{ const s=String(v||""); return /^[\w\s,'"\-]{1,120}$/.test(s)?s:(fb??"Caladea, Cambria, Georgia, 'Times New Roman', serif"); };
+SEC.safeNum=(v,min,max,fb)=>{ const n=Number(v); if(!isFinite(n)) return fb; return Math.min(max,Math.max(min,n)); };
+SEC.safeImage=(v)=>{ const s=String(v||""); if(!s) return ""; if(!/^data:image\/(png|jpe?g|gif|webp|bmp);base64,[A-Za-z0-9+/=\s]+$/.test(s)) return ""; if(s.length>SEC.LIMITS.logo*1.4) return ""; return s; };
+SEC.safeUrlLike=(v)=>{ const s=String(v||""); return /^(data:image\/|#|$)/.test(s)?s:""; };
+/* recursive structural clean: strips functions, prototypes, __proto__, over‑long or over‑deep data */
+SEC.clean=function(v,depth){ depth=depth||0; if(depth>SEC.LIMITS.depth) return undefined;
+  if(v===null) return null; const t=typeof v;
+  if(t==="string") return SEC.safeStr(v); if(t==="number") return isFinite(v)?v:0; if(t==="boolean") return v;
+  if(Array.isArray(v)) return v.slice(0,SEC.LIMITS.arr).map(x=>SEC.clean(x,depth+1)).filter(x=>x!==undefined);
+  if(t==="object"){ const o={}; let n=0; for(const k of Object.keys(v)){ if(k==="__proto__"||k==="constructor"||k==="prototype") continue; if(++n>SEC.LIMITS.keys) break; if(!/^[\w\-. ]{1,64}$/.test(k)) continue; const c=SEC.clean(v[k],depth+1); if(c!==undefined) o[k]=c; } return o; }
+  return undefined; };
+/* settings‑specific field rules applied after the structural clean */
+SEC.sanitizeSettings=function(s){ s=SEC.clean(s)||{}; const L=s.layout||{};
+  const has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
+  if(s.layout){ if(has(L,"color")) L.color=SEC.safeColor(L.color,"#ffffff"); if(has(L,"ink")) L.ink=SEC.safeColor(L.ink,"#111111"); if(has(L,"line")) L.line=SEC.safeColor(L.line,"#111111"); if(has(L,"font")) L.font=SEC.safeFont(L.font);
+    ["pageW","pageH","cardW","cardH","marginTop","padX","padY","cardBorder","divider","fs","perSheet"].forEach(k=>{ if(k in L) L[k]=SEC.safeNum(L[k],0,1000,undefined); }); }
+  if(s.cover&&has(s.cover,"logo")){ s.cover.logo=SEC.safeImage(s.cover.logo); }
+  if(s.deco){ if(has(s.deco,"c1")) s.deco.c1=SEC.safeColor(s.deco.c1,"#1e3a8a"); if(has(s.deco,"c2")) s.deco.c2=SEC.safeColor(s.deco.c2,"#d4a017"); if(has(s.deco,"c3")) s.deco.c3=SEC.safeColor(s.deco.c3,""); if(s.deco.style!=null) s.deco.style=String(s.deco.style).replace(/[^\w\-]/g,"").slice(0,40); }
+  if(s.table&&has(s.table,"thBg")){ s.table.thBg=SEC.safeColor(s.table.thBg,""); } if(s.grid&&has(s.grid,"thBg")){ s.grid.thBg=SEC.safeColor(s.grid.thBg,""); }
+  if(s.template!=null) s.template=String(s.template).replace(/[^\w\-]/g,"").slice(0,64);
+  return s; };
+SEC.sanitizeTemplateFile=function(d){ d=SEC.clean(d)||{}; const out={overrides:{},user:[]};
+  if(d.overrides&&typeof d.overrides==="object") for(const id of Object.keys(d.overrides)){ if(!/^[\w\-]{1,64}$/.test(id)) continue; const o=d.overrides[id]||{}; out.overrides[id]={name:SEC.safeStr(o.name,120),desc:SEC.safeStr(o.desc,400)}; if(o.settings) out.overrides[id].settings=SEC.sanitizeSettings(o.settings); }
+  if(Array.isArray(d.user)) out.user=d.user.slice(0,SEC.LIMITS.arr).filter(t=>t&&typeof t==="object").map(t=>({id:String(t.id||("u_"+Date.now())).replace(/[^\w\-]/g,"").slice(0,64), name:SEC.safeStr(t.name,120)||"Imported template", desc:SEC.safeStr(t.desc,400), settings:SEC.sanitizeSettings(t.settings||{})}));
+  return out; };
+/* safe file reading: size + type gate, JSON parse in try, returns Promise */
+SEC.readJSON=function(file){ return new Promise((res,rej)=>{
+  if(!file) return rej("No file"); if(file.size>SEC.LIMITS.file) { SEC.audit("reject","File too large: "+file.name); return rej("The file is larger than 2 MB and was refused."); }
+  if(!/\.json$/i.test(file.name)&&file.type&&!/json/.test(file.type)){ SEC.audit("reject","Wrong type: "+file.name); return rej("Only .json files are accepted."); }
+  const r=new FileReader(); r.onerror=()=>rej("Could not read the file."); r.onload=()=>{ try{ const txt=String(r.result); if(/<script|on\w+\s*=|javascript:/i.test(txt)) { SEC.audit("reject","Script content in "+file.name); return rej("The file contains script‑like content and was refused."); } res(JSON.parse(txt)); }catch(e){ rej("The file is not valid JSON."); } }; r.readAsText(file); }); };
+SEC.readImage=function(file){ return new Promise((res,rej)=>{
+  if(!file) return rej("No file"); if(!/^image\/(png|jpe?g|gif|webp|bmp)$/.test(file.type)){ SEC.audit("reject","Logo type "+file.type); return rej("Only PNG, JPG, GIF, WebP or BMP images are accepted (SVG is not allowed for safety)."); }
+  if(file.size>SEC.LIMITS.logo){ SEC.audit("reject","Logo too large"); return rej("The logo must be smaller than 600 KB."); }
+  const r=new FileReader(); r.onerror=()=>rej("Could not read the image."); r.onload=()=>{ const v=SEC.safeImage(r.result); v?res(v):rej("The image could not be verified."); }; r.readAsDataURL(file); }); };
+
+/* ---------- integrity checksum for storage ---------- */
+SEC.hash32=function(str){ let h=0x811c9dc5; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,0x01000193); } return (h>>>0).toString(16); };
+SEC.seal=(obj)=>{ const body=JSON.stringify(obj); return JSON.stringify({v:1,sum:SEC.hash32(body),body}); };
+SEC.unseal=(raw)=>{ if(!raw) return null; try{ const env=JSON.parse(raw); if(env&&env.v===1&&typeof env.body==="string"){ if(SEC.hash32(env.body)!==env.sum){ SEC.audit("integrity","Stored settings failed checksum – ignored"); return null; } return JSON.parse(env.body); } return env; /* legacy unsealed */ }catch(e){ return null; } };
+
+/* ---------- passcode (PBKDF2) ---------- */
+SEC.pbkdf=async function(pass,saltHex){ const enc=new TextEncoder(); const salt=Uint8Array.from(saltHex.match(/../g).map(h=>parseInt(h,16)));
+  if(crypto.subtle){ const key=await crypto.subtle.importKey("raw",enc.encode(pass),"PBKDF2",false,["deriveBits"]); const bits=await crypto.subtle.deriveBits({name:"PBKDF2",salt,iterations:120000,hash:"SHA-256"},key,256); return [...new Uint8Array(bits)].map(b=>b.toString(16).padStart(2,"0")).join(""); }
+  let h=saltHex+pass; for(let i=0;i<5000;i++) h=SEC.hash32(h+i); return h; };
+SEC.randHex=n=>[...crypto.getRandomValues(new Uint8Array(n))].map(b=>b.toString(16).padStart(2,"0")).join("");
+SEC.setPass=async function(pass){ const salt=SEC.randHex(16); SEC.cfg.salt=salt; SEC.cfg.hash=await SEC.pbkdf(pass,salt); SEC.cfg.lockEnabled=true; SEC.save(); SEC.audit("lock","Passcode set"); };
+SEC.checkPass=async function(pass){ if(!SEC.cfg.hash) return true; return (await SEC.pbkdf(pass,SEC.cfg.salt))===SEC.cfg.hash; };
+SEC.clearPass=function(){ SEC.cfg.hash=""; SEC.cfg.salt=""; SEC.cfg.lockEnabled=false; SEC.save(); SEC.audit("lock","Passcode removed"); };
+
+/* ---------- lock screen ---------- */
+SEC.lockUI=function(){ let el=document.getElementById("lockScreen"); if(el) return el;
+  el=document.createElement("div"); el.id="lockScreen"; el.innerHTML=`<div class="lk"><div class="lki">${I.lock||""}</div><h2>Locked</h2><p>Enter the passcode to continue.</p><input type="password" id="lockPass" autocomplete="current-password" placeholder="Passcode"><div class="lke" id="lockErr"></div><button class="primary" id="lockBtn">Unlock</button><p class="lkh">Set or remove the passcode in the <b>Security</b> tab. If you forget it, clear this browser’s site data to reset (your templates can be restored from an exported backup).</p></div>`;
+  document.body.appendChild(el);
+  const tryUnlock=async()=>{ const v=document.getElementById("lockPass").value; if(await SEC.checkPass(v)){ SEC.unlock(); } else { document.getElementById("lockErr").textContent="Wrong passcode."; SEC.audit("lock","Failed unlock attempt"); SEC.fails=(SEC.fails||0)+1; if(SEC.fails>=5){ const b=document.getElementById("lockBtn"); b.disabled=true; setTimeout(()=>{b.disabled=false; SEC.fails=0;},30000); document.getElementById("lockErr").textContent="Too many attempts – wait 30 seconds."; } } };
+  el.querySelector("#lockBtn").onclick=tryUnlock; el.querySelector("#lockPass").onkeydown=e=>{ if(e.key==="Enter") tryUnlock(); }; return el; };
+SEC.lock=function(reason){ if(!SEC.cfg.lockEnabled||!SEC.cfg.hash) return; SEC.locked=true; const el=SEC.lockUI(); el.classList.add("on"); document.body.classList.add("locked"); document.getElementById("lockErr").textContent=""; const i=document.getElementById("lockPass"); i.value=""; setTimeout(()=>i.focus(),50); SEC.audit("lock","Locked"+(reason?" ("+reason+")":"")); };
+SEC.unlock=function(){ SEC.locked=false; const el=document.getElementById("lockScreen"); if(el) el.classList.remove("on"); document.body.classList.remove("locked"); SEC.audit("lock","Unlocked"); SEC.touch(); };
+SEC.touch=function(){ if(SEC.timer) clearTimeout(SEC.timer); if(!SEC.cfg.lockEnabled||!SEC.cfg.hash||!SEC.cfg.autoLockMin) return; SEC.timer=setTimeout(()=>SEC.lock("inactivity"), SEC.cfg.autoLockMin*60000); };
+SEC.initLock=function(){ ["mousemove","keydown","pointerdown","touchstart"].forEach(ev=>document.addEventListener(ev,()=>{ if(!SEC.locked) SEC.touch(); },{passive:true}));
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden&&SEC.cfg.lockEnabled&&SEC.cfg.hash&&SEC.cfg.autoLockMin) SEC.touch(); });
+  if(SEC.cfg.lockEnabled&&SEC.cfg.hash&&SEC.cfg.requireOnOpen) SEC.lock("opened"); else SEC.touch();
+  document.addEventListener("keydown",e=>{ if(SEC.locked){ const inLock=e.target.closest&&e.target.closest("#lockScreen"); if(!inLock){ e.stopPropagation(); e.preventDefault(); } } },true);
+  window.addEventListener("beforeprint",()=>{ if(SEC.locked){ SEC.audit("print","Print blocked while locked"); } }); };
+
+/* ---------- backups ---------- */
+SEC.backup=function(reason){ if(!SEC.cfg.backups) return; try{ let list=JSON.parse(localStorage.getItem(SEC.BAK)||"[]"); const snap={t:Date.now(),reason:reason||"auto",settings:localStorage.getItem(KEY)||"",tpl:localStorage.getItem(TKEY)||"[]",ov:localStorage.getItem(OKEY)||"{}"};
+  if(list[0]&&list[0].settings===snap.settings&&list[0].tpl===snap.tpl&&list[0].ov===snap.ov) return; list.unshift(snap); list=list.slice(0,5);
+  try{ localStorage.setItem(SEC.BAK, JSON.stringify(list)); }catch(e){ list=list.slice(0,2); try{ localStorage.setItem(SEC.BAK, JSON.stringify(list)); }catch(e2){} } }catch(e){} };
+SEC.backups=function(){ try{ return JSON.parse(localStorage.getItem(SEC.BAK)||"[]"); }catch(e){ return []; } };
+SEC.restore=function(i){ const b=SEC.backups()[i]; if(!b) return false; SEC.backup("before restore"); if(b.settings) localStorage.setItem(KEY,b.settings); localStorage.setItem(TKEY,b.tpl||"[]"); localStorage.setItem(OKEY,b.ov||"{}"); SEC.audit("restore","Restored backup from "+new Date(b.t).toLocaleString()); return true; };
+SEC.exportAll=function(){ const data={kind:"duebook-full-backup",v:1,t:Date.now(),settings:S,templates:{overrides:overrides(),user:userTemplates()}}; const body=JSON.stringify(data); const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify({sum:SEC.hash32(body),body})],{type:"application/json"})); a.download="duebook-full-backup.json"; a.click(); SEC.audit("export","Full backup exported"); };
+SEC.importAll=function(d){ if(d&&typeof d.body==="string"){ if(SEC.hash32(d.body)!==d.sum){ SEC.audit("reject","Backup checksum mismatch"); throw new Error("The backup file has been altered (checksum mismatch) and was refused."); } d=JSON.parse(d.body); }
+  if(!d||d.kind!=="duebook-full-backup") throw new Error("This is not a Due Book full backup file."); SEC.backup("before import");
+  const t=SEC.sanitizeTemplateFile(d.templates||{}); saveOverrides(t.overrides); saveUserTemplates(t.user); const s=SEC.sanitizeSettings(d.settings||{}); SEC.audit("import","Full backup imported"); return s; };
+
+/* ---------- runtime guards ---------- */
+SEC.guardRuntime=function(){
+  // freeze the template catalogue & helpers against tampering by imported data
+  try{ Object.freeze(DECO_STYLES); Object.freeze(DECO_PALETTES); }catch(e){}
+  // block dragging files onto the page (accidental script/HTML drops)
+  ["dragover","drop"].forEach(ev=>document.addEventListener(ev,e=>{ if(!e.target.closest||!e.target.closest("input[type=file]")) { e.preventDefault(); } }));
+  // global error trap – never leave a half‑rendered state; log and recover
+  window.addEventListener("error",e=>{ SEC.audit("error",(e.message||"Error").slice(0,120)); });
+  window.addEventListener("unhandledrejection",e=>{ SEC.audit("error",String(e.reason||"").slice(0,120)); });
+};
+
 function decoFor(id){ const d=S.deco; if(!d||!d.on) return null; const pg=d.pages||{};
   const ok= id==="fr" ? pg.front!==false : id==="fl" ? !!pg.frontLeft : !!pg.inside; return ok?d:null; }
 function decorate(html,id){ const d=decoFor(id); if(!d) return html;
@@ -1581,6 +1876,8 @@ TP_("medication_home","events","Home Medication Reminder Card","Daily medication
 
 const svg=(d,extra="")=>`<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${d}</svg>`;
 const I={
+  lock:svg('<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'),
+  refresh:svg('<polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>'),
   print:svg('<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>'),
   plus:svg('<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>'),
   up:svg('<polyline points="18 15 12 9 6 15"/>'),
@@ -1620,11 +1917,13 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const get = (o,p) => p.split(".").reduce((a,k)=>a==null?undefined:a[k], o);
 const set = (o,p,v) => { const ks=p.split("."); const last=ks.pop(); const t=ks.reduce((a,k)=>a[k]=a[k]??{}, o); t[last]=v; };
 
-let S = load(); let tab = "templates"; let currentSheet = 0; let tplCat="all", tplQ="";
+SEC.load();
+let S = load(); let tab = "templates"; let currentSheet = 0; let tplCat="all", tplQ=""; let decoGroup="all";
 const CATS=[["all","All"],["school","School"],["church","Church"],["community","Community"],["business","Business"],["finance","Finance"],["health","Health"],["civic","NGO & civic"],["events","Events & family"],["mine","My templates"]];
 function startSettings(){ const t=TEMPLATES[DEFAULT_TEMPLATE]; return deepMerge(clone(DEFAULTS), Object.assign({template:DEFAULT_TEMPLATE}, t?t.settings:{}, t&&!t.settings.deco?{deco:autoDeco(DEFAULT_TEMPLATE,t.cat||"other")}:{})); }
-function load(){ try{ const raw=localStorage.getItem(KEY); if(raw) return deepMerge(clone(DEFAULTS), JSON.parse(raw)); }catch(e){} return startSettings(); }
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw){ const d=SEC.unseal(raw); if(d) return deepMerge(clone(DEFAULTS), SEC.sanitizeSettings(d)); } }catch(e){} return startSettings(); }
+let _bakT=null;
+function save(){ try{ localStorage.setItem(KEY, SEC.seal(S)); if(_bakT) clearTimeout(_bakT); _bakT=setTimeout(()=>SEC.backup("auto"),4000); }catch(e){} }
 const OKEY="duebook.tploverrides.v1";
 function userTemplates(){ try{ return JSON.parse(localStorage.getItem(TKEY)||"[]"); }catch(e){ return []; } }
 function saveUserTemplates(list){ localStorage.setItem(TKEY, JSON.stringify(list)); }
@@ -1642,7 +1941,7 @@ function updateTemplate(id,patch){
   if(TEMPLATES[id]){ const ov=overrides(); const cur=getTemplate(id); ov[id]=Object.assign({name:cur.name,desc:cur.desc,settings:cur.settings},ov[id]||{},patch); saveOverrides(ov); }
   else { const list=userTemplates(); const i=list.findIndex(t=>(t.id||("u_"+t.name))===id); if(i>=0){ Object.assign(list[i],patch); saveUserTemplates(list);} }
 }
-function loadTemplate(settings){ S = deepMerge(clone(DEFAULTS), settings); save(); currentSheet=0; renderForm(); render(); }
+function loadTemplate(settings){ SEC.backup("before load"); S = deepMerge(clone(DEFAULTS), SEC.sanitizeSettings(settings)); save(); currentSheet=0; renderForm(); render(); }
 
 /* ===================== FORM BUILDERS ===================== */
 const F = {
@@ -1657,7 +1956,7 @@ const F = {
 const arrBtns=(arr,i,n)=>`<button class="icon" data-act="up" data-arr="${arr}" data-i="${i}" ${i===0?"disabled":""} title="Move up">${I.up}</button><button class="icon" data-act="down" data-arr="${arr}" data-i="${i}" ${i===n-1?"disabled":""} title="Move down">${I.down}</button><button class="icon danger" data-act="del" data-arr="${arr}" data-i="${i}" title="Remove">${I.x}</button>`;
 
 const PANEL_TYPES=[["pledge","Pledge text"],["cover","Cover (name, address, fill‑in lines)"],["table","Records table (Month / Due / Contribution)"],["grid","Monthly record grid (Month of: …)"],["rcover","Report card – front cover"],["promo","Report card – promotion statement"],["grades","Report card – grades table (First semester on left page, Second on right)"],["custom","Custom text"],["blank","Blank"]];
-const TABS=[["templates","Templates"],["layout","Layout & style"],["panels","Pages"],["cover","Cover"],["design","Cover design"],["pledge","Pledge"],["table","Table"],["grid","Month grid"],["report","Report card"],["numbering","Numbering"],["print","Print"]];
+const TABS=[["templates","Templates"],["layout","Layout & style"],["panels","Pages"],["cover","Cover"],["design","Cover design"],["pledge","Pledge"],["table","Table"],["grid","Month grid"],["report","Report card"],["numbering","Numbering"],["print","Print"],["security","Security"]];
 
 function formHTML(){
   switch(tab){
@@ -1759,7 +2058,11 @@ function formHTML(){
       <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove</button>${F.num("cover.logoH","Logo height (mm)",4,40,1)}</div>
     </fieldset>`;
   case "design": { const d=S.deco; const W=100,H=92;
-    const sw=DECO_STYLES.map(([id,l])=>`<button type="button" class="sw ${d.style===id?"on":""}" data-act="deco-style" data-id="${id}" title="${l}">${decoSVG(id,W,H,Object.assign({},d,{style:id,opacity:1}))}<span>${l}</span></button>`).join("");
+    const grp=decoGroup; const shown=DECO_STYLES.filter(([id])=>grp==="all"||(DECO_GROUP_OF[id]||"frames")===grp);
+    const gcount=g=>g==="all"?DECO_STYLES.length:DECO_STYLES.filter(([id])=>(DECO_GROUP_OF[id]||"frames")===g).length;
+    const chips=`<div class="chips">${[["all","All"]].concat(DECO_GROUPS).map(([id,l])=>`<button type="button" class="chip ${grp===id?"on":""}" data-act="deco-group" data-id="${id}">${l} <span>${gcount(id)}</span></button>`).join("")}</div>`;
+    const cur=DECO_STYLES.find(([id])=>id===d.style);
+    const sw=chips+`<div class="hint" style="margin-top:6px">Current: <b>${esc(cur?cur[1]:d.style)}</b> · ${DECO_STYLES.length} designs. Click <b>Random</b> to try one at random.</div><div class="btns" style="margin-top:4px"><button type="button" class="small" data-act="deco-random">${I.refresh||""} Random design</button><button type="button" class="small" data-act="deco-auto">Template’s own preset</button></div>`+shown.map(([id,l])=>`<button type="button" class="sw ${d.style===id?"on":""}" data-act="deco-style" data-id="${id}" title="${l}">${decoSVG(id,W,H,Object.assign({},d,{style:id,opacity:1}))}<span>${l}</span></button>`).join("");
     const pals=DECO_PALETTES.map(([nm,a,b],i)=>`<button type="button" class="pal ${d.c1===a&&d.c2===b?"on":""}" data-act="deco-pal" data-i="${i}" title="${nm}"><i style="background:${a}"></i><i style="background:${b}"></i></button>`).join("");
     return `
     <fieldset><legend>Decorative cover design</legend>
@@ -1768,6 +2071,7 @@ function formHTML(){
     </fieldset>
     <fieldset ${d.on?"":"disabled style='opacity:.55'"}><legend>Style</legend>
       <div id="decoGrid">${sw}</div>
+      <div class="hint">Designs are grouped: frames, corner ornaments, header bands, patterns, African & cultural, nature, modern and themed (church, school, health, finance, sports…).</div>
     </fieldset>
     <fieldset ${d.on?"":"disabled style='opacity:.55'"}><legend>Colours</legend>
       <div id="palRow">${pals}</div>
@@ -1784,6 +2088,30 @@ function formHTML(){
       ${F.check("deco.pages.front","Front cover (right page of the front sheet)")}
       ${F.check("deco.pages.frontLeft","Back cover (left page of the front sheet – pledge / promotion statement)")}
       ${F.check("deco.pages.inside","Inside pages (tables and grids)")}
+    </fieldset>`; }
+  case "security": { const c=SEC.cfg; const baks=SEC.backups(); const fmt=t=>new Date(t).toLocaleString();
+    return `
+    <fieldset><legend>Passcode lock</legend>
+      <div class="hint">Protects the editor and preview on a shared computer. The passcode is never stored – only a salted PBKDF2‑SHA‑256 hash. After 5 wrong attempts unlocking pauses for 30 seconds.</div>
+      <div class="hint" style="margin-bottom:4px">Status: <b>${c.hash?"Passcode lock ON":"No passcode set"}</b></div>
+      <div class="row"><div><label>${c.hash?"New passcode":"Passcode"}</label><input type="password" id="secPass1" autocomplete="new-password" placeholder="At least 4 characters"></div><div><label>Repeat</label><input type="password" id="secPass2" autocomplete="new-password"></div></div>
+      <div class="btns"><button class="small primary" data-act="sec-setpass">${I.lock||""} ${c.hash?"Change passcode":"Set passcode"}</button>${c.hash?`<button class="small" data-act="sec-lock">${I.lock||""} Lock now</button><button class="small danger" data-act="sec-clearpass">Remove passcode</button>`:""}</div>
+      <div class="row" style="margin-top:6px"><div><label>Auto‑lock after inactivity (minutes, 0 = never)</label><input type="number" id="secAuto" min="0" max="240" value="${esc(c.autoLockMin)}" data-sec="autoLockMin"></div></div>
+      <div class="check"><input type="checkbox" id="secOpen" data-sec="requireOnOpen" ${c.requireOnOpen?"checked":""}><label for="secOpen">Ask for the passcode when the page opens</label></div>
+    </fieldset>
+    <fieldset><legend>Import protection</legend>
+      <div class="hint">Every settings, template or backup file is size‑limited (2 MB), checked for script content, parsed safely and then <b>sanitised</b>: unknown keys, over‑long text, unsafe colours/fonts and non‑image logos are stripped before anything is displayed. Logos accept PNG/JPG/GIF/WebP only (no SVG). Saved data carries a checksum so corrupted or tampered browser storage is ignored instead of loaded.</div>
+      <div class="check"><input type="checkbox" id="secBk" data-sec="backups" ${c.backups?"checked":""}><label for="secBk">Keep automatic safety backups (last 5 states, before every import / template load)</label></div>
+    </fieldset>
+    <fieldset><legend>Backups &amp; recovery</legend>
+      <div class="btns"><button class="small" data-act="sec-export">${I.download} Export full backup (signed)</button><button class="small" data-act="sec-import">${I.upload} Restore from backup file</button><input type="file" id="bakFile" accept="application/json" hidden><button class="small" data-act="sec-snap">Snapshot now</button></div>
+      <div class="hint">A full backup contains your current design and the whole template library with a checksum; the app refuses altered files.</div>
+      ${baks.length?`<div class="list" style="margin-top:8px">${baks.map((b,i)=>`<div class="item"><span class="n">${i+1}</span><span style="flex:1;font-size:12px">${esc(fmt(b.t))} <span style="color:#6b7280">· ${esc(b.reason)}</span></span><button class="small" data-act="sec-restore" data-i="${i}">Restore</button></div>`).join("")}</div>`:`<div class="hint">No local snapshots yet.</div>`}
+    </fieldset>
+    <fieldset><legend>Activity log</legend>
+      <div class="hint">Last ${SEC.log.length} security events (imports, rejected files, locks).</div>
+      <div style="max-height:180px;overflow:auto;border:1px solid #e5e7eb;border-radius:8px;padding:6px;font-size:11px;line-height:1.5;background:#fafafa">${SEC.log.length?SEC.log.map(e=>`<div><span style="color:#6b7280">${esc(fmt(e.t))}</span> <b>${esc(e.type)}</b> – ${esc(e.msg)}</div>`).join(""):"Nothing yet."}</div>
+      <div class="btns"><button class="small" data-act="sec-clearlog">Clear log</button></div>
     </fieldset>`; }
   case "pledge": return `
     <fieldset><legend>Pledge</legend>
@@ -1952,12 +2280,16 @@ form.addEventListener("input", e=>{
 });
 form.addEventListener("change", e=>{
   const el=e.target, p=el.dataset.p;
-  if(el.id==="tplFile"){ const f=el.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ const d=JSON.parse(r.result);
-      if(d.overrides) saveOverrides(Object.assign(overrides(),d.overrides));
-      if(Array.isArray(d.user)){ const list=userTemplates(); d.user.forEach(t=>{ const i=list.findIndex(x=>x.id===t.id); if(i>=0) list[i]=t; else list.push(t); }); saveUserTemplates(list); }
-      renderForm(); infoModal("Templates imported","The templates from the file were added to your library."); }catch(err){ infoModal("Invalid file","That file is not a Due Book template library."); } }; r.readAsText(f); return; }
+  if(el.dataset.sec){ const k=el.dataset.sec; SEC.cfg[k]=el.type==="checkbox"?el.checked:Number(el.value)||0; SEC.save(); SEC.touch(); return; }
+  if(el.id==="tplFile"){ const f=el.files[0]; el.value=""; if(!f) return; SEC.readJSON(f).then(raw=>{ const d=SEC.sanitizeTemplateFile(raw); SEC.backup("before template import");
+      const nO=Object.keys(d.overrides).length, nU=d.user.length; if(!nO&&!nU) throw new Error("No templates were found in that file.");
+      saveOverrides(Object.assign(overrides(),d.overrides));
+      const list=userTemplates(); d.user.forEach(t=>{ const i=list.findIndex(x=>x.id===t.id); if(i>=0) list[i]=t; else list.push(t); }); saveUserTemplates(list);
+      SEC.audit("import",`Templates imported (${nO} built‑in edits, ${nU} user)`); renderForm(); infoModal("Templates imported",`${nU} template${nU===1?"":"s"} and ${nO} built‑in edit${nO===1?"":"s"} were checked, cleaned and added to your library.`); })
+      .catch(err=>{ SEC.audit("reject","Template import: "+(err.message||err)); infoModal("Import refused",esc(err.message||err)); }); return; }
+  if(el.id==="bakFile"){ const f=el.files[0]; el.value=""; if(!f) return; SEC.readJSON(f).then(raw=>{ const st=SEC.importAll(raw); loadTemplate(st); renderForm(); infoModal("Backup restored","Settings and templates were verified (checksum) and restored from the backup file."); }).catch(err=>{ infoModal("Restore refused",esc(err.message||err)); }); return; }
   if(p && (/^panels\.\w+\.(type|yearMode)$/.test(p) || p==="grid.layout")) renderForm();
-  if(el.id==="logoFile"){ const f=el.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{S.cover.logo=r.result;save();render();}; r.readAsDataURL(f); }
+  if(el.id==="logoFile"){ const f=el.files[0]; if(!f) return; SEC.readImage(f).then(v=>{ S.cover.logo=v; save(); render(); }).catch(err=>infoModal("Logo refused",esc(err))); el.value=""; }
 });
 form.addEventListener("click", e=>{
   const b=e.target.closest("button"); if(!b) return; e.preventDefault();
@@ -1965,6 +2297,19 @@ form.addEventListener("click", e=>{
   const act=b.dataset.act; if(!act) return;
   if(act==="tpl-cat"){ tplCat=b.dataset.id; renderForm(); return; }
   if(act==="deco-style"){ S.deco.style=b.dataset.id; save(); renderForm(); render(); return; }
+  if(act==="sec-setpass"){ const a=document.getElementById("secPass1").value, b2=document.getElementById("secPass2").value;
+    if(a.length<4) return infoModal("Passcode too short","Use at least 4 characters."); if(a!==b2) return infoModal("Passcodes differ","The two entries do not match.");
+    SEC.setPass(a).then(()=>{ renderForm(); infoModal("Passcode set","The lock is active. You can lock the screen now with “Lock now”, and it will lock automatically after the inactivity time."); }); return; }
+  if(act==="sec-clearpass"){ askModal({title:"Remove passcode",msg:"Remove the passcode and turn the lock off?",ok:"Remove",danger:true}).then(y=>{ if(y){ SEC.clearPass(); renderForm(); } }); return; }
+  if(act==="sec-lock"){ SEC.lock("manual"); return; }
+  if(act==="sec-export"){ SEC.exportAll(); return; }
+  if(act==="sec-import"){ document.getElementById("bakFile").click(); return; }
+  if(act==="sec-snap"){ SEC.backup("manual"); SEC.audit("backup","Manual snapshot"); renderForm(); return; }
+  if(act==="sec-restore"){ const i=+b.dataset.i; const bk=SEC.backups()[i]; if(!bk) return; askModal({title:"Restore snapshot",warn:true,msg:`Restore the design and template library saved on <b>${esc(new Date(bk.t).toLocaleString())}</b>? Your current state is snapshotted first.`,ok:"Restore"}).then(y=>{ if(!y) return; SEC.restore(i); S=load(); currentSheet=0; renderForm(); render(); }); return; }
+  if(act==="sec-clearlog"){ SEC.log=[]; localStorage.removeItem(SEC.LOG); renderForm(); return; }
+  if(act==="deco-group"){ decoGroup=b.dataset.id; renderForm(); return; }
+  if(act==="deco-random"){ const pool=DECO_STYLES.filter(([id])=>decoGroup==="all"||(DECO_GROUP_OF[id]||"frames")===decoGroup); const pick=pool[Math.floor(Math.random()*pool.length)]; const pal=DECO_PALETTES[Math.floor(Math.random()*DECO_PALETTES.length)]; S.deco.style=pick[0]; S.deco.c1=pal[1]; S.deco.c2=pal[2]; S.deco.on=true; save(); renderForm(); render(); return; }
+  if(act==="deco-auto"){ const t=TEMPLATES[S.template]; const a=autoDeco(S.template||"due",(t&&t.cat)||"other"); Object.assign(S.deco,a); save(); renderForm(); render(); return; }
   if(act==="deco-pal"){ const p=DECO_PALETTES[+b.dataset.i]; S.deco.c1=p[1]; S.deco.c2=p[2]; save(); renderForm(); render(); return; }
   if(act==="tpl-use"){ const t=getTemplate(b.dataset.id); if(!t) return;
     const cur=getTemplate(S.template);
@@ -2237,7 +2582,7 @@ document.getElementById("printBtn").addEventListener("click",()=>{
 window.addEventListener("afterprint",render);
 document.getElementById("saveBtn").addEventListener("click",()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.download="duebook-settings.json";a.click();});
 document.getElementById("loadBtn").addEventListener("click",()=>document.getElementById("loadFile").click());
-document.getElementById("loadFile").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{loadTemplate(JSON.parse(r.result));}catch(err){infoModal("Invalid file","That file is not a Due Book settings file.");}};r.readAsText(f);});
+document.getElementById("loadFile").addEventListener("change",e=>{const f=e.target.files[0];e.target.value="";if(!f)return;SEC.readJSON(f).then(d=>{ if(d&&d.kind==="duebook-full-backup"||(d&&typeof d.body==="string")){ const st=SEC.importAll(d); loadTemplate(st); renderForm(); infoModal("Backup restored","Settings and templates were verified and restored."); return; } if(!d||typeof d!=="object"||!(d.layout||d.cover||d.report||d.template)) throw new Error("That file is not a Due Book settings file."); loadTemplate(d); SEC.audit("import","Settings file imported"); }).catch(err=>{ SEC.audit("reject","Settings import: "+(err.message||err)); infoModal("Import refused",esc(err.message||err)); });});
 document.getElementById("resetBtn").addEventListener("click",()=>{askModal({title:"Reset design",warn:true,msg:"Reset everything in the editor to the default <b>Junior High Report Card</b>?<br>Your saved templates are not affected.",ok:"Reset",icon:I.reset}).then(y=>{if(y)loadTemplate(startSettings());});});
 
 document.getElementById("printBtn").innerHTML=I.print+" Print / PDF";
@@ -2247,6 +2592,7 @@ document.getElementById("resetBtn").innerHTML=I.reset+" Reset";
 document.getElementById("prevSheet").innerHTML=I.prev;
 document.getElementById("nextSheet").innerHTML=I.next;
 renderTabs(); renderForm(); render();
+SEC.guardRuntime(); SEC.initLock(); SEC.backup("startup");
 /* re-fit once embedded fonts are active and whenever the preview area changes size */
 if(document.fonts && document.fonts.ready){ document.fonts.ready.then(()=>render()); }
 let rzT; window.addEventListener("resize",()=>{ clearTimeout(rzT); rzT=setTimeout(render,150); });
