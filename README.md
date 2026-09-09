@@ -42,7 +42,8 @@ You can also drop these files on any static host (GitHub Pages, Netlify, a USB w
 ## What you get
 
 - **Editor** — templates, layout, cover, tables, security
-- **Preview** — front and back of each A4 sheet
+- **Full A4 grade sheets** — a one-page, logo-ready school grade-sheet template with editable learner details, subjects, grade columns, scale, comments and signatures
+- **Preview** — front and back of each A4 sheet (or one complete page for a full A4 grade sheet)
 - **Print / PDF** — from the toolbar, or from the phone’s Print tab
 - **Offline** — designs stay in this browser; a service worker keeps the app cached
 

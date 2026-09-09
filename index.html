@@ -111,6 +111,8 @@
   .sheet.cut .card{outline:0.3mm dashed #999}
   .sheet.cut .fold{position:absolute;left:50%;top:0;bottom:0;border-left:0.3mm dotted #999}
   .card.border{border:var(--card-border) solid var(--line)}
+  .card.single .panel{width:100%}
+  .card.single .fold{display:none}
   .panel{width:50%;height:100%;position:relative;display:flex;flex-direction:column;overflow:hidden;overflow-wrap:anywhere}
   .panel.rl{border-left:var(--divider) solid var(--line)}
   .panel.decorated{isolation:isolate}
@@ -236,6 +238,39 @@
   .gr .gfoot.bottom{flex:0 0 var(--foot-h)}
   .gr .scale{white-space:pre-line;line-height:1.3;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
   .gr .gn{font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;font-weight:700}
+
+  /* Full A4 grade sheet */
+  .fg .fgbox{height:100%;display:flex;flex-direction:column;border:var(--fg-border,.35mm) solid var(--line);font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
+  .fg .fg-header{display:grid;grid-template-columns:26mm minmax(0,1fr) 37mm;gap:2mm;align-items:center;padding:3mm 3.5mm 2.5mm;border-bottom:var(--fg-line,.3mm) solid var(--line)}
+  .fg .fg-logo-slot{width:24mm;height:var(--fg-logo-h,24mm);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .fg .fg-logo-slot.empty{border:.25mm dashed #9ca3af;color:#6b7280;font-size:7pt;font-weight:700;letter-spacing:.08em}
+  .fg .fg-logo-slot img{display:block;max-width:100%;max-height:100%;object-fit:contain}
+  .fg .fg-ident{text-align:center;min-width:0}
+  .fg .fg-school{margin:0;font-weight:900;line-height:1.1;letter-spacing:.02em}
+  .fg .fg-addr{margin:.6mm 0 0;white-space:pre-line;line-height:1.2}
+  .fg .fg-title{margin:1.2mm 0 0;font-weight:900;line-height:1.15;letter-spacing:.04em}
+  .fg .fg-meta{font-size:7.6pt;font-weight:700;white-space:pre-line;line-height:1.45}
+  .fg .fg-student{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.7mm 5mm;padding:2.4mm 3.5mm;border-bottom:var(--fg-line,.3mm) solid var(--line)}
+  .fg .fg-field{display:flex;align-items:flex-end;gap:1.2mm;min-width:0;font-weight:700;line-height:1.15}
+  .fg .fg-field .lab{white-space:nowrap}
+  .fg .fg-field .line{height:1.15em;min-width:8mm;flex:1;border-bottom:.3mm solid var(--line)}
+  .fg .fg-record-caption{text-align:center;font-weight:900;letter-spacing:.04em;padding:1.7mm 3.5mm 1mm;line-height:1.15}
+  .fg .fg-table-wrap{padding:0 3.5mm 2.5mm;display:flex;flex:1;min-height:0}
+  .fg .fg-table{width:100%;height:100%;table-layout:fixed;border-collapse:collapse}
+  .fg .fg-table th,.fg .fg-table td{border:var(--fg-line,.3mm) solid var(--line);padding:0 1mm;line-height:1.1;overflow:hidden;vertical-align:middle}
+  .fg .fg-table th{font-weight:900;text-align:center;white-space:normal;background:#f8fafc}
+  .fg .fg-table td:first-child{text-align:left;font-weight:700}
+  .fg .fg-lower{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);border-top:var(--fg-line,.3mm) solid var(--line)}
+  .fg .fg-scale,.fg .fg-summary{padding:2mm 3.5mm;white-space:pre-line;line-height:1.38}
+  .fg .fg-scale{border-right:var(--fg-line,.3mm) solid var(--line)}
+  .fg .fg-scale b,.fg .fg-summary b{font-weight:900;letter-spacing:.03em}
+  .fg .fg-comment{padding:2mm 3.5mm 1.7mm;border-top:var(--fg-line,.3mm) solid var(--line);font-size:8pt;line-height:1.25}
+  .fg .fg-comment-lines{display:flex;flex-direction:column;gap:4.3mm;margin-top:1.2mm}
+  .fg .fg-comment-lines i{display:block;height:1px;border-bottom:.25mm solid var(--line)}
+  .fg .fg-signatures{display:flex;gap:12mm;padding:1.8mm 8mm 2.5mm;border-top:var(--fg-line,.3mm) solid var(--line)}
+  .fg .fg-sign{flex:1;text-align:center;font-size:8pt;font-weight:700}
+  .fg .fg-sign .line{height:7mm;border-bottom:.3mm solid var(--line);margin-bottom:1mm}
+  .fg .fg-note{padding:0 3.5mm 2.2mm;text-align:center;line-height:1.25}
   .free{white-space:pre-line}
   .free h3{margin:0 0 .3em;font-weight:800}
   .free p{margin:0;line-height:1.35}
@@ -365,7 +400,7 @@ const MONTHS = ["January","February","March","April","May","June","July","August
 const DEFAULTS = {
   template:"due",
   layout:{ pageW:210, pageH:297, perSheet:3, cardW:200, cardH:92, marginTop:5, padX:6, padY:5,
-    color:"#cfe8dc", printBg:true, guides:true, cardBorder:0, divider:0,
+    color:"#cfe8dc", printBg:true, guides:true, cardBorder:0, divider:0, singleSided:false,
     font:"Caladea, Cambria, Georgia, 'Times New Roman', serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
   panels:{
     fl:{type:"pledge", year:2026, yearMode:"blank", custom:{head:"",body:""}},
@@ -411,7 +446,10 @@ const DEFAULTS = {
     subjHead:"SUBJECTS", subjects:["Mathematics","English","Civics","History","Health Science","Literature","Vocabulary","Computer","Phonics","P.E.","Wash In School","R.M.E.","Conduct","Rank","Average"],
     subjW:24, gGap:6, gSize:10, gHeadSize:9.5, gLineW:0.3, gFill:78, signFill:false,
     scale:"97 -100 = EXCELLENT\n90 -96  = Very Good\n80 -89  = Good\n70-79    = Fail Not Encouraging\nBelow 70 = D Failure", scaleSize:10,
-    gNote:"Any Grade below 70 will not be honored for promotion", box:true, boxW:0.6 },
+    gNote:"Any Grade below 70 will not be honored for promotion", box:true, boxW:0.6,
+    fullTableTitle:"SCHOLASTIC RECORD", fullCols:["Class Work","Test","Exam","Total","Grade","Remarks"], fullSubjectW:30,
+    fullMeta:"Academic Year: ____________\nTerm: ____________", fullSummary:"Class Average: ________\nPosition: ________\nConduct: ________\nAttendance: Present ______  Absent ______",
+    fullCommentLabel:"Class Teacher's Comment:", fullSignatures:["Class Teacher","Principal / Head Teacher"], fullLogoH:24 },
   numbering:{ sheets:1, innerSheets:0, autoNo:false, startNo:1, prefix:"", pad:0, churches:"" },
   deco:{ on:false, style:"classic", c1:"#1e3a8a", c2:"#d4a017", scale:1, opacity:1, tint:false, tintAmt:0.07, inset:2, hideBox:true, colorHeadings:true, pages:{front:true, frontLeft:false, inside:false} },
   print:{ order:"interleaved" }
@@ -715,8 +753,15 @@ SEC.clean=function(v,depth){ depth=depth||0; if(depth>SEC.LIMITS.depth) return u
 SEC.sanitizeSettings=function(s){ s=SEC.clean(s)||{}; const L=s.layout||{};
   const has=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
   if(s.layout){ if(has(L,"color")) L.color=SEC.safeColor(L.color,"#ffffff"); if(has(L,"ink")) L.ink=SEC.safeColor(L.ink,"#111111"); if(has(L,"line")) L.line=SEC.safeColor(L.line,"#111111"); if(has(L,"font")) L.font=SEC.safeFont(L.font);
-    ["pageW","pageH","cardW","cardH","marginTop","padX","padY","cardBorder","divider","fs","perSheet"].forEach(k=>{ if(k in L) L[k]=SEC.safeNum(L[k],0,1000,undefined); }); }
+    ["pageW","pageH","cardW","cardH","marginTop","padX","padY","cardBorder","divider","fs","perSheet"].forEach(k=>{ if(k in L) L[k]=SEC.safeNum(L[k],0,1000,undefined); });
+    if(has(L,"singleSided")) L.singleSided=L.singleSided===true; }
   if(s.cover&&has(s.cover,"logo")){ s.cover.logo=SEC.safeImage(s.cover.logo); }
+  if(s.report&&typeof s.report==="object"){ const R=s.report;
+    if(has(R,"fullLogoH")) R.fullLogoH=SEC.safeNum(R.fullLogoH,4,60,24);
+    if(has(R,"fullSubjectW")) R.fullSubjectW=SEC.safeNum(R.fullSubjectW,10,70,30);
+    ["fullTableTitle","fullMeta","fullSummary","fullCommentLabel"].forEach(k=>{ if(has(R,k)) R[k]=SEC.safeStr(R[k],600); });
+    if(Array.isArray(R.fullCols)) R.fullCols=R.fullCols.slice(0,12).map(v=>SEC.safeStr(v,60));
+    if(Array.isArray(R.fullSignatures)) R.fullSignatures=R.fullSignatures.slice(0,6).map(v=>SEC.safeStr(v,80)); }
   if(s.deco){ if(has(s.deco,"c1")) s.deco.c1=SEC.safeColor(s.deco.c1,"#1e3a8a"); if(has(s.deco,"c2")) s.deco.c2=SEC.safeColor(s.deco.c2,"#d4a017"); if(has(s.deco,"c3")) s.deco.c3=SEC.safeColor(s.deco.c3,""); if(s.deco.style!=null) s.deco.style=String(s.deco.style).replace(/[^\w\-]/g,"").slice(0,40); }
   if(s.table&&has(s.table,"thBg")){ s.table.thBg=SEC.safeColor(s.table.thBg,""); } if(s.grid&&has(s.grid,"thBg")){ s.grid.thBg=SEC.safeColor(s.grid.thBg,""); }
   if(s.template!=null) s.template=String(s.template).replace(/[^\w\-]/g,"").slice(0,64);
@@ -787,9 +832,9 @@ SEC.guardRuntime=function(){
 };
 
 function decoFor(id){ const d=S.deco; if(!d||!d.on) return null; const pg=d.pages||{};
-  const ok= id==="fr" ? pg.front!==false : id==="fl" ? !!pg.frontLeft : !!pg.inside; return ok?d:null; }
+  const ok=singleSided()&&id==="fl" ? pg.front!==false : id==="fr" ? pg.front!==false : id==="fl" ? !!pg.frontLeft : !!pg.inside; return ok?d:null; }
 function decorate(html,id){ const d=decoFor(id); if(!d) return html;
-  const L=S.layout, W=L.cardW/2, H=L.cardH, ins=Number(d.inset)||0;
+  const L=S.layout, W=singleSided()?L.cardW:L.cardW/2, H=L.cardH, ins=Number(d.inset)||0;
   if(ins>0) html=html.replace(`padding:${L.padY}mm ${L.padX}mm;`,`padding:${L.padY+ins}mm ${L.padX+ins}mm;`);
   html=html.replace('style="',`style="--deco-c1:${d.c1};`);
   html=html.replace('class="panel',`class="panel decorated${d.colorHeadings?" dh":""}${d.hideBox!==false?" nobox":""}`);
@@ -826,6 +871,8 @@ const TEMPLATES = {
 const RPT_LAYOUT={ pageW:210, pageH:297, perSheet:2, cardW:200, cardH:141, marginTop:5, padX:4, padY:4, color:"#ffffff", guides:true };
 const RPT_PANELS={ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"} };
 const RPT_SIZES={ schoolSize:12, addrSize:10, titleSize:11, fieldSize:10.5, signSize:10, signRowH:5.6, signFill:false, noteSize:9.5, mottoSize:11, pTitleSize:12, pSize:11, gSize:10, gHeadSize:9.5, scaleSize:10, subjW:34, cGap:1.5 };
+const FULL_A4_RPT_LAYOUT={ pageW:210, pageH:297, perSheet:1, cardW:210, cardH:297, marginTop:0, padX:7, padY:6, color:"#ffffff", printBg:true, guides:false, cardBorder:0, divider:0, singleSided:true };
+const FULL_A4_RPT_PANELS={ fl:{type:"fullgrades"}, fr:{type:"blank"}, bl:{type:"blank"}, br:{type:"blank"}, il:{type:"blank"}, ir:{type:"blank"} };
 const BLANK_ROWS=n=>Array.from({length:n},()=>"");
 const MONTHS12=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const CHURCH_ADDR="Jamah Town, Brewerville City\nMontserrado County\nRepublic of Liberia";
@@ -835,6 +882,16 @@ const LINE=(label,fill="none")=>({label, after:"", pos:"under", fill});
 
 Object.assign(TEMPLATES,{
 /* ================= SCHOOL ================= */
+  report_full_a4:{ cat:"school", name:"Full A4 Grade Sheet (logo-ready)", desc:"One complete, single-sided A4 grade sheet — not a folded card. Upload the school logo in the Report card tab; it is preserved at the top-left of the page. Edit the school heading, learner details, subjects, grade columns, grading scale, teacher comment and signatures.",
+    settings:{ layout:FULL_A4_RPT_LAYOUT, panels:FULL_A4_RPT_PANELS, cover:{logoH:24}, report:Object.assign({},RPT_SIZES,{
+      school:"SCHOOL NAME", addr:"School address\nTown / County", title:"STUDENT GRADE SHEET",
+      fields:"Student Name: | Admission No.:\nClass: | Academic Year:\nTerm: | Class Teacher:", fieldSize:10,
+      subjects:["English Language","Mathematics","Science","Social Studies","Civics","Computer Studies","Creative Arts","Physical Education","Reading","Writing","Conduct","Attendance","Class Average","Position"],
+      subjHead:"SUBJECTS", gSize:9, gHeadSize:8.5, gLineW:0.3, scaleSize:8.5, boxW:0.35,
+      fullTableTitle:"SCHOLASTIC RECORD", fullCols:["Class Work","Test","Exam","Total","Grade","Remarks"], fullSubjectW:30,
+      fullMeta:"Academic Year: ____________\nTerm: ____________", fullSummary:"Class Average: ________\nPosition: ________\nConduct: ________\nAttendance: Present ______  Absent ______",
+      fullCommentLabel:"Class Teacher's Comment:", fullSignatures:["Class Teacher","Principal / Head Teacher"], fullLogoH:24,
+      scale:"90 - 100 = Excellent\n80 - 89 = Very Good\n70 - 79 = Good\n60 - 69 = Fair\nBelow 60 = Needs Improvement", note:"This grade sheet is valid only when signed by the class teacher and principal." }) } },
   report_elem:{ cat:"school", name:"Elementary School Report Card", desc:"Same layout as the Junior High card (2 per A4, folded) with elementary subjects: Mathematics, English, Reading, Spelling, Writing, Science, Social Studies, Bible, Health, P.E., Art, Conduct, Rank, Average.",
     settings:{ layout:RPT_LAYOUT, panels:RPT_PANELS, report:Object.assign({}, RPT_SIZES, { title:"ELEMENTARY REPORT CARD", addr:SCHOOL_ADDR,
       subjects:["Mathematics","English","Reading","Spelling","Writing","Science","Social Studies","Bible","Health","P.E.","Art","Conduct","Rank","Average"] }) } },
@@ -2040,7 +2097,7 @@ const F = {
 };
 const arrBtns=(arr,i,n)=>`<button class="icon" data-act="up" data-arr="${arr}" data-i="${i}" ${i===0?"disabled":""} title="Move up">${I.up}</button><button class="icon" data-act="down" data-arr="${arr}" data-i="${i}" ${i===n-1?"disabled":""} title="Move down">${I.down}</button><button class="icon danger" data-act="del" data-arr="${arr}" data-i="${i}" title="Remove">${I.x}</button>`;
 
-const PANEL_TYPES=[["pledge","Pledge text"],["cover","Cover (name, address, fill‑in lines)"],["table","Records table (Month / Due / Contribution)"],["grid","Monthly record grid (Month of: …)"],["rcover","Report card – front cover"],["promo","Report card – promotion statement"],["grades","Report card – grades table (First semester on left page, Second on right)"],["custom","Custom text"],["blank","Blank"]];
+const PANEL_TYPES=[["pledge","Pledge text"],["cover","Cover (name, address, fill‑in lines)"],["table","Records table (Month / Due / Contribution)"],["grid","Monthly record grid (Month of: …)"],["rcover","Report card – front cover"],["promo","Report card – promotion statement"],["grades","Report card – grades table (First semester on left page, Second on right)"],["fullgrades","Full A4 grade sheet"],["custom","Custom text"],["blank","Blank"]];
 const TABS=[["templates","Templates"],["layout","Layout & style"],["panels","Pages"],["cover","Cover"],["design","Cover design"],["pledge","Pledge"],["table","Table"],["grid","Month grid"],["report","Report card"],["numbering","Numbering"],["print","Print"],["security","Security"]];
 
 function formHTML(){
@@ -2077,10 +2134,11 @@ function formHTML(){
   case "layout": return `
     <fieldset><legend>Paper &amp; cards</legend>
       <div class="row">${F.num("layout.pageW","Page width (mm)",50,500)}${F.num("layout.pageH","Page height (mm)",50,500)}</div>
-      <div class="row">${F.num("layout.perSheet","Cards per sheet",1,6)}${F.num("layout.marginTop","Top/bottom margin (mm)",0,50,0.5)}</div>
-      <div class="row">${F.num("layout.cardW","Card width (mm, open)",60,300,0.5)}${F.num("layout.cardH","Card height (mm)",30,200,0.5)}</div>
+      <div class="row">${F.num("layout.perSheet",S.layout.singleSided?"Sheets per set":"Cards per sheet",1,6)}${F.num("layout.marginTop","Top/bottom margin (mm)",0,50,0.5)}</div>
+      <div class="row">${F.num("layout.cardW",S.layout.singleSided?"Sheet content width (mm)":"Card width (mm, open)",60,500,0.5)}${F.num("layout.cardH",S.layout.singleSided?"Sheet content height (mm)":"Card height (mm)",30,500,0.5)}</div>
       <div class="row">${F.num("layout.padX","Panel side padding (mm)",0,20,0.5)}${F.num("layout.padY","Panel top/bottom padding (mm)",0,20,0.5)}</div>
-      <div class="hint">A4 = 210 × 297 mm. 3 cards of 200 × 92 mm fit with ~4.5 mm between them. Each card folds in the middle into two pages.</div>
+      ${F.check("layout.singleSided","Single-sided full-page sheet (no fold or reverse side)")}
+      <div class="hint">${S.layout.singleSided?"This layout prints one complete A4 page per sheet. The full-page content is set in Pages, and only the front is printed.":"A4 = 210 × 297 mm. 3 cards of 200 × 92 mm fit with ~4.5 mm between them. Each card folds in the middle into two pages."}</div>
     </fieldset>
     <fieldset><legend>Colours &amp; lines</legend>
       <div class="row">${F.color("layout.color","Card background")}${F.color("layout.ink","Text colour")}${F.color("layout.line","Line colour")}</div>
@@ -2103,20 +2161,27 @@ function formHTML(){
       ${F.check("layout.autofit","Auto‑fit text (shrink letters automatically so nothing overflows or gets cut off)")}
       <div class="hint">Each section also has its own point sizes in its tab. With auto‑fit on, those sizes act as a maximum – long text, extra rows/columns or a smaller card will scale down to fit by themselves.</div>
     </fieldset>`;
-  case "panels": return `
-    <fieldset><legend>Cover sheet</legend>
-      <div class="hint">Each card has 4 pages: two on the <b>front sheet</b> (outside when folded) and two on the <b>back sheet</b> (inside). Choose the content of each.</div>
-      ${panelEditor("fl","Front sheet – LEFT page")}
-      ${panelEditor("fr","Front sheet – RIGHT page")}
-      ${panelEditor("bl","Back sheet – LEFT page")}
-      ${panelEditor("br","Back sheet – RIGHT page")}
-    </fieldset>
-    <fieldset><legend>Inner sheets (booklet)</legend>
-      ${F.num("numbering.innerSheets","Inner sheets per booklet (0 = plain bi‑fold card)",0,12)}
-      <div class="hint">Inner sheets are folded and stapled inside the cover sheet. Both sides of an inner sheet use the two pages below, so every inner page looks the same (e.g. month grids). Each inner sheet adds 4 pages to the booklet.</div>
-      ${panelEditor("il","Inner sheet – LEFT page")}
-      ${panelEditor("ir","Inner sheet – RIGHT page")}
-    </fieldset>`;
+  case "panels": {
+    if(singleSided()) return `
+      <fieldset><legend>Full A4 page</legend>
+        <div class="hint">This template is a single-sided, full-page sheet. Its complete printable page is set below; there is no fold, reverse side or inner sheet.</div>
+        ${panelEditor("fl","Full A4 page")}
+      </fieldset>`;
+    return `
+      <fieldset><legend>Cover sheet</legend>
+        <div class="hint">Each card has 4 pages: two on the <b>front sheet</b> (outside when folded) and two on the <b>back sheet</b> (inside). Choose the content of each.</div>
+        ${panelEditor("fl","Front sheet – LEFT page")}
+        ${panelEditor("fr","Front sheet – RIGHT page")}
+        ${panelEditor("bl","Back sheet – LEFT page")}
+        ${panelEditor("br","Back sheet – RIGHT page")}
+      </fieldset>
+      <fieldset><legend>Inner sheets (booklet)</legend>
+        ${F.num("numbering.innerSheets","Inner sheets per booklet (0 = plain bi‑fold card)",0,12)}
+        <div class="hint">Inner sheets are folded and stapled inside the cover sheet. Both sides of an inner sheet use the two pages below, so every inner page looks the same (e.g. month grids). Each inner sheet adds 4 pages to the booklet.</div>
+        ${panelEditor("il","Inner sheet – LEFT page")}
+        ${panelEditor("ir","Inner sheet – RIGHT page")}
+      </fieldset>`;
+  }
   case "cover": return `
     <fieldset><legend>Heading</legend>
       <div class="row"><div style="flex:3">${F.text("cover.org","Organisation name")}</div>${F.num("cover.orgSize","pt",5,40,0.5)}</div>
@@ -2264,6 +2329,36 @@ function formHTML(){
       ${F.text("grid.note","Footer note (optional)")}
     </fieldset>`;
   case "report": { const R=S.report; const list=(arr,ph)=>`<div class="list">${get(S,arr).map((r,i)=>`<div class="item"><span class="n">${i+1}</span><input type="text" data-p="${arr}.${i}" value="${esc(r)}" placeholder="${ph}">${arrBtns(arr,i,get(S,arr).length)}</div>`).join("")}</div><div class="btns"><button class="small" data-act="add" data-arr="${arr}">${I.plus} Add</button></div>`;
+    const isFullA4=singleSided()&&S.panels.fl&&S.panels.fl.type==="fullgrades";
+    if(isFullA4) return `
+    <fieldset><legend>Full A4 grade sheet</legend>
+      <div class="hint">One complete A4 page prints for each learner. The school logo keeps its original proportions in the upper-left logo position.</div>
+      <label>School logo</label>
+      <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove</button>${F.num("report.fullLogoH","Logo height (mm)",8,36,1)}</div>
+      <div class="hint">PNG, JPG, GIF, WebP or BMP up to 600 KB. ${S.cover.logo?"A logo is ready for this sheet.":"No logo uploaded yet — the printed page shows a light placeholder."}</div>
+    </fieldset>
+    <fieldset><legend>School heading &amp; learner details</legend>
+      <div class="row"><div style="flex:3">${F.text("report.school","School name")}</div>${F.num("report.schoolSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.area("report.addr","Address (one line each)",2)}</div>${F.num("report.addrSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.text("report.title","Sheet title")}</div>${F.num("report.titleSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.area("report.fields","Learner details (one row per line; use | for two fields on a row)",3)}</div>${F.num("report.fieldSize","pt",5,30,0.5)}</div>
+      ${F.area("report.fullMeta","Header reference details (one line each; use ___ for write-in lines)",2)}
+    </fieldset>
+    <fieldset><legend>Scholastic record</legend>
+      <div class="row"><div style="flex:3">${F.text("report.fullTableTitle","Table heading")}</div>${F.num("report.fullSubjectW","Subjects column width (%)",10,70)}</div>
+      <label>Grade columns</label>${list("report.fullCols","Column heading")}
+      ${F.text("report.subjHead","Subjects column heading")}
+      <label>Subjects / rows</label>${list("report.subjects","Subject")}
+      <div class="row">${F.num("report.gSize","Cell pt",5,20,0.5)}${F.num("report.gHeadSize","Header pt",5,20,0.5)}${F.num("report.gLineW","Grid line (mm)",0.1,2,0.05)}</div>
+      <div class="hint">Rows use all remaining page height automatically. Keep the grade columns short enough to remain readable when printed.</div>
+    </fieldset>
+    <fieldset><legend>Grade scale, comments &amp; signatures</legend>
+      <div class="row"><div style="flex:3">${F.area("report.scale","Grading scale (one per line)",5)}</div>${F.num("report.scaleSize","pt",5,20,0.5)}</div>
+      ${F.area("report.fullSummary","Summary lines (one per line; use ___ for write-in lines)",4)}
+      ${F.text("report.fullCommentLabel","Teacher comment heading")}
+      <label>Signature labels</label>${list("report.fullSignatures","Label")}
+      <div class="row"><div style="flex:3">${F.area("report.note","Footer note (optional)",2)}</div>${F.num("report.noteSize","pt",5,20,0.5)}</div>
+    </fieldset>`;
     return `
     <fieldset><legend>Front cover</legend>
       <div class="row"><div style="flex:3">${F.text("report.school","School name")}</div>${F.num("report.schoolSize","pt",5,30,0.5)}</div>
@@ -2309,7 +2404,12 @@ function formHTML(){
     <fieldset><legend>Frame</legend>
       <div class="row">${F.check("report.box","Border box around cover / statement")}${F.num("report.boxW","Box thickness (mm)",0.1,3,0.1)}</div>
     </fieldset>`; }
-  case "numbering": return `
+  case "numbering": { if(singleSided()) return `
+    <fieldset><legend>Quantity</legend>
+      ${F.num("numbering.sheets","Number of A4 grade sheets",1,300)}
+      <div class="hint">Each set is one complete, single-sided A4 grade sheet.</div>
+    </fieldset>`;
+    return `
     <fieldset><legend>Quantity</legend>
       ${F.num("numbering.sheets","Number of booklets/cards sets (each set = 3 cards)",1,300)}
       <div class="hint">A set is one A4 front + one A4 back (plus inner sheets if any) = 3 booklets/cards.</div>
@@ -2322,8 +2422,13 @@ function formHTML(){
     <fieldset><legend>Church names (optional)</legend>
       ${F.area("numbering.churches","One church per line, in card order",4)}
       <div class="hint">Used by any cover line set to “church list”. Leave empty to keep the line blank.</div>
-    </fieldset>`;
-  case "print": return `
+    </fieldset>`; }
+  case "print": {
+    if(singleSided()) return `
+      <fieldset><legend>Single-sided A4 printing</legend>
+        <div class="hint"><b>One complete A4 grade sheet</b> prints for every set. There is no back page. In the print dialog choose <b>A4</b>, <b>Margins: None</b>, <b>Scale: 100%</b> and turn on background graphics if you use a coloured page background.</div>
+      </fieldset>`;
+    return `
     <fieldset><legend>Print order</legend>
       ${F.select("print.order","Pages",[["interleaved","Front, Back, Front, Back… (duplex printer)"],["fronts","Fronts only (all sheets)"],["backs","Backs only (all sheets)"],["grouped","All fronts, then all backs"]])}
       <div class="hint" style="margin-top:8px">
@@ -2334,6 +2439,7 @@ function formHTML(){
         <b>Coloured paper:</b> untick “Print background colour” in Layout &amp; style.
       </div>
     </fieldset>`;
+  }
   }
 }
 function panelEditor(id,label){
@@ -2354,7 +2460,7 @@ form.addEventListener("input", e=>{
   const el=e.target, p=el.dataset.p; if(!p) return;
   let v; if(el.dataset.t==="bool") v=el.checked; else if(el.dataset.t==="num") v=el.value===""?"":Number(el.value); else v=el.value;
   set(S,p,v); save(); render();
-  if(p==="deco.on"){ renderForm(); return; }
+  if(p==="deco.on"||p==="layout.singleSided"){ renderForm(); return; }
   if(el.type==="range"){ const lab=el.previousElementSibling; if(lab) lab.textContent=lab.textContent.replace(/\(.*\)$/,`(${v})`); }
 });
 form.addEventListener("input", e=>{
@@ -2374,11 +2480,11 @@ form.addEventListener("change", e=>{
       .catch(err=>{ SEC.audit("reject","Template import: "+(err.message||err)); infoModal("Import refused",esc(err.message||err)); }); return; }
   if(el.id==="bakFile"){ const f=el.files[0]; el.value=""; if(!f) return; SEC.readJSON(f).then(raw=>{ const st=SEC.importAll(raw); loadTemplate(st); renderForm(); infoModal("Backup restored","Settings and templates were verified (checksum) and restored from the backup file."); }).catch(err=>{ infoModal("Restore refused",esc(err.message||err)); }); return; }
   if(p && (/^panels\.\w+\.(type|yearMode)$/.test(p) || p==="grid.layout")) renderForm();
-  if(el.id==="logoFile"){ const f=el.files[0]; if(!f) return; SEC.readImage(f).then(v=>{ S.cover.logo=v; save(); render(); }).catch(err=>infoModal("Logo refused",esc(err))); el.value=""; }
+  if(el.id==="logoFile"){ const f=el.files[0]; if(!f) return; SEC.readImage(f).then(v=>{ S.cover.logo=v; save(); renderForm(); render(); }).catch(err=>infoModal("Logo refused",esc(err))); el.value=""; }
 });
 form.addEventListener("click", e=>{
   const b=e.target.closest("button"); if(!b) return; e.preventDefault();
-  if(b.id==="logoClear"){ S.cover.logo=""; save(); render(); return; }
+  if(b.id==="logoClear"){ S.cover.logo=""; save(); renderForm(); render(); return; }
   const act=b.dataset.act; if(!act) return;
   if(act==="tpl-cat"){ tplCat=b.dataset.id; renderForm(); return; }
   if(act==="deco-style"){ S.deco.style=b.dataset.id; save(); renderForm(); render(); return; }
@@ -2437,6 +2543,8 @@ document.getElementById("tabs").addEventListener("click", e=>{ const b=e.target.
 const sheetCount=()=>Math.max(1,Math.min(300,parseInt(S.numbering.sheets)||1));
 const innerSheets=()=>Math.max(0,Math.min(12,parseInt(S.numbering.innerSheets)||0));
 const perSheet=()=>Math.max(1,Math.min(6,parseInt(S.layout.perSheet)||3));
+function singleSided(){ return S.layout.singleSided===true; }
+function fullGradeSheet(){ return singleSided()&&S.panels&&S.panels.fl&&S.panels.fl.type==="fullgrades"; }
 function physList(){ const L=[]; for(let s=0;s<sheetCount();s++){ L.push({set:s,kind:"cover"}); for(let i=0;i<innerSheets();i++) L.push({set:s,kind:"inner",i}); } return L; }
 function cardNumber(idx){ const n=S.numbering; if(!n.autoNo) return ""; return (n.prefix||"")+String((parseInt(n.startNo)||0)+idx).padStart(parseInt(n.pad)||0,"0"); }
 function churchFor(idx){ return (S.numbering.churches||"").split("\n").map(s=>s.trim()).filter(Boolean)[idx]||""; }
@@ -2512,6 +2620,48 @@ function gridPanel(){ const g=S.grid;
     </div></div>`; }
 
 const blanks=t=>esc(t).replace(/_{3,}/g,m=>`<span class="bl" style="width:${Math.min(80,m.length*2.2)}mm"></span>`);
+function fullGradesPanel(){ const R=S.report;
+  const cols=(Array.isArray(R.fullCols)?R.fullCols:[]).map(c=>String(c||"").trim()).filter(Boolean).slice(0,12);
+  const gradeCols=cols.length?cols:["Class Work","Test","Exam","Total","Grade","Remarks"];
+  const subjects=(Array.isArray(R.subjects)?R.subjects:[]).map(s=>String(s||"").trim()).filter(Boolean).slice(0,80);
+  const gradeRows=subjects.length?subjects:["Subject"];
+  const subjectW=Math.max(10,Math.min(70,Number(R.fullSubjectW)||30));
+  const fields=(R.fields||"").split("\n").flatMap(line=>line.split("|")).map(f=>f.trim()).filter(Boolean)
+    .map(f=>`<div class="fg-field" style="font-size:${pt(R.fieldSize)}"><span class="lab">${esc(f)}</span><span class="line"></span></div>`).join("");
+  const logo=S.cover&&S.cover.logo;
+  const logoH=Math.max(4,Math.min(60,Number(R.fullLogoH)||24));
+  const logoMark=logo
+    ?`<div class="fg-logo-slot" style="--fg-logo-h:${logoH}mm"><img src="${logo}" style="height:100%" alt="School logo"></div>`
+    :`<div class="fg-logo-slot empty" aria-label="School logo placeholder">LOGO</div>`;
+  const summary=(R.fullSummary||"").trim();
+  const signatures=(Array.isArray(R.fullSignatures)?R.fullSignatures:[]).map(x=>String(x||"").trim()).filter(Boolean).slice(0,6);
+  const signList=signatures.length?signatures:["Class Teacher","Principal / Head Teacher"];
+  const table=`<table class="fg-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||.3))}mm;--fg-fs:${pt(R.gSize)};--fg-hfs:${pt(R.gHeadSize)}"><colgroup><col style="width:${subjectW}%">${gradeCols.map(()=>`<col style="width:${(100-subjectW)/gradeCols.length}%">`).join("")}</colgroup>
+    <thead><tr><th style="font-size:var(--fg-hfs)">${esc(R.subjHead)}</th>${gradeCols.map(c=>`<th style="font-size:var(--fg-hfs)">${esc(c)}</th>`).join("")}</tr></thead>
+    <tbody>${gradeRows.map(subject=>`<tr><td style="font-size:var(--fg-fs)">${esc(subject)}</td>${gradeCols.map(()=>`<td style="font-size:var(--fg-fs)"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
+  return `<div class="panel fg" style="${pad()}--fg-border:${Math.max(.1,Math.min(2,Number(R.boxW)||.35))}mm;--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||.3))}mm">
+    <div class="fgbox">
+      <div class="fg-header">
+        ${logoMark}
+        <div class="fg-ident">
+          <p class="fg-school" style="font-size:${pt(R.schoolSize)}">${esc(R.school)}</p>
+          ${R.addr?`<p class="fg-addr" style="font-size:${pt(R.addrSize)}">${esc(R.addr)}</p>`:""}
+          <p class="fg-title" style="font-size:${pt(R.titleSize)}">${esc(R.title)}</p>
+        </div>
+        <div class="fg-meta">${blanks(R.fullMeta||"")}</div>
+      </div>
+      <div class="fg-student">${fields}</div>
+      ${R.fullTableTitle?`<div class="fg-record-caption" style="font-size:${pt(R.gHeadSize)}">${esc(R.fullTableTitle)}</div>`:""}
+      <div class="fg-table-wrap">${table}</div>
+      <div class="fg-lower">
+        <div class="fg-scale" style="font-size:${pt(R.scaleSize)}"><b>GRADING SCALE</b>${R.scale?`<br>${esc(R.scale)}`:""}</div>
+        <div class="fg-summary" style="font-size:${pt(R.scaleSize)}"><b>SUMMARY</b>${summary?`<br>${blanks(summary)}`:""}</div>
+      </div>
+      <div class="fg-comment"><b>${esc(R.fullCommentLabel||"Class Teacher's Comment:")}</b><div class="fg-comment-lines"><i></i><i></i></div></div>
+      <div class="fg-signatures">${signList.map(label=>`<div class="fg-sign"><div class="line"></div>${esc(label)}</div>`).join("")}</div>
+      ${R.note?`<div class="fg-note" style="font-size:${pt(R.noteSize)}">${esc(R.note)}</div>`:""}
+    </div>
+  </div>`; }
 function rcoverPanel(){ const R=S.report;
   const rows=(R.fields||"").split("\n").map(l=>l.trim()).filter(Boolean).map(l=>`<div class="frow" style="font-size:${pt(R.fieldSize)}">${l.split("|").map(f=>`<span class="f"><span class="lab">${esc(f.trim())}</span><span class="line"></span></span>`).join("")}</div>`).join("");
   const tw=R.signCols.reduce((a,c)=>a+(Number(c.w)||1),0);
@@ -2573,7 +2723,7 @@ function customPanel(p){ return `<div class="panel free" style="${pad()};justify
   <p style="font-size:${pt(11)}">${esc(p.custom.body)}</p></div>`; }
 
 function panel(id,idx,right){ const p=S.panels[id]; let html;
-  switch(p.type){ case "pledge":html=pledgePanel();break; case "cover":html=coverPanel(idx);break; case "table":html=tablePanel(idx,p);break; case "grid":html=gridPanel();break; case "rcover":html=rcoverPanel();break; case "promo":html=promoPanel();break; case "grades":html=gradesPanel(right?"right":"left");break; case "custom":html=customPanel(p);break; default:html=`<div class="panel" style="${pad()}"></div>`; }
+  switch(p.type){ case "pledge":html=pledgePanel();break; case "cover":html=coverPanel(idx);break; case "table":html=tablePanel(idx,p);break; case "grid":html=gridPanel();break; case "rcover":html=rcoverPanel();break; case "promo":html=promoPanel();break; case "grades":html=gradesPanel(right?"right":"left");break; case "fullgrades":html=fullGradesPanel();break; case "custom":html=customPanel(p);break; default:html=`<div class="panel" style="${pad()}"></div>`; }
   html=decorate(html,id);
   html=html.replace('class="panel','data-pid="'+id+'" class="panel'); return right?html.replace('class="panel','class="panel rl'):html; }
 
@@ -2582,6 +2732,10 @@ function card(ps,side,slot){
   const gap=n>1?(L.pageH-2*L.marginTop-n*L.cardH)/(n-1):0;
   const top=L.marginTop+slot*(L.cardH+gap), left=(L.pageW-L.cardW)/2;
   const idx=ps.set*n+slot;
+  if(singleSided()){
+    const page=ps.kind==="inner"?"il":"fl";
+    return `<div class="card single ${L.cardBorder>0?"border":""}" style="left:${left}mm;top:${top}mm;width:${L.cardW}mm;height:${L.cardH}mm">${panel(page,idx,false)}</div>`;
+  }
   const [l,r]=ps.kind==="inner"?["il","ir"]:(side==="front"?["fl","fr"]:["bl","br"]);
   return `<div class="card ${L.cardBorder>0?"border":""}" style="left:${left}mm;top:${top}mm;width:${L.cardW}mm;height:${L.cardH}mm">${panel(l,idx,false)}${panel(r,idx,true)}<div class="fold"></div></div>`;
 }
@@ -2589,8 +2743,9 @@ function sheetHTML(ps,side){
   const L=S.layout,n=perSheet();
   const cards=Array.from({length:n},(_,j)=>card(ps,side,j)).join("");
   const vars=`--card-bg:${L.color};--ink:${L.ink};--line:${L.line};--font:${L.font};--card-border:${L.cardBorder}mm;--divider:${L.divider}mm`;
-  const name=ps.kind==="cover"?"Cover sheet":`Inner sheet ${ps.i+1}`;
-  return `<div class="sheetHolder"><p class="cap">Set ${ps.set+1} · ${name} – ${side==="front"?"FRONT":"BACK"}${ps.kind==="cover"?(side==="front"?" (outside)":" (inside)"):""}</p>
+  const name=singleSided()?"Full A4 grade sheet":ps.kind==="cover"?"Cover sheet":`Inner sheet ${ps.i+1}`;
+  const sideLabel=singleSided()?"":" – "+(side==="front"?"FRONT":"BACK")+(ps.kind==="cover"?(side==="front"?" (outside)":" (inside)"):"");
+  return `<div class="sheetHolder"><p class="cap">Set ${ps.set+1} · ${name}${sideLabel}</p>
     <div class="scaleBox"><div class="sheet ${L.guides?"cut":""}" style="width:${L.pageW}mm;height:${L.pageH}mm;${vars}">${cards}</div></div></div>`;
 }
 
@@ -2609,7 +2764,7 @@ function fitPanel(panel){
   panel.style.setProperty("--k","1");
   panel.querySelectorAll("th,td").forEach(c=>c.style.removeProperty("--cf"));
   if(!S.layout.autofit) return;
-  const roots=[panel, panel.querySelector(".box"), panel.querySelector(".fields"), panel.querySelector(".gbox"), panel.querySelector(".gtables"), panel.querySelector(".gwrap")].filter(Boolean);
+  const roots=[panel, panel.querySelector(".box"), panel.querySelector(".fields"), panel.querySelector(".gbox"), panel.querySelector(".gtables"), panel.querySelector(".gwrap"), panel.querySelector(".fgbox"), panel.querySelector(".fg-header"), panel.querySelector(".fg-student"), panel.querySelector(".fg-table-wrap"), panel.querySelector(".fg-lower")].filter(Boolean);
   let k=1;
   for(let i=0;i<40;i++){
     let over=0; roots.forEach(r=>{over=Math.max(over,overflowOf(r));});
@@ -2636,16 +2791,19 @@ function render(){
   const L=physList(); currentSheet=Math.min(currentSheet,L.length-1);
   const ps=L[currentSheet];
   const wrap=document.getElementById("previewWrap");
-  wrap.innerHTML=sheetHTML(ps,"front")+sheetHTML(ps,"back");
+  wrap.innerHTML=sheetHTML(ps,"front")+(singleSided()?"":sheetHTML(ps,"back"));
   fitAll(wrap);
   const total=sheetCount()*perSheet();
-  document.getElementById("countInfo").textContent=`${sheetCount()} set${sheetCount()>1?"s":""} × ${perSheet()} = ${total} ${innerSheets()?"booklets":"cards"} · ${L.length} A4 sheet${L.length>1?"s":""} (front + back)`+(S.numbering.autoNo?` · #${cardNumber(0)} – #${cardNumber(total-1)}`:"");
+  const unit=fullGradeSheet()?"grade sheet":innerSheets()?"booklet":"card";
+  const paper=`${L.length} A4 sheet${L.length>1?"s":""}${singleSided()?" (single-sided)":" (front + back)"}`;
+  document.getElementById("countInfo").textContent=`${sheetCount()} set${sheetCount()>1?"s":""} × ${perSheet()} = ${total} ${unit}${total===1?"":"s"} · ${paper}`+(S.numbering.autoNo?` · #${cardNumber(0)} – #${cardNumber(total-1)}`:"");
   document.getElementById("sheetInfo").textContent=`Sheet ${currentSheet+1} of ${L.length}`;
   applyZoom();
 }
 function renderAll(){
   const L=physList(),o=S.print.order,parts=[];
-  if(o==="fronts"){L.forEach(ps=>parts.push(sheetHTML(ps,"front")));}
+  if(singleSided()) L.forEach(ps=>parts.push(sheetHTML(ps,"front")));
+  else if(o==="fronts"){L.forEach(ps=>parts.push(sheetHTML(ps,"front")));}
   else if(o==="backs"){L.forEach(ps=>parts.push(sheetHTML(ps,"back")));}
   else if(o==="grouped"){L.forEach(ps=>parts.push(sheetHTML(ps,"front")));L.forEach(ps=>parts.push(sheetHTML(ps,"back")));}
   else {L.forEach(ps=>{parts.push(sheetHTML(ps,"front"));parts.push(sheetHTML(ps,"back"));});}
