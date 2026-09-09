@@ -1,5 +1,5 @@
 /* Card & Booklet Generator — offline cache for phone and computer installs */
-const CACHE = "duebook-pwa-v1";
+const CACHE = "duebook-pwa-v2";
 const ASSETS = [
   "./",
   "./index.html",
