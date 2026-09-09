@@ -189,55 +189,95 @@
   .grid .gnote{font-size:.8em;margin-top:.8mm;text-align:center}
 
   /* report card */
-  .rc .box{height:100%;display:flex;flex-direction:column;padding:2.5mm 4mm;gap:var(--gap,2mm)}
-  .rc .box.spread{justify-content:space-between}
-  .rc .box.spread .sign{flex:0 0 auto}
-  .rc .box.b{border:var(--box-w) solid var(--line)}
-  .rc .bl{display:inline-block;border-bottom:0.3mm solid var(--line);height:1em;vertical-align:baseline}
-  .rc .hdr{text-align:center}
-  .rc .org{font-weight:800;text-align:center;margin:0;line-height:1.15}
-  .rc .addr{text-align:center;margin:.6mm 0 0;line-height:1.25;white-space:pre-line}
-  .rc .title{font-weight:800;text-align:center;margin:1.8mm 0 0;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;letter-spacing:.02em}
-  .rc .fields{display:flex;flex-direction:column;gap:1.6mm}
-  .rc .frow{display:flex;gap:4mm;margin:0;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;font-weight:700}
-  .rc .frow .f{flex:1;display:flex;align-items:flex-end;gap:1.2mm}
-  .rc .frow .lab{white-space:nowrap}
-  .rc .frow .line{flex:1;border-bottom:0.3mm solid var(--line);height:1.15em}
-  .rc .sign{flex:1;display:flex;flex-direction:column;min-height:0}
-  .rc .sh{text-align:center;font-weight:800;margin:0;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;letter-spacing:.02em}
-  .rc .sn{margin:.4mm 0 1.2mm;font-weight:700;line-height:1.25;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
-  .rc table{width:100%;border-collapse:collapse;table-layout:fixed;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
-  .rc table.fill{flex:1;min-height:0}
-  .rc th,.rc td{border:0.3mm solid var(--line);padding:0 1.2mm;height:var(--rowh,1.6em);line-height:1;overflow:hidden;white-space:nowrap;text-align:left;font-weight:700;vertical-align:middle}
-  .rc thead th{height:1.8em}
-  .rc .fields{gap:2.2mm}
-  .rc .addr{font-weight:400}
-  .rc .foot{display:flex;flex-direction:column;gap:1.5mm}
-  .rc .note{margin:0;line-height:1.3;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
-  .rc .motto{margin:0;text-align:center;font-weight:800;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;letter-spacing:.02em}
-  .rc .motto.rule{border-top:0.3mm solid var(--line);padding-top:1.2mm}
-  .rc .ptitle{text-align:center;font-weight:800;margin:1.5mm 0 0;letter-spacing:.02em}
-  .rc .pintro{text-align:center;margin:0}
-  .rc .pbody{margin:0;line-height:1.5}
-  .rc .popt{margin:0;padding:0;list-style:none}
-  .rc .popt li{margin:0 0 1mm;line-height:1.45;padding-left:6mm;text-indent:-6mm}
-  .rc .psig{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:3mm;padding-top:2mm}
-  .rc .psig .sg{width:60%;text-align:center}
-  .rc .psig .sg .ln{border-bottom:0.3mm solid var(--line);height:8mm}
-  .rc .pdate{margin:1.5mm 0 0}
-  .rc .pnote{margin:0;text-align:center}
-  .gr .gwrap{display:flex;align-items:stretch;flex:1;min-height:0}
-  .gr table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:calc(var(--g-fs) * var(--cf,1));height:100%}
-  .gr th,.gr td{border:var(--tbl-w) solid var(--line);padding:0 1mm;line-height:1.1;overflow:hidden;white-space:nowrap;height:1.55em}
-  .gr th{font-weight:700;text-align:center;font-size:calc(var(--gh-fs) * var(--cf,1))}
-  .gr th.sem{font-weight:800;border:none;text-align:center;height:1.4em}
-  .gr th.sub{text-align:left;font-weight:700}
-  .gr th.col{white-space:normal;height:2.6em;line-height:1.1;vertical-align:middle}
-  .gr td.s{text-align:left}
-  .gr .gfoot{display:flex;justify-content:space-between;align-items:flex-end;gap:6mm;margin-top:2mm;flex:0 0 auto}
-  .gr .gfoot.bottom{flex:0 0 var(--foot-h)}
-  .gr .scale{white-space:pre-line;line-height:1.3;font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
-  .gr .gn{font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;font-weight:700}
+  .box.double, .gbox.double {
+    border: var(--box-w, 0.75mm) solid var(--line);
+    outline: max(0.25mm, calc(var(--box-w, 0.75mm) * 0.45)) solid var(--line);
+    outline-offset: -1.6mm;
+  }
+  .rc .box {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 3mm 4.5mm;
+    gap: var(--gap, 1.5mm);
+    box-sizing: border-box;
+  }
+  .rc .box.spread { justify-content: space-between; }
+  .rc .box.spread .sign { flex: 0 0 auto; }
+  .rc .box.b { border: var(--box-w, 0.75mm) solid var(--line); }
+  .rc .bl { display: inline-block; border-bottom: 0.3mm solid var(--line); height: 1em; vertical-align: baseline; }
+  .rc .hdr { text-align: center; }
+  .rc .org { font-weight: 900; text-align: center; margin: 0; line-height: 1.15; letter-spacing: 0.02em; }
+  .rc .addr { text-align: center; margin: 0.8mm 0 0; line-height: 1.25; white-space: pre-line; font-weight: 500; }
+  .rc .rc-logo { margin: 1mm auto; text-align: center; }
+  .rc .rc-logo svg, .rc .rc-logo img { display: block; margin: 0 auto; max-height: 24mm; }
+  .rc .rc-level { font-weight: 900; text-align: center; margin: 1mm 0 0; letter-spacing: 0.04em; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; text-transform: uppercase; }
+  .rc .title { font-weight: 800; text-align: center; margin: 0.6mm 0 0; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; letter-spacing: 0.02em; }
+  .rc .fields { display: flex; flex-direction: column; gap: 1.5mm; margin: 1mm 0; }
+  .rc .frow { display: flex; gap: 4mm; margin: 0; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; font-weight: 700; align-items: flex-end; }
+  .rc .frow .f { flex: 1; display: flex; align-items: flex-end; gap: 1.5mm; min-width: 0; }
+  .rc .frow .lab { white-space: nowrap; }
+  .rc .frow .line { flex: 1; border-bottom: 0.3mm solid var(--line); height: 1.15em; min-width: 12mm; }
+  .rc .sign { display: flex; flex-direction: column; min-height: 0; margin-top: 0.5mm; }
+  .rc .sh { text-align: center; font-weight: 900; margin: 0 0 0.5mm; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; letter-spacing: 0.03em; }
+  .rc .sn { margin: 0 0 1.2mm; font-weight: 400; line-height: 1.22; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; text-align: justify; }
+  .rc table { width: 100%; border-collapse: collapse; table-layout: fixed; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; }
+  .rc table.fill { flex: 1; min-height: 0; }
+  .rc th, .rc td { border: 0.3mm solid var(--line); padding: 0 1.5mm; height: var(--rowh, 1.5em); line-height: 1; overflow: hidden; white-space: nowrap; text-align: left; font-weight: 700; vertical-align: middle; }
+  .rc thead th { height: 1.7em; text-align: center; font-weight: 800; }
+  .rc td:first-child { text-align: left; }
+  .rc .foot { display: flex; flex-direction: column; gap: 1mm; margin-top: auto; }
+  .rc .note { margin: 0; line-height: 1.3; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; }
+  .rc .motto { margin: 0.5mm 0 0; text-align: center; font-weight: 800; font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif; letter-spacing: 0.02em; }
+  .rc .motto.rule { border-top: 0.3mm solid var(--line); padding-top: 1.2mm; }
+
+  /* Promotion statement */
+  .promo-panel .box { padding: 3.5mm 5mm; }
+  .promo-panel .ptitle { text-align: center; font-weight: 900; margin: 0 0 2mm; letter-spacing: 0.04em; }
+  .promo-panel .pintro { text-align: left; margin: 0 0 1.2mm; line-height: 1.35; }
+  .promo-panel .pbody { margin: 0 0 2mm; line-height: 1.45; white-space: pre-line; }
+  .promo-panel .popt { margin: 0 0 2mm; padding: 0; list-style: none; }
+  .promo-panel .popt li { margin: 0 0 1.2mm; line-height: 1.35; padding-left: 6mm; text-indent: -6mm; }
+  .promo-panel .psig-wrap { display: flex; flex-direction: column; gap: 2.5mm; margin: 2mm 0 1.5mm; width: 88%; }
+  .promo-panel .sg-row { display: flex; align-items: flex-end; gap: 2mm; }
+  .promo-panel .sg-lbl { font-weight: 700; white-space: nowrap; min-width: 22mm; }
+  .promo-panel .sg-body { flex: 1; display: flex; flex-direction: column; align-items: center; }
+  .promo-panel .sg-body .ln { width: 100%; border-bottom: 0.3mm solid var(--line); height: 4.5mm; }
+  .promo-panel .sg-sub { font-weight: 700; text-transform: uppercase; font-size: 0.9em; margin-top: 0.6mm; }
+  .promo-panel .pdate { margin: 1.8mm 0 1mm; line-height: 1.3; }
+  .promo-panel .pnote { margin: 1.2mm 0 0; font-weight: 800; text-align: left; text-transform: uppercase; letter-spacing: 0.02em; }
+  .promo-panel .pmotto { margin: auto 0 0; text-align: center; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; padding-top: 1.5mm; }
+
+  /* Inside grades tables */
+  .gr .gbox {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2.5mm 3.5mm;
+    box-sizing: border-box;
+    font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif;
+  }
+  .gr .gbox.b { border: var(--box-w, 0.75mm) solid var(--line); }
+  .gr .ghead-banner {
+    font-weight: 900;
+    text-align: center;
+    letter-spacing: 0.03em;
+    padding: 0.5mm 0 1.2mm;
+    text-transform: uppercase;
+  }
+  .gr .gwrap { display: flex; align-items: stretch; flex: 1; min-height: 0; }
+  .gr table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: calc(var(--g-fs) * var(--cf,1)); height: 100%; }
+  .gr th, .gr td { border: var(--tbl-w, 0.3mm) solid var(--line); padding: 0 1mm; line-height: 1.05; overflow: hidden; white-space: nowrap; height: 1.45em; vertical-align: middle; }
+  .gr th { font-weight: 800; text-align: center; font-size: calc(var(--gh-fs) * var(--cf,1)); }
+  .gr th.sem { font-weight: 900; border: var(--tbl-w, 0.3mm) solid var(--line); text-align: center; height: 1.5em; }
+  .gr th.sem-blank { border: none !important; }
+  .gr th.sub { text-align: left; font-weight: 800; }
+  .gr th.col { white-space: normal; height: 2.3em; line-height: 1.05; vertical-align: middle; }
+  .gr td.s { text-align: left; font-weight: 700; }
+  .gr td.s.bold { font-weight: 900; }
+  .gr .gfoot { display: flex; justify-content: space-between; align-items: flex-end; gap: 4mm; margin-top: 1.2mm; flex: 0 0 auto; }
+  .gr .scale { font-weight: 700; white-space: pre-line; line-height: 1.25; font-size: calc(var(--scale-fs, 7.5pt) * var(--cf,1)); }
+  .gr .gn { font-weight: 700; }
 
   /* Full A4 grade sheet */
   .fg .fgbox{height:100%;display:flex;flex-direction:column;border:var(--fg-border,.35mm) solid var(--line);font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
@@ -395,18 +435,41 @@
 <script>
 (function(){
 "use strict";
+const EMMANUEL_SEAL_SVG = (h=22) => `<svg viewBox="0 0 200 200" style="height:${h}mm;max-width:85%;display:block;margin:0 auto" aria-label="School Emblem">
+  <circle cx="100" cy="100" r="95" fill="none" stroke="currentColor" stroke-width="2.5"/>
+  <circle cx="100" cy="100" r="89" fill="none" stroke="currentColor" stroke-width="1.2"/>
+  <circle cx="100" cy="100" r="63" fill="none" stroke="currentColor" stroke-width="1.2"/>
+  <defs>
+    <path id="topSealArc" d="M 22,100 A 78,78 0 1,1 178,100" fill="none"/>
+    <path id="botSealArc" d="M 172,100 A 72,72 0 0,1 28,100" fill="none"/>
+  </defs>
+  <text font-family="'Times New Roman', serif" font-size="11.5" font-weight="bold" fill="currentColor" letter-spacing="1">
+    <textPath href="#topSealArc" startOffset="50%" text-anchor="middle">EMMANUEL BOLAY DAVID SCHOOL</textPath>
+  </text>
+  <text font-family="'Times New Roman', serif" font-size="11.5" font-weight="bold" fill="currentColor" letter-spacing="1.5">
+    <textPath href="#botSealArc" startOffset="50%" text-anchor="middle">OF EXCELLENCE</textPath>
+  </text>
+  <text x="23" y="104" font-size="10" fill="currentColor" text-anchor="middle">★</text>
+  <text x="177" y="104" font-size="10" fill="currentColor" text-anchor="middle">★</text>
+  <path d="M 74,68 Q 100,60 126,68 L 126,98 Q 100,126 74,98 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+  <path d="M 82,82 Q 100,77 100,94 Q 100,77 118,82 L 118,102 Q 100,97 100,112 Q 100,97 82,102 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <line x1="100" y1="94" x2="100" y2="112" stroke="currentColor" stroke-width="1.3"/>
+  <text x="100" y="77" font-family="'Times New Roman', serif" font-size="8" font-weight="bold" fill="currentColor" text-anchor="middle">EST. 2018</text>
+  <path d="M 38,142 L 58,136 L 142,136 L 162,142 L 154,152 L 142,146 L 58,146 L 46,152 Z" fill="none" stroke="currentColor" stroke-width="1.3"/>
+  <text x="100" y="143" font-family="sans-serif" font-size="6.2" font-weight="bold" fill="currentColor" text-anchor="middle" letter-spacing="0.4">MOTTO: LEARN, TEACH AND EXCEL</text>
+</svg>`;
 const KEY = "duebook.settings.v4", TKEY = "duebook.templates.v1", DEFAULT_TEMPLATE = "report";
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const DEFAULTS = {
-  template:"due",
-  layout:{ pageW:210, pageH:297, perSheet:3, cardW:200, cardH:92, marginTop:5, padX:6, padY:5,
-    color:"#cfe8dc", printBg:true, guides:true, cardBorder:0, divider:0, singleSided:false,
-    font:"Caladea, Cambria, Georgia, 'Times New Roman', serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
+  template:"report",
+  layout:{ pageW:297, pageH:210, perSheet:1, cardW:287, cardH:200, marginTop:5, padX:3, padY:3,
+    color:"#ffffff", printBg:true, guides:true, cardBorder:0, divider:0, singleSided:false,
+    font:"Carlito, Calibri, 'Segoe UI', Arial, sans-serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
   panels:{
-    fl:{type:"pledge", year:2026, yearMode:"blank", custom:{head:"",body:""}},
-    fr:{type:"cover",  year:2026, yearMode:"blank", custom:{head:"",body:""}},
-    bl:{type:"table",  year:2026, yearMode:"blank", custom:{head:"",body:""}},
-    br:{type:"table",  year:2027, yearMode:"blank", custom:{head:"",body:""}},
+    fl:{type:"promo",  year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    fr:{type:"rcover", year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    bl:{type:"grades", year:2026, yearMode:"blank", custom:{head:"",body:""}},
+    br:{type:"grades", year:2026, yearMode:"blank", custom:{head:"",body:""}},
     il:{type:"grid",   year:2026, yearMode:"blank", custom:{head:"",body:""}},
     ir:{type:"grid",   year:2026, yearMode:"blank", custom:{head:"",body:""}}
   },
@@ -428,28 +491,43 @@ const DEFAULTS = {
     cols:[ {name:"Month of:", w:24}, {name:"Sunday", w:9.5}, {name:"Tithe", w:9.5}, {name:"Conference", w:9.5}, {name:"Death", w:9.5}, {name:"Programs", w:9.5}, {name:"Building Fund", w:9.5}, {name:"Attendance", w:9.5}, {name:"Total", w:9.5} ],
     headerSize:7.5, cellSize:7, lineW:0.25, box:true, boxW:0.7, pad:2, gap:2.5, rotate:true, thFill:false, thBg:"#e5e7eb", note:"" },
   report:{
-    school:"SAME GOD NEW GENERATION ACADEMY", schoolSize:12,
-    addr:"Cow Farm, New Israel Community\nBrewerville-City\nRepublic of Liberia", addrSize:10,
-    title:"JUNIOR HIGH REPORT CARD", titleSize:11,
-    fields:"Student Name:\nYear: | Class:", fieldSize:10.5,
-    signHead:"PARENTS/GUARDIANS", signNote:"Must sign each period as evidence that they have seen the period report.",
-    signCols:[ {name:"PERIOD", w:17}, {name:"CLASS SPONSOR", w:41.5}, {name:"PARENT/GUARDIAN", w:41.5} ],
-    signRows:["I.","II.","III.","IV.","V.","VI"], signSize:10, signRowH:6,
-    note:"NOTE: When a student’s mark is 70% or below in any student, the parents/guardian should give special attention to see that the student does well in all the work required by the otherwise, the student will probably fail.", noteSize:9.5,
-    motto:"MOTTO: “NO CHILD LEFT BEHIND”", mottoSize:11, mottoRule:false, noteAlign:"justify", signNoteAlign:"left", cGap:2,
+    school:"EMMANUEL BOLAY DAVID SCHOOL OF EXCELLENCE", schoolSize:13,
+    addr:"Freedom Compound, Behind Jah Tondo Town, Brewerville\nMontserrado County, Republic of Liberia\nCell#: 0777175475 / 0886580695", addrSize:9,
+    logoH:22, showSeal:true,
+    level:"LOWER BASIC EDUCATION", levelSize:11,
+    title:"Elementary School Report Card", titleSize:11,
+    fields:"Student's Name: | Sex:\nGrade: | Academic Year:\nClass Sponsor:", fieldSize:9.5,
+    signHead:"PARENTS OR GUARDIANS", signHeadSize:9.5,
+    signNote:"This card is issued at the end of each period. It indicates to you the grade and cumulative averages that the student has attained. Parents are encouraged to give special attention to see that the student does well in all the work required.",
+    signCols:[ {name:"PERIOD", w:22}, {name:"TEACHER", w:39}, {name:"PARENT / GUARDIAN", w:39} ],
+    signRows:["1st Period","2nd Period","3rd Period","4th Period","5th Period","6th Period"], signSize:9, signRowH:5.8, signFill:false,
+    note:"", noteSize:8.5,
+    motto:"\"Accelerated Education For Accelerated Development\"", mottoSize:9.5, mottoRule:false, noteAlign:"left", signNoteAlign:"left", cGap:1.5,
     pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This is to certify that",
-    pBody:"Student: ______________ HAS/HAS NOT satisfactorily completed the Academic work of Grade ______ and is therefore",
-    pOptions:["A.  Promoted to grade __________","B.  Condition in ____________________ and to be given conditional examination in this subject at the opening of the next school year term.","C.  Required to repeat the Grade.","D.  Asked not to enroll next year."],
-    pSigns:["Class Sponsor","Principal"], pDate:"Date: ______________ 20______", pNote:"Note: Any erasure on this card makes it invalid", pSize:11.5,
-    sem1:"FIRST SEMESTER", sem1Cols:["1st PD.","2nd PD.","3rd PD.","Sem. Exam","Sem. Ave"],
-    sem2:"SECOND SEMESTER", sem2Cols:["4th PD","5th PD","6th PD","EXAM","Sem. Ave.","Yrly Ave."],
-    subjHead:"SUBJECTS", subjects:["Mathematics","English","Civics","History","Health Science","Literature","Vocabulary","Computer","Phonics","P.E.","Wash In School","R.M.E.","Conduct","Rank","Average"],
-    subjW:24, gGap:6, gSize:10, gHeadSize:9.5, gLineW:0.3, gFill:78, signFill:false,
-    scale:"97 -100 = EXCELLENT\n90 -96  = Very Good\n80 -89  = Good\n70-79    = Fail Not Encouraging\nBelow 70 = D Failure", scaleSize:10,
-    gNote:"Any Grade below 70 will not be honored for promotion", box:true, boxW:0.6,
+    pBody:"Student: __________________________________________________ HAS/HAS NOT satisfactorily completed the Academic work of Grade __________ and is therefore",
+    pOptions:[
+      "A. Eligible for promotion to grade ____________________",
+      "B. Conditioned in ____________________ and to be given conditional examination in this subject at the opening of next school term.",
+      "C. Required to repeat the grade.",
+      "D. Advised not to enroll next academic year."
+    ],
+    pSigns:["Registrar","Principal"], pDate:"Closing Date: ______________________________", pNote:"NOTE: ANY ERASURE ON THIS CARD RENDERS IT INVALID.", pMotto:"MOTTO: LEARN, TEACH AND EXCEL", pMottoSize:9.5, pSize:9.5,
+    gTitle:"ELEMENTARY SCHOOL REPORT CARD", gTitleSize:11,
+    sem1:"FIRST SEMESTER", sem1Cols:["1st","2nd","3rd","EXAM","1st SEMESTER AVERAGE"],
+    sem2:"SECOND SEMESTER", sem2Cols:["4th","5th","6th","EXAM","2nd SEMESTER AVERAGE","YEARLY AVERAGE"],
+    subjHead:"SUBJECTS",
+    subjects:[
+      "BIBLE","ENGLISH","READING","SPELLING","PHONICS","WRITING","MATHEMATICS","SOCIAL STUDIES","SCIENCE",
+      "HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION",
+      "AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"
+    ],
+    subjW:32, gGap:0, gSize:8.2, gHeadSize:8, gLineW:0.3, gFill:85,
+    scale:"GRADING SCALE: A+: 96-100 (Excellent); A: 91-95 (Very Good); B+: 86-90 (Good); B: 81-85 (Credit); C+: 76-80 (Average); C: 71-75 (Fair); D: 70 (Conditional Pass); F: Below 70 (Failure).",
+    scaleSize:7.5, gNote:"", box:true, doubleBorder:true, boxW:0.7,
     fullTableTitle:"SCHOLASTIC RECORD", fullCols:["Class Work","Test","Exam","Total","Grade","Remarks"], fullSubjectW:30,
-    fullMeta:"Academic Year: ____________\nTerm: ____________", fullSummary:"Class Average: ________\nPosition: ________\nConduct: ________\nAttendance: Present ______  Absent ______",
-    fullCommentLabel:"Class Teacher's Comment:", fullSignatures:["Class Teacher","Principal / Head Teacher"], fullLogoH:24 },
+    fullMeta:"Academic Year: ____________\nTerm: ____________", fullSummary:"Class Average: ________\nPosition / Rank: ________\nDays Present: ________\nDays Absent: ________",
+    fullCommentLabel:"TEACHER'S REMARKS / CONDUCT", fullSignatures:["Class Sponsor","Principal","Parent / Guardian"], fullLogoH:18
+  },
   numbering:{ sheets:1, innerSheets:0, autoNo:false, startNo:1, prefix:"", pad:0, churches:"" },
   deco:{ on:false, style:"classic", c1:"#1e3a8a", c2:"#d4a017", scale:1, opacity:1, tint:false, tintAmt:0.07, inset:2, hideBox:true, colorHeadings:true, pages:{front:true, frontLeft:false, inside:false} },
   print:{ order:"interleaved" }
@@ -759,6 +837,9 @@ SEC.sanitizeSettings=function(s){ s=SEC.clean(s)||{}; const L=s.layout||{};
   if(s.report&&typeof s.report==="object"){ const R=s.report;
     if(has(R,"fullLogoH")) R.fullLogoH=SEC.safeNum(R.fullLogoH,4,60,24);
     if(has(R,"fullSubjectW")) R.fullSubjectW=SEC.safeNum(R.fullSubjectW,10,70,30);
+    if(has(R,"logoH")) R.logoH=SEC.safeNum(R.logoH,5,50,22);
+    if(has(R,"showSeal")) R.showSeal=R.showSeal!==false;
+    if(has(R,"doubleBorder")) R.doubleBorder=R.doubleBorder!==false;
     ["fullTableTitle","fullMeta","fullSummary","fullCommentLabel"].forEach(k=>{ if(has(R,k)) R[k]=SEC.safeStr(R[k],600); });
     if(Array.isArray(R.fullCols)) R.fullCols=R.fullCols.slice(0,12).map(v=>SEC.safeStr(v,60));
     if(Array.isArray(R.fullSignatures)) R.fullSignatures=R.fullSignatures.slice(0,6).map(v=>SEC.safeStr(v,80)); }
@@ -850,10 +931,44 @@ const deepMerge = (base, over) => {
 };
 /* ---------- built-in templates ---------- */
 const TEMPLATES = {
-  report:{ cat:"school", name:"Junior High Report Card (progress report)", desc:"Half‑A4 card (2 per A4 sheet, front and back), folded in the middle. Outside: PROMOTION STATEMENT (left) and the front cover with school name, Student Name / Year / Class, PARENTS/GUARDIANS signature table for periods I–VI, NOTE and MOTTO (right). Inside: full‑width grades table – FIRST SEMESTER (1st–3rd PD, Sem. Exam, Sem. Ave) and SECOND SEMESTER (4th–6th PD, Exam, Sem. Ave., Yrly Ave.) for all subjects, with the grading scale below.",
+  report:{ cat:"school", name:"Elementary School Report Card (Emmanuel Bolay David School of Excellence)", desc:"Full A4 two-sided bi-fold report card (1 per A4 sheet landscape, folded down the middle). Outside: PROMOTION STATEMENT (left) and Front Cover with school crest/seal, student details, parent advisory notice, and 6-period Teacher/Parent signature table (right). Inside: Full First & Second Semester grades table with all 21 subjects/evaluations and bottom grading scale.",
     settings:{ template:"report",
-      layout:{ pageW:210, pageH:297, perSheet:2, cardW:200, cardH:141, marginTop:5, padX:4, padY:4, color:"#ffffff", guides:true },
-      report:{ schoolSize:12, addrSize:10, titleSize:11, fieldSize:10.5, signSize:10, signRowH:5.6, signFill:false, noteSize:9.5, mottoSize:11, pTitleSize:12, pSize:11, gSize:10, gHeadSize:9.5, scaleSize:10, subjW:34, cGap:1.5 },
+      layout:{ pageW:297, pageH:210, perSheet:1, cardW:287, cardH:200, marginTop:5, padX:3, padY:3, color:"#ffffff", guides:true, singleSided:false, font:"Carlito, Calibri, 'Segoe UI', Arial, sans-serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
+      report:{
+        school:"EMMANUEL BOLAY DAVID SCHOOL OF EXCELLENCE", schoolSize:13,
+        addr:"Freedom Compound, Behind Jah Tondo Town, Brewerville\nMontserrado County, Republic of Liberia\nCell#: 0777175475 / 0886580695", addrSize:9,
+        logoH:22, showSeal:true,
+        level:"LOWER BASIC EDUCATION", levelSize:11,
+        title:"Elementary School Report Card", titleSize:11,
+        fields:"Student's Name: | Sex:\nGrade: | Academic Year:\nClass Sponsor:", fieldSize:9.5,
+        signHead:"PARENTS OR GUARDIANS", signHeadSize:9.5,
+        signNote:"This card is issued at the end of each period. It indicates to you the grade and cumulative averages that the student has attained. Parents are encouraged to give special attention to see that the student does well in all the work required.",
+        signCols:[ {name:"PERIOD", w:22}, {name:"TEACHER", w:39}, {name:"PARENT / GUARDIAN", w:39} ],
+        signRows:["1st Period","2nd Period","3rd Period","4th Period","5th Period","6th Period"], signSize:9, signRowH:5.8, signFill:false,
+        note:"", noteSize:8.5,
+        motto:"\"Accelerated Education For Accelerated Development\"", mottoSize:9.5, mottoRule:false, noteAlign:"left", signNoteAlign:"left", cGap:1.5,
+        pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This is to certify that",
+        pBody:"Student: __________________________________________________ HAS/HAS NOT satisfactorily completed the Academic work of Grade __________ and is therefore",
+        pOptions:[
+          "A. Eligible for promotion to grade ____________________",
+          "B. Conditioned in ____________________ and to be given conditional examination in this subject at the opening of next school term.",
+          "C. Required to repeat the grade.",
+          "D. Advised not to enroll next academic year."
+        ],
+        pSigns:["Registrar","Principal"], pDate:"Closing Date: ______________________________", pNote:"NOTE: ANY ERASURE ON THIS CARD RENDERS IT INVALID.", pMotto:"MOTTO: LEARN, TEACH AND EXCEL", pMottoSize:9.5, pSize:9.5,
+        gTitle:"ELEMENTARY SCHOOL REPORT CARD", gTitleSize:11,
+        sem1:"FIRST SEMESTER", sem1Cols:["1st","2nd","3rd","EXAM","1st SEMESTER AVERAGE"],
+        sem2:"SECOND SEMESTER", sem2Cols:["4th","5th","6th","EXAM","2nd SEMESTER AVERAGE","YEARLY AVERAGE"],
+        subjHead:"SUBJECTS",
+        subjects:[
+          "BIBLE","ENGLISH","READING","SPELLING","PHONICS","WRITING","MATHEMATICS","SOCIAL STUDIES","SCIENCE",
+          "HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION",
+          "AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"
+        ],
+        subjW:32, gGap:0, gSize:8.2, gHeadSize:8, gLineW:0.3, gFill:85,
+        scale:"GRADING SCALE: A+: 96-100 (Excellent); A: 91-95 (Very Good); B+: 86-90 (Good); B: 81-85 (Credit); C+: 76-80 (Average); C: 71-75 (Fair); D: 70 (Conditional Pass); F: Below 70 (Failure).",
+        scaleSize:7.5, gNote:"", box:true, doubleBorder:true, boxW:0.7
+      },
       panels:{ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"} } } },
   due:{ cat:"church", name:"Membership Due & Contribution Card", desc:"Bi‑fold card: MY PLEDGE + cover on the outside, two monthly DUE / CONTRIBUTION tables (Year: ____) on the inside. 3 cards per A4, front and back.", settings:{} },
   offering:{ cat:"church", name:"Monthly Activities Book (offering & attendance)", desc:"Front A4: 3 covers – Greater Praise Church Int, Inc., MONTHLY ACTIVITIES BOOK, NAME / POSITION / DATE / SIGNED lines and the Mission Statement (left page blank). Back A4: 3 record pages, each with two “Month of:” tables one under the other – Sunday, Tithe, Conference, Death, Programs, Building Fund, Attendance, Total. Add inner sheets in the Pages tab for a thicker stapled book.",
@@ -2331,7 +2446,7 @@ function formHTML(){
   case "report": { const R=S.report; const list=(arr,ph)=>`<div class="list">${get(S,arr).map((r,i)=>`<div class="item"><span class="n">${i+1}</span><input type="text" data-p="${arr}.${i}" value="${esc(r)}" placeholder="${ph}">${arrBtns(arr,i,get(S,arr).length)}</div>`).join("")}</div><div class="btns"><button class="small" data-act="add" data-arr="${arr}">${I.plus} Add</button></div>`;
     const isFullA4=singleSided()&&S.panels.fl&&S.panels.fl.type==="fullgrades";
     if(isFullA4) return `
-    <fieldset><legend>Full A4 grade sheet</legend>
+    <fieldset><legend>Full A4 grade sheet (single-sided)</legend>
       <div class="hint">One complete A4 page prints for each learner. The school logo keeps its original proportions in the upper-left logo position.</div>
       <label>School logo</label>
       <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove</button>${F.num("report.fullLogoH","Logo height (mm)",8,36,1)}</div>
@@ -2363,46 +2478,51 @@ function formHTML(){
     <fieldset><legend>Front cover</legend>
       <div class="row"><div style="flex:3">${F.text("report.school","School name")}</div>${F.num("report.schoolSize","pt",5,30,0.5)}</div>
       <div class="row"><div style="flex:3">${F.area("report.addr","Address (one line each)",3)}</div>${F.num("report.addrSize","pt",5,30,0.5)}</div>
-      <div class="row"><div style="flex:3">${F.text("report.title","Card title")}</div>${F.num("report.titleSize","pt",5,30,0.5)}</div>
-      <div class="row"><div style="flex:3">${F.area("report.fields","Fill‑in lines (one per line; use | to put two on the same line)",2)}</div>${F.num("report.fieldSize","pt",5,30,0.5)}</div>
-      ${F.text("report.signHead","Signature section heading")}
-      ${F.area("report.signNote","Signature instruction",2)}
+      <label>School crest / logo</label>
+      <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove custom logo</button>${F.num("report.logoH","Logo height (mm)",8,40,1)}</div>
+      <div class="row">${F.check("report.showSeal","Show circular school crest (EST. 2018)")}</div>
+      <div class="row"><div style="flex:3">${F.text("report.level","Education level / section","e.g. LOWER BASIC EDUCATION")}</div>${F.num("report.levelSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.text("report.title","Card title","e.g. Elementary School Report Card")}</div>${F.num("report.titleSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.area("report.fields","Fill‑in lines (one per line; use | to put two on the same line)",3)}</div>${F.num("report.fieldSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:3">${F.text("report.signHead","Section heading","e.g. PARENTS OR GUARDIANS")}</div>${F.num("report.signHeadSize","pt",5,30,0.5)}</div>
+      ${F.area("report.signNote","Instructions / note for parents & guardians",3)}
       <label>Signature table columns</label>
       <div class="list">${R.signCols.map((c,i)=>`<div class="item"><span class="n">${i+1}</span><input type="text" data-p="report.signCols.${i}.name" value="${esc(c.name)}"><input type="number" class="w" data-p="report.signCols.${i}.w" data-t="num" value="${esc(c.w)}" min="1" max="100" title="Width %">${arrBtns("report.signCols",i,R.signCols.length)}</div>`).join("")}</div>
       <div class="btns"><button class="small" data-act="add" data-arr="report.signCols">${I.plus} Add column</button>${F.num("report.signSize","Table pt",5,20,0.5)}</div>
-      <div class="row">${F.check("report.signFill","Stretch signature rows to fill the page")}${F.num("report.signRowH","Row height when not stretched (mm)",3,15,0.5)}</div>
-      <div class="hint">When rows are not stretched (as on the original card) the spare space is shared evenly between the blocks.</div>
+      <div class="row">${F.check("report.signFill","Stretch signature rows to fill the page")}${F.num("report.signRowH","Row height (mm)",3,15,0.5)}</div>
       <label>Signature table rows (periods)</label>${list("report.signRows","Row label")}
-      <div class="row"><div style="flex:3">${F.area("report.note","Note",3)}</div>${F.num("report.noteSize","pt",5,20,0.5)}</div>
-      <div class="row"><div style="flex:3">${F.text("report.motto","Motto")}</div>${F.num("report.mottoSize","pt",5,20,0.5)}</div>
-      <div class="row">${F.select("report.noteAlign","Note alignment",[["justify","Justify"],["left","Left"],["center","Centre"]])}${F.select("report.signNoteAlign","Instruction alignment",[["left","Left"],["center","Centre"]])}</div>
+      <div class="row"><div style="flex:3">${F.text("report.motto","Cover slogan / motto")}</div>${F.num("report.mottoSize","pt",5,20,0.5)}</div>
       <div class="row">${F.num("report.cGap","Space between blocks (mm)",0,8,0.5)}${F.check("report.mottoRule","Line above motto")}</div>
     </fieldset>
-    <fieldset><legend>Promotion statement</legend>
+    <fieldset><legend>Promotion statement (outside back)</legend>
       <div class="hint">Type 3 or more underscores (___) anywhere to print a blank line – longer runs give longer lines.</div>
-      <div class="row"><div style="flex:3">${F.text("report.pTitle","Heading")}</div>${F.num("report.pTitleSize","pt",5,30,0.5)}</div>
-      ${F.text("report.pIntro","Opening line")}
+      <div class="row"><div style="flex:3">${F.text("report.pTitle","Heading","e.g. PROMOTION STATEMENT")}</div>${F.num("report.pTitleSize","pt",5,30,0.5)}</div>
+      ${F.text("report.pIntro","Opening line","e.g. This certifies that ___________________________________")}
       ${F.area("report.pBody","Statement",3)}
-      <label>Options</label>${list("report.pOptions","Option text")}
-      <label>Signature lines</label>${list("report.pSigns","Title under the line")}
-      ${F.text("report.pDate","Date line")}
-      ${F.text("report.pNote","Note at the bottom")}
+      <label>Promotion options</label>${list("report.pOptions","Option text")}
+      <label>Signature labels</label>${list("report.pSigns","Title under the line")}
+      ${F.text("report.pDate","Closing date line","e.g. Closing Date: ____________________")}
+      ${F.text("report.pNote","Warning note","e.g. NOTE: ANY ERASURE ON THIS CARD RENDERS IT INVALID.")}
+      <div class="row"><div style="flex:3">${F.text("report.pMotto","Statement motto","e.g. MOTTO: LEARN, TEACH AND EXCEL")}</div>${F.num("report.pMottoSize","pt",5,20,0.5)}</div>
       ${F.num("report.pSize","Text size (pt)",5,20,0.5)}
     </fieldset>
-    <fieldset><legend>Grades table (inside)</legend>
-      <div class="row"><div style="flex:2">${F.text("report.sem1","First block heading")}</div><div style="flex:2">${F.text("report.sem2","Second block heading")}</div></div>
+    <fieldset><legend>Grades table (inside spread)</legend>
+      <div class="row"><div style="flex:3">${F.text("report.gTitle","Header banner (inside left page)","e.g. ELEMENTARY SCHOOL REPORT CARD")}</div>${F.num("report.gTitleSize","pt",5,30,0.5)}</div>
+      <div class="row"><div style="flex:2">${F.text("report.sem1","First block heading","First Semester")}</div><div style="flex:2">${F.text("report.sem2","Second block heading","Second Semester")}</div></div>
       <label>First block columns</label>${list("report.sem1Cols","Column")}
       <label>Second block columns</label>${list("report.sem2Cols","Column")}
-      ${F.text("report.subjHead","Subjects column heading")}
-      <label>Subjects / rows</label>${list("report.subjects","Subject")}
+      ${F.text("report.subjHead","Subjects column heading","SUBJECTS")}
+      <label>Subjects &amp; evaluation rows (21 rows)</label>${list("report.subjects","Subject / Evaluation")}
+      <div class="btns"><button class="small" data-act="eb-subjects">Reset to 21 standard subjects</button></div>
       <div class="row">${F.num("report.subjW","Subject column width (% of left page)",10,60)}${F.num("report.gFill","Table height (% of page)",40,95)}</div>
       <div class="hint">The grades table is split on the fold: SUBJECTS + first semester on the left page, second semester on the right page. Both halves are exactly the same width and their rows line up.</div>
       <div class="row">${F.num("report.gSize","Cell pt",5,20,0.5)}${F.num("report.gHeadSize","Header pt",5,20,0.5)}${F.num("report.gLineW","Grid line (mm)",0.1,2,0.05)}</div>
       <div class="row"><div style="flex:3">${F.area("report.scale","Grading scale (one per line)",5)}</div>${F.num("report.scaleSize","pt",5,20,0.5)}</div>
-      ${F.text("report.gNote","Note beside the scale")}
+      ${F.text("report.gNote","Note beside the scale (optional)")}
     </fieldset>
-    <fieldset><legend>Frame</legend>
-      <div class="row">${F.check("report.box","Border box around cover / statement")}${F.num("report.boxW","Box thickness (mm)",0.1,3,0.1)}</div>
+    <fieldset><legend>Frame &amp; border</legend>
+      <div class="row">${F.check("report.box","Border box around pages")}${F.check("report.doubleBorder","Double-line frame (outer & inner box)")}</div>
+      <div class="row">${F.num("report.boxW","Border line thickness (mm)",0.1,3,0.1)}</div>
     </fieldset>`; }
   case "numbering": { if(singleSided()) return `
     <fieldset><legend>Quantity</legend>
@@ -2523,6 +2643,7 @@ form.addEventListener("click", e=>{
   if(act==="tpl-export"){ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify({overrides:overrides(),user:userTemplates()},null,2)],{type:"application/json"})); a.download="duebook-templates.json"; a.click(); return; }
   if(act==="tpl-import"){ document.getElementById("tplFile").click(); return; }
   if(act==="months"){ S.table.rows=MONTHS.slice(); }
+  else if(act==="eb-subjects"){ S.report.subjects=["BIBLE","ENGLISH","READING","SPELLING","PHONICS","WRITING","MATHEMATICS","SOCIAL STUDIES","SCIENCE","HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION","AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"]; }
   else if(act==="numbers"){ S.table.rows=Array.from({length:12},(_,i)=>String(i+1)); }
   else if(act==="gridreset"){ Object.assign(S.grid, clone(DEFAULTS.grid)); }
   else {
@@ -2663,61 +2784,83 @@ function fullGradesPanel(){ const R=S.report;
     </div>
   </div>`; }
 function rcoverPanel(){ const R=S.report;
-  const rows=(R.fields||"").split("\n").map(l=>l.trim()).filter(Boolean).map(l=>`<div class="frow" style="font-size:${pt(R.fieldSize)}">${l.split("|").map(f=>`<span class="f"><span class="lab">${esc(f.trim())}</span><span class="line"></span></span>`).join("")}</div>`).join("");
+  const rows=(R.fields||"").split("\n").map(l=>l.trim()).filter(Boolean).map(l=>`<div class="frow" style="font-size:${pt(R.fieldSize||9.5)}">${l.split("|").map(f=>`<span class="f"><span class="lab">${esc(f.trim())}</span><span class="line"></span></span>`).join("")}</div>`).join("");
   const tw=R.signCols.reduce((a,c)=>a+(Number(c.w)||1),0);
-  const tbl=`<table class="${R.signFill?"fill":""}" style="font-size:${pt(R.signSize)}"><colgroup>${R.signCols.map(c=>`<col style="width:${(Number(c.w)||1)/tw*100}%">`).join("")}</colgroup>
+  const tbl=`<table class="${R.signFill?"fill":""}" style="font-size:${pt(R.signSize||9)}"><colgroup>${R.signCols.map(c=>`<col style="width:${(Number(c.w)||1)/tw*100}%">`).join("")}</colgroup>
     <thead><tr>${R.signCols.map(c=>`<th>${esc(c.name)}</th>`).join("")}</tr></thead>
     <tbody>${R.signRows.map(r=>`<tr><td>${esc(r)}</td>${R.signCols.slice(1).map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
-  return `<div class="panel rc" style="${pad()}--box-w:${R.boxW}mm;--gap:${R.cGap??2}mm;--rowh:${R.signRowH||6}mm"><div class="box ${R.box?"b":""} ${R.signFill?"":"spread"}">
+  const logoH=Number(R.logoH)||22;
+  let logoHTML="";
+  if(S.cover&&S.cover.logo){
+    logoHTML=`<div class="rc-logo"><img src="${S.cover.logo}" style="height:${logoH}mm" alt="Logo"></div>`;
+  } else if(R.showSeal!==false){
+    logoHTML=`<div class="rc-logo" style="margin:1mm auto;text-align:center">${EMMANUEL_SEAL_SVG(logoH)}</div>`;
+  }
+  return `<div class="panel rc" style="${pad()}--box-w:${R.boxW||0.7}mm;--gap:${R.cGap??1.5}mm;--rowh:${R.signRowH||5.8}mm"><div class="box ${R.box?"b":""} ${R.doubleBorder!==false?"double":""} ${R.signFill?"":"spread"}">
     <div class="hdr">
-      <p class="org" style="font-size:${pt(R.schoolSize)}">${esc(R.school)}</p>
-      <p class="addr" style="font-size:${pt(R.addrSize)}">${esc(R.addr)}</p>
-      <p class="title" style="font-size:${pt(R.titleSize)}">${esc(R.title)}</p>
+      <p class="org" style="font-size:${pt(R.schoolSize||13)}">${esc(R.school)}</p>
+      <p class="addr" style="font-size:${pt(R.addrSize||9)}">${esc(R.addr)}</p>
+      ${logoHTML}
+      ${R.level?`<p class="rc-level" style="font-size:${pt(R.levelSize||11)}">${esc(R.level)}</p>`:""}
+      <p class="title" style="font-size:${pt(R.titleSize||11)}">${esc(R.title)}</p>
     </div>
     <div class="fields">${rows}</div>
     <div class="sign">
-      ${R.signHead?`<p class="sh" style="font-size:${pt(R.fieldSize)}">${esc(R.signHead)}</p>`:""}
-      ${R.signNote?`<p class="sn" style="font-size:${pt(R.noteSize)};text-align:${R.signNoteAlign||"left"}">${esc(R.signNote)}</p>`:""}
+      ${R.signHead?`<p class="sh" style="font-size:${pt(R.signHeadSize||R.fieldSize||9.5)}">${esc(R.signHead)}</p>`:""}
+      ${R.signNote?`<p class="sn" style="font-size:${pt(R.noteSize||8.5)};text-align:${R.signNoteAlign||"justify"}">${esc(R.signNote)}</p>`:""}
       ${tbl}
     </div>
     <div class="foot">
-      ${R.note?`<p class="note" style="font-size:${pt(R.noteSize)};text-align:${R.noteAlign||"justify"}">${esc(R.note)}</p>`:""}
-      ${R.motto?`<p class="motto ${R.mottoRule?"rule":""}" style="font-size:${pt(R.mottoSize)}">${esc(R.motto)}</p>`:""}
+      ${R.note?`<p class="note" style="font-size:${pt(R.noteSize||8.5)};text-align:${R.noteAlign||"justify"}">${esc(R.note)}</p>`:""}
+      ${R.motto?`<p class="motto ${R.mottoRule?"rule":""}" style="font-size:${pt(R.mottoSize||9.5)}">${esc(R.motto)}</p>`:""}
     </div>
   </div></div>`; }
-function promoPanel(){ const R=S.report; const fs=pt(R.pSize);
-  return `<div class="panel rc" style="${pad()}--box-w:${R.boxW}mm;font-size:${fs}"><div class="box ${R.box?"b":""}">
-    <p class="org" style="font-size:${pt(R.schoolSize)}">${esc(R.school)}</p>
-    <p class="ptitle" style="font-size:${pt(R.pTitleSize)}">${esc(R.pTitle)}</p>
+
+function promoPanel(){ const R=S.report; const fs=pt(R.pSize||9.5);
+  const signs = (R.pSigns&&R.pSigns.length) ? R.pSigns : ["Registrar","Principal"];
+  return `<div class="panel rc promo-panel" style="${pad()}--box-w:${R.boxW||0.7}mm;font-size:${fs}"><div class="box ${R.box?"b":""} ${R.doubleBorder!==false?"double":""}">
+    <p class="ptitle" style="font-size:${pt(R.pTitleSize||12)}">${esc(R.pTitle)}</p>
     ${R.pIntro?`<p class="pintro">${esc(R.pIntro)}</p>`:""}
     <p class="pbody">${blanks(R.pBody)}</p>
     <ul class="popt">${R.pOptions.map(o=>`<li>${blanks(o)}</li>`).join("")}</ul>
-    <div class="psig">${R.pSigns.map(t=>`<div class="sg"><div class="ln"></div>${esc(t)}</div>`).join("")}</div>
+    <div class="psig-wrap">
+      ${signs.map(t=>`<div class="sg-row"><span class="sg-lbl">${esc(t)}:</span><div class="sg-body"><div class="ln"></div></div></div>`).join("")}
+    </div>
     ${R.pDate?`<p class="pdate">${blanks(R.pDate)}</p>`:""}
     ${R.pNote?`<p class="pnote">${esc(R.pNote)}</p>`:""}
+    ${R.pMotto?`<p class="pmotto" style="font-size:${pt(R.pMottoSize||9.5)}">${esc(R.pMotto)}</p>`:""}
   </div></div>`; }
+
 function gradesPanel(side){ const R=S.report;
-  const n1=R.sem1Cols.length, n2=R.sem2Cols.length, sw=Math.max(10,Math.min(60,Number(R.subjW)||24));
+  const n1=R.sem1Cols.length, n2=R.sem2Cols.length, sw=Math.max(10,Math.min(60,Number(R.subjW)||32));
   const rows=R.subjects;
   let t;
   if(side==="left"){
     t=`<table><colgroup><col style="width:${sw}%">${R.sem1Cols.map(()=>`<col style="width:${(100-sw)/n1}%">`).join("")}</colgroup>
-      <thead><tr><th class="sem" style="border:none"></th><th class="sem" colspan="${n1}">${esc(R.sem1)}</th></tr>
-      <tr><th class="sub col">${esc(R.subjHead)}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c)}</th>`).join("")}</tr></thead>
-      <tbody>${rows.map(sj=>`<tr><td class="s">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+      <thead>
+        <tr><th class="sem-blank" style="border:none"></th><th class="sem" colspan="${n1}">${esc(R.sem1||"First Semester")}</th></tr>
+        <tr><th class="sub col">${esc(R.subjHead||"SUBJECTS")}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr>
+      </thead>
+      <tbody>${rows.map(sj=>`<tr><td class="s ${sj==='AVERAGE'?'bold':''}">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
   } else {
-    t=`<table><colgroup>${R.sem2Cols.map(()=>`<col>`).join("")}</colgroup>
-      <thead><tr><th class="sem" colspan="${n2}">${esc(R.sem2)}</th></tr>
-      <tr>${R.sem2Cols.map(c=>`<th class="col">${esc(c)}</th>`).join("")}</tr></thead>
-      <tbody>${rows.map(()=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+    t=`<table><colgroup>${R.sem2Cols.map(()=>`<col style="width:${100/n2}%">`).join("")}</colgroup>
+      <thead>
+        <tr><th class="sem" colspan="${n2}">${esc(R.sem2||"Second Semester")}</th></tr>
+        <tr>${R.sem2Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr>
+      </thead>
+      <tbody>${rows.map(sj=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
   }
   const foot=side==="left"
-    ?`<div class="scale" style="font-size:${pt(R.scaleSize)}">${esc(R.scale)}</div>`
-    :(R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize)};margin-left:auto">${esc(R.gNote)}</div>`:"");
-  return `<div class="panel gr" style="${pad()}--tbl-w:${R.gLineW}mm;--g-fs:${pt(R.gSize)};--gh-fs:${pt(R.gHeadSize)}">
-    <div class="gwrap" style="flex:0 0 ${Math.max(40,Math.min(95,Number(R.gFill)||78))}%">${t}</div>
-    <div class="gfoot">${foot}</div>
+    ?`<div class="scale" style="font-size:${pt(R.scaleSize||7.5)}">${esc(R.scale)}</div>`
+    :(R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize||7.5)};margin-left:auto">${esc(R.gNote)}</div>`:`<div class="scale" style="visibility:hidden;font-size:${pt(R.scaleSize||7.5)}">&nbsp;</div>`);
+  return `<div class="panel gr" style="${pad()}--tbl-w:${R.gLineW||0.3}mm;--g-fs:${pt(R.gSize||8.2)};--gh-fs:${pt(R.gHeadSize||8)};--box-w:${R.boxW||0.7}mm">
+    <div class="gbox ${R.box?"b":""} ${R.doubleBorder!==false?"double":""}">
+      ${side==="left"?(R.gTitle?`<div class="ghead-banner" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:""):`<div class="ghead-banner" style="visibility:hidden;font-size:${pt(R.gTitleSize||11)}">&nbsp;</div>`}
+      <div class="gwrap" style="flex:1">${t}</div>
+      <div class="gfoot">${foot}</div>
+    </div>
   </div>`; }
+
 function customPanel(p){ return `<div class="panel free" style="${pad()};justify-content:center">
   ${p.custom.head?`<h3 style="font-size:${pt(14)}">${esc(p.custom.head)}</h3>`:""}
   <p style="font-size:${pt(11)}">${esc(p.custom.body)}</p></div>`; }
