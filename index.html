@@ -248,39 +248,45 @@
   .promo-panel .pnote { margin: 1.2mm 0 0; font-weight: 800; text-align: left; text-transform: uppercase; letter-spacing: 0.02em; }
   .promo-panel .pmotto { margin: auto 0 0; text-align: center; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; padding-top: 1.5mm; }
 
-  /* Inside grades tables */
+  /* Inside grades tables - exact match to photo */
   .gr .gbox {
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 2.5mm 3.5mm;
+    padding: 2.2mm 3mm;
     box-sizing: border-box;
     font-family: Carlito, Calibri, 'Segoe UI', Arial, sans-serif;
   }
   .gr .gbox.b { border: var(--box-w, 0.75mm) solid var(--line); }
+  .gr .gbox.double{border:var(--box-w,0.75mm) solid var(--line);outline:max(0.25mm,calc(var(--box-w,0.75mm)*0.45)) solid var(--line);outline-offset:-1.4mm}
   .gr .ghead-banner {
     font-weight: 900;
     text-align: center;
-    letter-spacing: 0.03em;
-    padding: 0.5mm 0 1.2mm;
+    letter-spacing: 0.04em;
+    padding: 0.8mm 0 1mm;
     text-transform: uppercase;
+    border-bottom: var(--tbl-w,0.3mm) solid var(--line);
+    background:#f8fafc;
+    line-height:1.1;
   }
-  .gr .gwrap { display: flex; align-items: stretch; flex: 1; min-height: 0; }
-  .gr table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: calc(var(--g-fs) * var(--cf,1)); height: 100%; }
-  .gr th, .gr td { border: var(--tbl-w, 0.3mm) solid var(--line); padding: 0 1mm; line-height: 1.05; overflow: hidden; white-space: nowrap; height: 1.45em; vertical-align: middle; }
-  .gr th { font-weight: 800; text-align: center; font-size: calc(var(--gh-fs) * var(--cf,1)); }
-  .gr th.sem { font-weight: 900; border: var(--tbl-w, 0.3mm) solid var(--line); text-align: center; height: 1.5em; }
-  .gr th.sem-blank { border: none !important; }
-  .gr th.sub { text-align: left; font-weight: 800; }
-  .gr th.col { white-space: normal; height: 2.3em; line-height: 1.05; vertical-align: middle; }
+  .gr .gwrap { display: flex; align-items: stretch; flex: 1; min-height: 0; overflow:hidden }
+  .gr table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: calc(var(--g-fs) * var(--cf,1)); }
+  .gr .gwrap table{height:100%}
+  .gr th, .gr td { border: var(--tbl-w, 0.3mm) solid var(--line); padding: 0 .9mm; line-height: 1.05; overflow: hidden; white-space: nowrap; height: 1.38em; vertical-align: middle; }
+  .gr th { font-weight: 800; text-align: center; font-size: calc(var(--gh-fs) * var(--cf,1)); background:#f8fafc }
+  .gr th.sem { font-weight: 900; border: var(--tbl-w, 0.3mm) solid var(--line); text-align: center; height: 1.55em; background:#e5e7eb; letter-spacing:.02em }
+  .gr th.sem-blank { border: none !important; background:transparent !important }
+  .gr th.sub { text-align: left; font-weight: 900; background:#f1f5f9 }
+  .gr th.col { white-space: normal; height: 2.4em; line-height: 1.05; vertical-align: middle; font-size:calc((var(--gh-fs)*0.92)*var(--cf,1)) }
   .gr td.s { text-align: left; font-weight: 700; }
-  .gr td.s.bold { font-weight: 900; }
-  .gr .gfoot { display: flex; justify-content: space-between; align-items: flex-end; gap: 4mm; margin-top: 1.2mm; flex: 0 0 auto; }
+  .gr td.s.bold { font-weight: 900; background:#f8fafc }
+  .gr .gfoot { display: flex; justify-content: space-between; align-items: flex-start; gap: 4mm; margin-top: 1mm; flex: 0 0 auto; border-top: var(--tbl-w,0.3mm) solid var(--line); padding-top:1mm }
   .gr .scale { font-weight: 700; white-space: pre-line; line-height: 1.25; font-size: calc(var(--scale-fs, 7.5pt) * var(--cf,1)); }
   .gr .gn { font-weight: 700; }
 
-  /* Full A4 grade sheet */
-  .fg .fgbox{height:100%;display:flex;flex-direction:column;border:var(--fg-border,.35mm) solid var(--line);font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif}
+  /* Full A4 grade sheet - exact match dual semester */
+  .fg .fgbox{height:100%;display:flex;flex-direction:column;border:var(--fg-border,.35mm) solid var(--line);font-family:Carlito,Calibri,'Segoe UI',Arial,sans-serif;box-sizing:border-box}
+  .fg .fgbox.double{border:var(--fg-border,.7mm) solid var(--line);outline:max(0.25mm,calc(var(--fg-border,.7mm)*0.45)) solid var(--line);outline-offset:-1.6mm}
   .fg .fg-header{display:grid;grid-template-columns:26mm minmax(0,1fr) 37mm;gap:2mm;align-items:center;padding:3mm 3.5mm 2.5mm;border-bottom:var(--fg-line,.3mm) solid var(--line)}
   .fg .fg-logo-slot{width:24mm;height:var(--fg-logo-h,24mm);display:flex;align-items:center;justify-content:center;overflow:hidden}
   .fg .fg-logo-slot.empty{border:.25mm dashed #9ca3af;color:#6b7280;font-size:7pt;font-weight:700;letter-spacing:.08em}
@@ -294,16 +300,26 @@
   .fg .fg-field{display:flex;align-items:flex-end;gap:1.2mm;min-width:0;font-weight:700;line-height:1.15}
   .fg .fg-field .lab{white-space:nowrap}
   .fg .fg-field .line{height:1.15em;min-width:8mm;flex:1;border-bottom:.3mm solid var(--line)}
-  .fg .fg-record-caption{text-align:center;font-weight:900;letter-spacing:.04em;padding:1.7mm 3.5mm 1mm;line-height:1.15}
-  .fg .fg-table-wrap{padding:0 3.5mm 2.5mm;display:flex;flex:1;min-height:0}
-  .fg .fg-table{width:100%;height:100%;table-layout:fixed;border-collapse:collapse}
+  .fg .fg-record-caption{text-align:center;font-weight:900;letter-spacing:.04em;padding:1.7mm 3.5mm 1mm;line-height:1.15;text-transform:uppercase}
+  .fg .fg-table-wrap{padding:0 3.5mm 2.5mm;display:flex;flex:1;min-height:0;flex-direction:column}
+  .fg .fg-table{width:100%;table-layout:fixed;border-collapse:collapse}
   .fg .fg-table th,.fg .fg-table td{border:var(--fg-line,.3mm) solid var(--line);padding:0 1mm;line-height:1.1;overflow:hidden;vertical-align:middle}
   .fg .fg-table th{font-weight:900;text-align:center;white-space:normal;background:#f8fafc}
   .fg .fg-table td:first-child{text-align:left;font-weight:700}
+  .fg .fg-dual-wrap{display:flex;gap:2mm;flex:1;min-height:0;padding:0 3.5mm 2mm}
+  .fg .fg-dual-col{flex:1;display:flex;flex-direction:column;min-width:0}
+  .fg .fg-sem-table{width:100%;border-collapse:collapse;table-layout:fixed;flex:1}
+  .fg .fg-sem-table th,.fg .fg-sem-table td{border:var(--fg-line,.3mm) solid var(--line);padding:0 .8mm;line-height:1.05;overflow:hidden;vertical-align:middle;white-space:nowrap}
+  .fg .fg-sem-table th{font-weight:800;text-align:center;font-size:calc(var(--fg-hfs,8pt)*var(--cf,1));background:#f8fafc}
+  .fg .fg-sem-table th.sem{font-weight:900;height:1.6em;text-transform:uppercase}
+  .fg .fg-sem-table th.sub{font-weight:900;text-align:left}
+  .fg .fg-sem-table td.s{font-weight:700;text-align:left}
+  .fg .fg-sem-table td{font-size:calc(var(--fg-fs,8pt)*var(--cf,1));height:1.4em}
   .fg .fg-lower{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);border-top:var(--fg-line,.3mm) solid var(--line)}
-  .fg .fg-scale,.fg .fg-summary{padding:2mm 3.5mm;white-space:pre-line;line-height:1.38}
+  .fg .fg-scale,.fg .fg-summary{padding:2mm 3.5mm;white-space:pre-line;line-height:1.35}
   .fg .fg-scale{border-right:var(--fg-line,.3mm) solid var(--line)}
   .fg .fg-scale b,.fg .fg-summary b{font-weight:900;letter-spacing:.03em}
+  .fg .fg-scale-full{padding:2mm 3.5mm;border-top:var(--fg-line,.3mm) solid var(--line);white-space:pre-line;line-height:1.3;font-weight:700}
   .fg .fg-comment{padding:2mm 3.5mm 1.7mm;border-top:var(--fg-line,.3mm) solid var(--line);font-size:8pt;line-height:1.25}
   .fg .fg-comment-lines{display:flex;flex-direction:column;gap:4.3mm;margin-top:1.2mm}
   .fg .fg-comment-lines i{display:block;height:1px;border-bottom:.25mm solid var(--line)}
@@ -503,8 +519,8 @@ const DEFAULTS = {
     signRows:["1st Period","2nd Period","3rd Period","4th Period","5th Period","6th Period"], signSize:9, signRowH:5.8, signFill:false,
     note:"", noteSize:8.5,
     motto:"\"Accelerated Education For Accelerated Development\"", mottoSize:9.5, mottoRule:false, noteAlign:"left", signNoteAlign:"left", cGap:1.5,
-    pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This is to certify that",
-    pBody:"Student: __________________________________________________ HAS/HAS NOT satisfactorily completed the Academic work of Grade __________ and is therefore",
+    pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This certifies that",
+    pBody:"__________________________________________________ Has/has not satisfactorily completed the Academic work of Grade __________ And is promoted to ______________________\n\nAnd is therefore:",
     pOptions:[
       "A. Eligible for promotion to grade ____________________",
       "B. Conditioned in ____________________ and to be given conditional examination in this subject at the opening of next school term.",
@@ -521,9 +537,9 @@ const DEFAULTS = {
       "HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION",
       "AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"
     ],
-    subjW:32, gGap:0, gSize:8.2, gHeadSize:8, gLineW:0.3, gFill:85,
+    subjW:34, gGap:0, gSize:8.5, gHeadSize:8.2, gLineW:0.35, gFill:88,
     scale:"GRADING SCALE: A+: 96-100 (Excellent); A: 91-95 (Very Good); B+: 86-90 (Good); B: 81-85 (Credit); C+: 76-80 (Average); C: 71-75 (Fair); D: 70 (Conditional Pass); F: Below 70 (Failure).",
-    scaleSize:7.5, gNote:"", box:true, doubleBorder:true, boxW:0.7,
+    scaleSize:7.2, gNote:"", box:true, doubleBorder:true, boxW:0.7,
     fullTableTitle:"SCHOLASTIC RECORD", fullCols:["Class Work","Test","Exam","Total","Grade","Remarks"], fullSubjectW:30,
     fullMeta:"Academic Year: ____________\nTerm: ____________", fullSummary:"Class Average: ________\nPosition / Rank: ________\nDays Present: ________\nDays Absent: ________",
     fullCommentLabel:"TEACHER'S REMARKS / CONDUCT", fullSignatures:["Class Sponsor","Principal","Parent / Guardian"], fullLogoH:18
@@ -947,8 +963,8 @@ const TEMPLATES = {
         signRows:["1st Period","2nd Period","3rd Period","4th Period","5th Period","6th Period"], signSize:9, signRowH:5.8, signFill:false,
         note:"", noteSize:8.5,
         motto:"\"Accelerated Education For Accelerated Development\"", mottoSize:9.5, mottoRule:false, noteAlign:"left", signNoteAlign:"left", cGap:1.5,
-        pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This is to certify that",
-        pBody:"Student: __________________________________________________ HAS/HAS NOT satisfactorily completed the Academic work of Grade __________ and is therefore",
+        pTitle:"PROMOTION STATEMENT", pTitleSize:12, pIntro:"This certifies that",
+        pBody:"__________________________________________________ Has/has not satisfactorily completed the Academic work of Grade __________ And is promoted to ______________________\n\nAnd is therefore:",
         pOptions:[
           "A. Eligible for promotion to grade ____________________",
           "B. Conditioned in ____________________ and to be given conditional examination in this subject at the opening of next school term.",
@@ -965,9 +981,9 @@ const TEMPLATES = {
           "HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION",
           "AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"
         ],
-        subjW:32, gGap:0, gSize:8.2, gHeadSize:8, gLineW:0.3, gFill:85,
+        subjW:34, gGap:0, gSize:8.5, gHeadSize:8.2, gLineW:0.35, gFill:88,
         scale:"GRADING SCALE: A+: 96-100 (Excellent); A: 91-95 (Very Good); B+: 86-90 (Good); B: 81-85 (Credit); C+: 76-80 (Average); C: 71-75 (Fair); D: 70 (Conditional Pass); F: Below 70 (Failure).",
-        scaleSize:7.5, gNote:"", box:true, doubleBorder:true, boxW:0.7
+        scaleSize:7.2, gNote:"", box:true, doubleBorder:true, boxW:0.7
       },
       panels:{ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"} } } },
   due:{ cat:"church", name:"Membership Due & Contribution Card", desc:"Bi‑fold card: MY PLEDGE + cover on the outside, two monthly DUE / CONTRIBUTION tables (Year: ____) on the inside. 3 cards per A4, front and back.", settings:{} },
@@ -986,8 +1002,8 @@ const TEMPLATES = {
 const RPT_LAYOUT={ pageW:210, pageH:297, perSheet:2, cardW:200, cardH:141, marginTop:5, padX:4, padY:4, color:"#ffffff", guides:true };
 const RPT_PANELS={ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"} };
 const RPT_SIZES={ schoolSize:12, addrSize:10, titleSize:11, fieldSize:10.5, signSize:10, signRowH:5.6, signFill:false, noteSize:9.5, mottoSize:11, pTitleSize:12, pSize:11, gSize:10, gHeadSize:9.5, scaleSize:10, subjW:34, cGap:1.5 };
-const FULL_A4_RPT_LAYOUT={ pageW:210, pageH:297, perSheet:1, cardW:210, cardH:297, marginTop:0, padX:7, padY:6, color:"#ffffff", printBg:true, guides:false, cardBorder:0, divider:0, singleSided:true };
-const FULL_A4_RPT_PANELS={ fl:{type:"fullgrades"}, fr:{type:"blank"}, bl:{type:"blank"}, br:{type:"blank"}, il:{type:"blank"}, ir:{type:"blank"} };
+const FULL_A4_RPT_LAYOUT={ pageW:210, pageH:297, perSheet:1, cardW:200, cardH:287, marginTop:5, padX:4, padY:4, color:"#ffffff", printBg:true, guides:true, cardBorder:0, divider:0, singleSided:false };
+const FULL_A4_RPT_PANELS={ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"}, il:{type:"blank"}, ir:{type:"blank"} };
 const BLANK_ROWS=n=>Array.from({length:n},()=>"");
 const MONTHS12=["January","February","March","April","May","June","July","August","September","October","November","December"];
 const CHURCH_ADDR="Jamah Town, Brewerville City\nMontserrado County\nRepublic of Liberia";
@@ -997,16 +1013,72 @@ const LINE=(label,fill="none")=>({label, after:"", pos:"under", fill});
 
 Object.assign(TEMPLATES,{
 /* ================= SCHOOL ================= */
-  report_full_a4:{ cat:"school", name:"Full A4 Grade Sheet (logo-ready)", desc:"One complete, single-sided A4 grade sheet — not a folded card. Upload the school logo in the Report card tab; it is preserved at the top-left of the page. Edit the school heading, learner details, subjects, grade columns, grading scale, teacher comment and signatures.",
-    settings:{ layout:FULL_A4_RPT_LAYOUT, panels:FULL_A4_RPT_PANELS, cover:{logoH:24}, report:Object.assign({},RPT_SIZES,{
-      school:"SCHOOL NAME", addr:"School address\nTown / County", title:"STUDENT GRADE SHEET",
-      fields:"Student Name: | Admission No.:\nClass: | Academic Year:\nTerm: | Class Teacher:", fieldSize:10,
-      subjects:["English Language","Mathematics","Science","Social Studies","Civics","Computer Studies","Creative Arts","Physical Education","Reading","Writing","Conduct","Attendance","Class Average","Position"],
-      subjHead:"SUBJECTS", gSize:9, gHeadSize:8.5, gLineW:0.3, scaleSize:8.5, boxW:0.35,
-      fullTableTitle:"SCHOLASTIC RECORD", fullCols:["Class Work","Test","Exam","Total","Grade","Remarks"], fullSubjectW:30,
-      fullMeta:"Academic Year: ____________\nTerm: ____________", fullSummary:"Class Average: ________\nPosition: ________\nConduct: ________\nAttendance: Present ______  Absent ______",
-      fullCommentLabel:"Class Teacher's Comment:", fullSignatures:["Class Teacher","Principal / Head Teacher"], fullLogoH:24,
-      scale:"90 - 100 = Excellent\n80 - 89 = Very Good\n70 - 79 = Good\n60 - 69 = Fair\nBelow 60 = Needs Improvement", note:"This grade sheet is valid only when signed by the class teacher and principal." }) } },
+  report_full_a4:{ cat:"school", name:"Full A4 Report Card - Portrait (Emmanuel Exact Match)", desc:"Full A4 portrait bi-fold report card (1 per A4 sheet portrait, 210x297mm, folded down the middle). EXACT MATCH to the photos: Outside = PROMOTION STATEMENT (left) + Front Cover with crest, student details, PARENTS OR GUARDIANS notice and 6-period signature table (right). Inside = First Semester (left) and Second Semester (right) tables with all 21 subjects and grading scale at bottom. Prints double-sided, flip on long edge.",
+    settings:{ template:"report", layout:{ pageW:210, pageH:297, perSheet:1, cardW:200, cardH:287, marginTop:5, padX:4, padY:4, color:"#ffffff", printBg:true, guides:true, cardBorder:0, divider:0, singleSided:false, font:"Carlito, Calibri, 'Segoe UI', Arial, sans-serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
+      panels:{ fl:{type:"promo"}, fr:{type:"rcover"}, bl:{type:"grades"}, br:{type:"grades"} },
+      report:{
+        school:"EMMANUEL BOLAY DAVID SCHOOL OF EXCELLENCE", schoolSize:12.5,
+        addr:"Freedom Compound, Behind Jah Tondo Town, Brewerville\nMontserrado County, Republic of Liberia\nCell#: 0777175475 / 0886380695", addrSize:8.5,
+        logoH:20, showSeal:true,
+        level:"LOWER BASIC EDUCATION", levelSize:10.5,
+        title:"Elementary School Report Card", titleSize:10.5,
+        fields:"Student's Name: | Sex:\nGrade: | Academic Year:\nClass Sponsor:", fieldSize:9,
+        signHead:"PARENTS OR GUARDIANS", signHeadSize:9,
+        signNote:"This card is issued at the end of each period. It indicates to you the grade and cumulative averages that the student has attained. Parents are encouraged to give special attention to see that the student does well in all the work required.",
+        signCols:[ {name:"PERIOD", w:22}, {name:"TEACHER", w:39}, {name:"PARENT / GUARDIAN", w:39} ],
+        signRows:["1st Period","2nd Period","3rd Period","4th Period","5th Period","6th Period"], signSize:8.5, signRowH:5.2, signFill:false,
+        note:"", noteSize:8,
+        motto:"\"Accelerated Education For Accelerated Development\"", mottoSize:9, mottoRule:false, noteAlign:"left", signNoteAlign:"left", cGap:1.2,
+        pTitle:"PROMOTION STATEMENT", pTitleSize:11.5, pIntro:"This certifies that",
+        pBody:"__________________________________________________ Has/has not satisfactorily completed the Academic work of Grade __________ And is promoted to ______________________\n\nAnd is therefore:",
+        pOptions:[
+          "A. Eligible for promotion to grade ____________________",
+          "B. Conditioned in ____________________ and to be given conditional examination in this subject at the opening of next school term.",
+          "C. Required to repeat the grade.",
+          "D. Advised not to enroll next academic year."
+        ],
+        pSigns:["Registrar","Principal"], pDate:"Closing Date: ______________________________", pNote:"NOTE: ANY ERASURE ON THIS CARD RENDERS IT INVALID.", pMotto:"MOTTO: LEARN, TEACH AND EXCEL", pMottoSize:9, pSize:9,
+        gTitle:"ELEMENTARY SCHOOL REPORT CARD", gTitleSize:10.5,
+        sem1:"FIRST SEMESTER", sem1Cols:["1st","2nd","3rd","EXAM","1st SEMESTER AVERAGE"],
+        sem2:"SECOND SEMESTER", sem2Cols:["4th","5th","6th","EXAM","2nd SEMESTER AVERAGE","YEARLY AVERAGE"],
+        subjHead:"SUBJECTS",
+        subjects:[
+          "BIBLE","ENGLISH","READING","SPELLING","PHONICS","WRITING","MATHEMATICS","SOCIAL STUDIES","SCIENCE",
+          "HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION",
+          "AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"
+        ],
+        subjW:32, gGap:0, gSize:7.8, gHeadSize:7.5, gLineW:0.32, gFill:88,
+        scale:"GRADING SCALE: A+: 96-100 (Excellent); A: 91-95 (Very Good); B+: 86-90 (Good); B: 81-85 (Credit); C+: 76-80 (Average); C: 71-75 (Fair); D: 70 (Conditional Pass); F: Below 70 (Failure).",
+        scaleSize:6.8, gNote:"", box:true, doubleBorder:true, boxW:0.65
+      }
+    } },
+  report_full_a4_single:{ cat:"school", name:"Full A4 Single-Page Report (Both Semesters on One Side)", desc:"Single-sided A4 portrait sheet (210x297mm) that shows the complete inside spread on one page: school header, student details, ELEMENTARY SCHOOL REPORT CARD banner, First Semester table on left and Second Semester table on right side-by-side with all 21 subjects and grading scale at bottom. Ideal when you want the full grades table as a single A4 handout. Matches the inside photo exactly.",
+    settings:{ template:"report", layout:{ pageW:210, pageH:297, perSheet:1, cardW:200, cardH:287, marginTop:5, padX:4, padY:4, color:"#ffffff", printBg:true, guides:false, cardBorder:0, divider:0, singleSided:true, font:"Carlito, Calibri, 'Segoe UI', Arial, sans-serif", ink:"#111111", line:"#111111", fs:1, autofit:true },
+      panels:{ fl:{type:"fullgrades"}, fr:{type:"blank"}, bl:{type:"blank"}, br:{type:"blank"}, il:{type:"blank"}, ir:{type:"blank"} },
+      cover:{logoH:20},
+      report:{
+        school:"EMMANUEL BOLAY DAVID SCHOOL OF EXCELLENCE", schoolSize:12.5,
+        addr:"Freedom Compound, Behind Jah Tondo Town, Brewerville\nMontserrado County, Republic of Liberia\nCell#: 0777175475 / 0886380695", addrSize:8.5,
+        logoH:20, showSeal:true,
+        level:"LOWER BASIC EDUCATION", levelSize:10.5,
+        title:"Elementary School Report Card", titleSize:10.5,
+        fields:"Student's Name: | Sex:\nGrade: | Academic Year:\nClass Sponsor:", fieldSize:9,
+        gTitle:"ELEMENTARY SCHOOL REPORT CARD", gTitleSize:11,
+        sem1:"FIRST SEMESTER", sem1Cols:["1st","2nd","3rd","EXAM","1st SEMESTER AVERAGE"],
+        sem2:"SECOND SEMESTER", sem2Cols:["4th","5th","6th","EXAM","2nd SEMESTER AVERAGE","YEARLY AVERAGE"],
+        subjHead:"SUBJECTS",
+        subjects:[
+          "BIBLE","ENGLISH","READING","SPELLING","PHONICS","WRITING","MATHEMATICS","SOCIAL STUDIES","SCIENCE",
+          "HEALTH SCIENCE","DRAWING","FRENCH","COMPUTER","PHYSICAL EDUCATION","VOCATIONAL EDUCATION",
+          "AVERAGE","Rank","DAYS ABSENT","DAY PRESENT","STATUS","CONDUCT"
+        ],
+        subjW:30, gSize:8, gHeadSize:7.8, gLineW:0.35, gFill:90,
+        scale:"GRADING SCALE: A+: 96-100 (Excellent); A: 91-95 (Very Good); B+: 86-90 (Good); B: 81-85 (Credit); C+: 76-80 (Average); C: 71-75 (Fair); D: 70 (Conditional Pass); F: Below 70 (Failure).",
+        scaleSize:7, box:true, doubleBorder:true, boxW:0.7,
+        fullMeta:"Academic Year: ____________  Term: ____________",
+        fullSummary:"", note:""
+      }
+    } },
   report_elem:{ cat:"school", name:"Elementary School Report Card", desc:"Same layout as the Junior High card (2 per A4, folded) with elementary subjects: Mathematics, English, Reading, Spelling, Writing, Science, Social Studies, Bible, Health, P.E., Art, Conduct, Rank, Average.",
     settings:{ layout:RPT_LAYOUT, panels:RPT_PANELS, report:Object.assign({}, RPT_SIZES, { title:"ELEMENTARY REPORT CARD", addr:SCHOOL_ADDR,
       subjects:["Mathematics","English","Reading","Spelling","Writing","Science","Social Studies","Bible","Health","P.E.","Art","Conduct","Rank","Average"] }) } },
@@ -2742,21 +2814,61 @@ function gridPanel(){ const g=S.grid;
 
 const blanks=t=>esc(t).replace(/_{3,}/g,m=>`<span class="bl" style="width:${Math.min(80,m.length*2.2)}mm"></span>`);
 function fullGradesPanel(){ const R=S.report;
-  const cols=(Array.isArray(R.fullCols)?R.fullCols:[]).map(c=>String(c||"").trim()).filter(Boolean).slice(0,12);
-  const gradeCols=cols.length?cols:["Class Work","Test","Exam","Total","Grade","Remarks"];
+  // If this is a report-card with semesters defined, render EXACT dual-semester layout matching the photos
+  const hasSemesters = Array.isArray(R.sem1Cols) && Array.isArray(R.sem2Cols) && R.sem1Cols.length && R.sem2Cols.length;
   const subjects=(Array.isArray(R.subjects)?R.subjects:[]).map(s=>String(s||"").trim()).filter(Boolean).slice(0,80);
   const gradeRows=subjects.length?subjects:["Subject"];
-  const subjectW=Math.max(10,Math.min(70,Number(R.fullSubjectW)||30));
   const fields=(R.fields||"").split("\n").flatMap(line=>line.split("|")).map(f=>f.trim()).filter(Boolean)
     .map(f=>`<div class="fg-field" style="font-size:${pt(R.fieldSize)}"><span class="lab">${esc(f)}</span><span class="line"></span></div>`).join("");
   const logo=S.cover&&S.cover.logo;
   const logoH=Math.max(4,Math.min(60,Number(R.fullLogoH)||24));
   const logoMark=logo
     ?`<div class="fg-logo-slot" style="--fg-logo-h:${logoH}mm"><img src="${logo}" style="height:100%" alt="School logo"></div>`
-    :`<div class="fg-logo-slot empty" aria-label="School logo placeholder">LOGO</div>`;
+    : (R.showSeal!==false?`<div class="fg-logo-slot" style="border:none"><div style="transform:scale(0.9)">${EMMANUEL_SEAL_SVG(logoH)}</div></div>`:`<div class="fg-logo-slot empty" aria-label="School logo placeholder">LOGO</div>`);
   const summary=(R.fullSummary||"").trim();
   const signatures=(Array.isArray(R.fullSignatures)?R.fullSignatures:[]).map(x=>String(x||"").trim()).filter(Boolean).slice(0,6);
   const signList=signatures.length?signatures:["Class Teacher","Principal / Head Teacher"];
+
+  if(hasSemesters){
+    // Exact match: dual semester side-by-side inside one A4 page
+    const n1=R.sem1Cols.length, n2=R.sem2Cols.length;
+    const sw=Math.max(18,Math.min(45,Number(R.subjW)||32));
+    const subjHead=esc(R.subjHead||"SUBJECTS");
+    const leftCols=`<colgroup><col style="width:${sw}%">${R.sem1Cols.map(()=>`<col style="width:${(100-sw)/n1}%">`).join("")}</colgroup>`;
+    const rightCols=`<colgroup>${R.sem2Cols.map(()=>`<col style="width:${100/n2}%">`).join("")}</colgroup>`;
+    const leftHead=`<thead><tr><th class="sub" style="border:none;background:transparent"></th><th class="sem" colspan="${n1}">${esc(R.sem1||"FIRST SEMESTER")}</th></tr><tr><th class="sub">${subjHead}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr></thead>`;
+    const rightHead=`<thead><tr><th class="sem" colspan="${n2}">${esc(R.sem2||"SECOND SEMESTER")}</th></tr><tr>${R.sem2Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr></thead>`;
+    const leftBody=`<tbody>${gradeRows.map(sj=>`<tr><td class="s ${sj==='AVERAGE'?'bold':''}">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody>`;
+    const rightBody=`<tbody>${gradeRows.map(()=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody>`;
+    return `<div class="panel fg" style="${pad()}--fg-border:${Math.max(.1,Math.min(2,Number(R.boxW)||0.7))}mm;--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm;--fg-fs:${pt(R.gSize)};--fg-hfs:${pt(R.gHeadSize)}">
+    <div class="fgbox ${R.doubleBorder!==false?'double':''}" style="--fg-border:${Math.max(.1,Math.min(2,Number(R.boxW)||0.7))}mm">
+      <div class="fg-header">
+        ${logoMark}
+        <div class="fg-ident">
+          <p class="fg-school" style="font-size:${pt(R.schoolSize)}">${esc(R.school)}</p>
+          ${R.addr?`<p class="fg-addr" style="font-size:${pt(R.addrSize)}">${esc(R.addr)}</p>`:""}
+          ${R.level?`<p style="font-size:${pt(R.levelSize||10)};font-weight:900;margin:.8mm 0 0;letter-spacing:.03em">${esc(R.level)}</p>`:""}
+          <p class="fg-title" style="font-size:${pt(R.titleSize)}">${esc(R.title)}</p>
+        </div>
+        <div class="fg-meta">${blanks(R.fullMeta||"")}</div>
+      </div>
+      ${fields?`<div class="fg-student">${fields}</div>`:""}
+      ${R.gTitle?`<div class="fg-record-caption" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:""}
+      <div class="fg-dual-wrap" style="--fg-fs:${pt(R.gSize)};--fg-hfs:${pt(R.gHeadSize)}">
+        <div class="fg-dual-col"><table class="fg-sem-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm">${leftCols}${leftHead}${leftBody}</table></div>
+        <div class="fg-dual-col"><table class="fg-sem-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm">${rightCols}${rightHead}${rightBody}</table></div>
+      </div>
+      <div class="fg-scale-full" style="font-size:${pt(R.scaleSize)}">${esc(R.scale)}</div>
+      ${summary?`<div class="fg-summary" style="font-size:${pt(R.scaleSize)};border-top:var(--fg-line) solid var(--line);padding:2mm 3.5mm"><b>SUMMARY</b><br>${blanks(summary)}</div>`:""}
+      ${R.note?`<div class="fg-note" style="font-size:${pt(R.noteSize)}">${esc(R.note)}</div>`:""}
+    </div>
+  </div>`;
+  }
+
+  // Fallback generic single table
+  const cols=(Array.isArray(R.fullCols)?R.fullCols:[]).map(c=>String(c||"").trim()).filter(Boolean).slice(0,12);
+  const gradeCols=cols.length?cols:["Class Work","Test","Exam","Total","Grade","Remarks"];
+  const subjectW=Math.max(10,Math.min(70,Number(R.fullSubjectW)||30));
   const table=`<table class="fg-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||.3))}mm;--fg-fs:${pt(R.gSize)};--fg-hfs:${pt(R.gHeadSize)}"><colgroup><col style="width:${subjectW}%">${gradeCols.map(()=>`<col style="width:${(100-subjectW)/gradeCols.length}%">`).join("")}</colgroup>
     <thead><tr><th style="font-size:var(--fg-hfs)">${esc(R.subjHead)}</th>${gradeCols.map(c=>`<th style="font-size:var(--fg-hfs)">${esc(c)}</th>`).join("")}</tr></thead>
     <tbody>${gradeRows.map(subject=>`<tr><td style="font-size:var(--fg-fs)">${esc(subject)}</td>${gradeCols.map(()=>`<td style="font-size:var(--fg-fs)"></td>`).join("")}</tr>`).join("")}</tbody></table>`;
@@ -2832,31 +2944,32 @@ function promoPanel(){ const R=S.report; const fs=pt(R.pSize||9.5);
   </div></div>`; }
 
 function gradesPanel(side){ const R=S.report;
-  const n1=R.sem1Cols.length, n2=R.sem2Cols.length, sw=Math.max(10,Math.min(60,Number(R.subjW)||32));
-  const rows=R.subjects;
+  const n1=(R.sem1Cols||[]).length||5, n2=(R.sem2Cols||[]).length||6, sw=Math.max(18,Math.min(50,Number(R.subjW)||34));
+  const rows=Array.isArray(R.subjects)?R.subjects:[];
   let t;
   if(side==="left"){
     t=`<table><colgroup><col style="width:${sw}%">${R.sem1Cols.map(()=>`<col style="width:${(100-sw)/n1}%">`).join("")}</colgroup>
       <thead>
-        <tr><th class="sem-blank" style="border:none"></th><th class="sem" colspan="${n1}">${esc(R.sem1||"First Semester")}</th></tr>
+        <tr><th class="sem-blank" style="border:none;background:transparent"></th><th class="sem" colspan="${n1}">${esc(R.sem1||"FIRST SEMESTER")}</th></tr>
         <tr><th class="sub col">${esc(R.subjHead||"SUBJECTS")}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr>
       </thead>
-      <tbody>${rows.map(sj=>`<tr><td class="s ${sj==='AVERAGE'?'bold':''}">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+      <tbody>${rows.map(sj=>`<tr><td class="s ${sj==='AVERAGE'||sj==='AVERAGE'?'bold':''}">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
   } else {
     t=`<table><colgroup>${R.sem2Cols.map(()=>`<col style="width:${100/n2}%">`).join("")}</colgroup>
       <thead>
-        <tr><th class="sem" colspan="${n2}">${esc(R.sem2||"Second Semester")}</th></tr>
+        <tr><th class="sem" colspan="${n2}">${esc(R.sem2||"SECOND SEMESTER")}</th></tr>
         <tr>${R.sem2Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr>
       </thead>
-      <tbody>${rows.map(sj=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
+      <tbody>${rows.map(()=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
   }
+  const scaleHTML=`<div class="scale" style="font-size:${pt(R.scaleSize||7.2)}">${esc(R.scale)}</div>`;
   const foot=side==="left"
-    ?`<div class="scale" style="font-size:${pt(R.scaleSize||7.5)}">${esc(R.scale)}</div>`
-    :(R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize||7.5)};margin-left:auto">${esc(R.gNote)}</div>`:`<div class="scale" style="visibility:hidden;font-size:${pt(R.scaleSize||7.5)}">&nbsp;</div>`);
-  return `<div class="panel gr" style="${pad()}--tbl-w:${R.gLineW||0.3}mm;--g-fs:${pt(R.gSize||8.2)};--gh-fs:${pt(R.gHeadSize||8)};--box-w:${R.boxW||0.7}mm">
+    ? scaleHTML
+    : (R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize||7.2)};margin-left:auto">${esc(R.gNote)}</div>`:scaleHTML);
+  return `<div class="panel gr" style="${pad()}--tbl-w:${Math.max(.15,Math.min(1,Number(R.gLineW)||0.35))}mm;--g-fs:${pt(R.gSize||8.2)};--gh-fs:${pt(R.gHeadSize||8)};--box-w:${R.boxW||0.7}mm;--scale-fs:${pt(R.scaleSize||7.2)}">
     <div class="gbox ${R.box?"b":""} ${R.doubleBorder!==false?"double":""}">
-      ${side==="left"?(R.gTitle?`<div class="ghead-banner" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:""):`<div class="ghead-banner" style="visibility:hidden;font-size:${pt(R.gTitleSize||11)}">&nbsp;</div>`}
-      <div class="gwrap" style="flex:1">${t}</div>
+      ${R.gTitle?`<div class="ghead-banner" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:`<div class="ghead-banner" style="visibility:hidden;font-size:${pt(R.gTitleSize||11)}">&nbsp;</div>`}
+      <div class="gwrap">${t}</div>
       <div class="gfoot">${foot}</div>
     </div>
   </div>`; }
