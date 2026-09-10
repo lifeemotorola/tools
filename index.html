@@ -2519,7 +2519,7 @@ function formHTML(){
     const isFullA4=singleSided()&&S.panels.fl&&S.panels.fl.type==="fullgrades";
     if(isFullA4) return `
     <fieldset><legend>Full A4 grade sheet (single-sided)</legend>
-      <div class="hint">One complete A4 page prints for each learner. The school logo keeps its original proportions in the upper-left logo position.</div>
+      <div class="hint">One complete A4 page prints for each learner. The school logo keeps its original proportions in the upper-left logo position. The <b>ELEMENTARY SCHOOL REPORT CARD</b> banner and the <b>grading scale</b> appear on the First&nbsp;Semester (left) side of the table only, and FIRST&nbsp;SEMESTER stretches across the whole head of its table.</div>
       <label>School logo</label>
       <div class="row"><input type="file" id="logoFile" accept="image/*" style="font-size:12px"><button class="small" type="button" id="logoClear">Remove</button>${F.num("report.fullLogoH","Logo height (mm)",8,36,1)}</div>
       <div class="hint">PNG, JPG, GIF, WebP or BMP up to 600 KB. ${S.cover.logo?"A logo is ready for this sheet.":"No logo uploaded yet — the printed page shows a light placeholder."}</div>
@@ -2587,7 +2587,7 @@ function formHTML(){
       <label>Subjects &amp; evaluation rows (21 rows)</label>${list("report.subjects","Subject / Evaluation")}
       <div class="btns"><button class="small" data-act="eb-subjects">Reset to 21 standard subjects</button></div>
       <div class="row">${F.num("report.subjW","Subject column width (% of left page)",10,60)}${F.num("report.gFill","Table height (% of page)",40,95)}</div>
-      <div class="hint">The grades table is split on the fold: SUBJECTS + first semester on the left page, second semester on the right page. Both halves are exactly the same width and their rows line up.</div>
+      <div class="hint">The grades table is split on the fold: SUBJECTS + first semester on the left page, second semester on the right page. Both halves are exactly the same width and their rows line up. The <b>ELEMENTARY SCHOOL REPORT CARD</b> banner and the <b>grading scale</b> print on the First&nbsp;Semester side only, and FIRST&nbsp;SEMESTER stretches across the whole head of its table.</div>
       <div class="row">${F.num("report.gSize","Cell pt",5,20,0.5)}${F.num("report.gHeadSize","Header pt",5,20,0.5)}${F.num("report.gLineW","Grid line (mm)",0.1,2,0.05)}</div>
       <div class="row"><div style="flex:3">${F.area("report.scale","Grading scale (one per line)",5)}</div>${F.num("report.scaleSize","pt",5,20,0.5)}</div>
       ${F.text("report.gNote","Note beside the scale (optional)")}
@@ -2836,10 +2836,15 @@ function fullGradesPanel(){ const R=S.report;
     const subjHead=esc(R.subjHead||"SUBJECTS");
     const leftCols=`<colgroup><col style="width:${sw}%">${R.sem1Cols.map(()=>`<col style="width:${(100-sw)/n1}%">`).join("")}</colgroup>`;
     const rightCols=`<colgroup>${R.sem2Cols.map(()=>`<col style="width:${100/n2}%">`).join("")}</colgroup>`;
-    const leftHead=`<thead><tr><th class="sub" style="border:none;background:transparent"></th><th class="sem" colspan="${n1}">${esc(R.sem1||"FIRST SEMESTER")}</th></tr><tr><th class="sub">${subjHead}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr></thead>`;
+    const leftHead=`<thead><tr><th class="sem" colspan="${n1+1}">${esc(R.sem1||"FIRST SEMESTER")}</th></tr><tr><th class="sub">${subjHead}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr></thead>`;
     const rightHead=`<thead><tr><th class="sem" colspan="${n2}">${esc(R.sem2||"SECOND SEMESTER")}</th></tr><tr>${R.sem2Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr></thead>`;
     const leftBody=`<tbody>${gradeRows.map(sj=>`<tr><td class="s ${sj==='AVERAGE'?'bold':''}">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody>`;
     const rightBody=`<tbody>${gradeRows.map(()=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody>`;
+    /* banner + grading scale print on ONE side of the table only (the First Semester / left side);
+       the right column keeps invisible placeholders so both tables' rows still line up */
+    const capStyle=`font-size:${pt(R.gTitleSize||11)}`;
+    const caption=vis=>`<div class="fg-record-caption" style="${capStyle}${vis?"":";visibility:hidden"}">${R.gTitle?esc(R.gTitle):"&nbsp;"}</div>`;
+    const scaleCol=vis=>`<div class="fg-scale-full" style="font-size:${pt(R.scaleSize)}${vis?"":";visibility:hidden"}">${esc(R.scale||"")}</div>`;
     return `<div class="panel fg" style="${pad()}--fg-border:${Math.max(.1,Math.min(2,Number(R.boxW)||0.7))}mm;--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm;--fg-fs:${pt(R.gSize)};--fg-hfs:${pt(R.gHeadSize)}">
     <div class="fgbox ${R.doubleBorder!==false?'double':''}" style="--fg-border:${Math.max(.1,Math.min(2,Number(R.boxW)||0.7))}mm">
       <div class="fg-header">
@@ -2853,12 +2858,10 @@ function fullGradesPanel(){ const R=S.report;
         <div class="fg-meta">${blanks(R.fullMeta||"")}</div>
       </div>
       ${fields?`<div class="fg-student">${fields}</div>`:""}
-      ${R.gTitle?`<div class="fg-record-caption" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:""}
       <div class="fg-dual-wrap" style="--fg-fs:${pt(R.gSize)};--fg-hfs:${pt(R.gHeadSize)}">
-        <div class="fg-dual-col"><table class="fg-sem-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm">${leftCols}${leftHead}${leftBody}</table></div>
-        <div class="fg-dual-col"><table class="fg-sem-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm">${rightCols}${rightHead}${rightBody}</table></div>
+        <div class="fg-dual-col">${caption(true)}<table class="fg-sem-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm">${leftCols}${leftHead}${leftBody}</table>${scaleCol(true)}</div>
+        <div class="fg-dual-col">${caption(false)}<table class="fg-sem-table" style="--fg-line:${Math.max(.1,Math.min(2,Number(R.gLineW)||0.35))}mm">${rightCols}${rightHead}${rightBody}</table>${scaleCol(false)}</div>
       </div>
-      <div class="fg-scale-full" style="font-size:${pt(R.scaleSize)}">${esc(R.scale)}</div>
       ${summary?`<div class="fg-summary" style="font-size:${pt(R.scaleSize)};border-top:var(--fg-line) solid var(--line);padding:2mm 3.5mm"><b>SUMMARY</b><br>${blanks(summary)}</div>`:""}
       ${R.note?`<div class="fg-note" style="font-size:${pt(R.noteSize)}">${esc(R.note)}</div>`:""}
     </div>
@@ -2950,7 +2953,7 @@ function gradesPanel(side){ const R=S.report;
   if(side==="left"){
     t=`<table><colgroup><col style="width:${sw}%">${R.sem1Cols.map(()=>`<col style="width:${(100-sw)/n1}%">`).join("")}</colgroup>
       <thead>
-        <tr><th class="sem-blank" style="border:none;background:transparent"></th><th class="sem" colspan="${n1}">${esc(R.sem1||"FIRST SEMESTER")}</th></tr>
+        <tr><th class="sem" colspan="${n1+1}">${esc(R.sem1||"FIRST SEMESTER")}</th></tr>
         <tr><th class="sub col">${esc(R.subjHead||"SUBJECTS")}</th>${R.sem1Cols.map(c=>`<th class="col">${esc(c).replace(/(\d+)(st|nd|rd|th)/gi,'$1<sup>$2</sup>')}</th>`).join("")}</tr>
       </thead>
       <tbody>${rows.map(sj=>`<tr><td class="s ${sj==='AVERAGE'||sj==='AVERAGE'?'bold':''}">${esc(sj)}</td>${R.sem1Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
@@ -2963,12 +2966,16 @@ function gradesPanel(side){ const R=S.report;
       <tbody>${rows.map(()=>`<tr>${R.sem2Cols.map(()=>"<td></td>").join("")}</tr>`).join("")}</tbody></table>`;
   }
   const scaleHTML=`<div class="scale" style="font-size:${pt(R.scaleSize||7.2)}">${esc(R.scale)}</div>`;
+  const scaleHidden=`<div class="scale" style="visibility:hidden;font-size:${pt(R.scaleSize||7.2)}">${esc(R.scale)}</div>`;
+  const bannerHidden=`<div class="ghead-banner" style="visibility:hidden;font-size:${pt(R.gTitleSize||11)}">${R.gTitle?esc(R.gTitle):"&nbsp;"}</div>`;
+  /* banner + grading scale print on ONE side of the table only (the First Semester / left side) */
+  const banner=side==="left"?(R.gTitle?`<div class="ghead-banner" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:bannerHidden):bannerHidden;
   const foot=side==="left"
     ? scaleHTML
-    : (R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize||7.2)};margin-left:auto">${esc(R.gNote)}</div>`:scaleHTML);
+    : (R.gNote?`<div class="gn" style="font-size:${pt(R.scaleSize||7.2)};margin-left:auto">${esc(R.gNote)}</div>`:scaleHidden);
   return `<div class="panel gr" style="${pad()}--tbl-w:${Math.max(.15,Math.min(1,Number(R.gLineW)||0.35))}mm;--g-fs:${pt(R.gSize||8.2)};--gh-fs:${pt(R.gHeadSize||8)};--box-w:${R.boxW||0.7}mm;--scale-fs:${pt(R.scaleSize||7.2)}">
     <div class="gbox ${R.box?"b":""} ${R.doubleBorder!==false?"double":""}">
-      ${R.gTitle?`<div class="ghead-banner" style="font-size:${pt(R.gTitleSize||11)}">${esc(R.gTitle)}</div>`:`<div class="ghead-banner" style="visibility:hidden;font-size:${pt(R.gTitleSize||11)}">&nbsp;</div>`}
+      ${banner}
       <div class="gwrap">${t}</div>
       <div class="gfoot">${foot}</div>
     </div>
